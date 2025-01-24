@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.$ER-Diagram.drawio.bkp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/alem-ekub.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ER-Diagram.drawio" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/AlemEQubApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/common/BaseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/common/IdResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/common/PageResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/AllowedOriginsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/ApplicationAuditAware.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/BeanConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/OpenApiConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/Ekub.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubSpecification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub_users/EkubUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub_users/EkubUserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub_users/EkubUserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub_users/EkubUserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/exception_handler/ExceptionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/exception_handler/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/file/FileController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/file/FileStorageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/keycloak/KeycloakClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/keycloak/KeycloakService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/keycloak/KeycloakUserRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/EkubPaymentStatusResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/Round.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/RoundController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/RoundMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/RoundRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/RoundResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/round/RoundService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/security/KeycloakJwtAuthenticationConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/security/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/sheduled_tasks/DrawEkub.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/sheduled_tasks/DynamicTaskScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/PasswordUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-api/src/test/java/com/ekub/AlemEQubApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/.vscode/extensions.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/.vscode/tasks.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/angular.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/public/world-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.routes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/admin-routing.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/admin.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/confirm-dialog/confirm-dialog.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/confirm-dialog/confirm-dialog.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/confirm-dialog/confirm-dialog.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/confirm-dialog/confirm-dialog.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/header/header.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/header/header.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/header/header.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/header/header.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/image-viewer/image-viewer.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/image-viewer/image-viewer.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/image-viewer/image-viewer.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/image-viewer/image-viewer.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/pagination/pagination.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/pagination/pagination.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/pagination/pagination.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/pagination/pagination.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/side-bar-item/side-bar-item.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/side-bar-item/side-bar-item.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/side-bar-item/side-bar-item.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/components/side-bar-item/side-bar-item.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/home/home.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/home/home.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/home/home.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/home/home.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/dashboard/dashboard.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/dashboard/dashboard.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/dashboard/dashboard.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/dashboard/dashboard.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/user/user.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/user/user.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/user/user.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/user/user.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-user-detail/view-user-detail.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-user-detail/view-user-detail.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-user-detail/view-user-detail.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-user-detail/view-user-detail.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer-item/drawer-item.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer-item/drawer-item.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer-item/drawer-item.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer-item/drawer-item.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer/drawer.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer/drawer.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer/drawer.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/drawer/drawer.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/ekub/ekub.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/ekub/ekub.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/ekub/ekub.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/ekub/ekub.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/header/header.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/header/header.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/header/header.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/components/header/header.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/main/main.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/main/main.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/main/main.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/main/main.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/member-routing.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/member.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/about/about.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/about/about.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/about/about.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/about/about.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/change-password/change-password.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/change-password/change-password.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/change-password/change-password.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/change-password/change-password.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekubs/ekubs.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekubs/ekubs.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekubs/ekubs.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekubs/ekubs.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-configuration.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/base-service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/add-ekub-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/get-draw-participants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/get-ekub-users.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/get-ekub-winners.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/get-ekubs-of-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/get-round-winner.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekub-users/remove-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/create-ekub.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/delete-ekub.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/get-current-round.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/get-ekub-by-id.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/get-page-of-ekubs.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/search-ekub-by-name.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/ekubs/update-ekub.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/files/get-file.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/payments/get-ekub-payment-status.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/payments/get-payments-of-current-round.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/payments/get-payments-of-ekub-round.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/rounds/get-ekub-rounds.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/create-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/delete-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/get-page-of-users.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/get-user-by-id.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/remove-profile-picture.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/update-password.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/update-profile.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/update-user.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/upload-id-card-image.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/upload-profile-picture.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/interceptor/http.interceptor.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/interceptor/http.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/user-profile.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/ekub-payment-status-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/ekub-request.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/ekub-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/id-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/page-response-ekub-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/page-response-user-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/password-update-request.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/payment-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/round-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/user-request.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/user-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/request-builder.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/ekub-users.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/ekubs.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/files.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/payments.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/rounds.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/users.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/strict-http-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/ux-service/ux.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/ux-service/ux.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/openapi/openapi.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/src/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/tailwind.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/tsconfig.app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alem-ekub-ui/tsconfig.spec.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Record" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2rhuv7cp0JWcXqaqXO6lpuApG34" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AlemEkubApplication.executor": "Debug",
+    "Maven.alem-ekub-api [install].executor": "Run",
+    "Maven.alem-equb-api [install].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ekub.common" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="AlemEkubApplication" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.ekub.AlemEQubApplication" />
+      <module name="alem-ekub-api" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="" />
+      <created>1737023857116</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1737023857116</updated>
+    </task>
+    <servers />
+  </component>
+</project>

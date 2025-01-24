@@ -1,0 +1,158 @@
+<main class="max-container w-full min-h-screen flex flex-col justify-center items-center gap-2 overflow-auto">
+    <header class="flex justify-center">
+        <p class="text-2xl font-mono mt-4">Manage User</p>
+    </header>
+    <section class="w-full md:w-2/3 lg:w-2/3 space-y-3">
+        <div *ngIf="errMsgs" class="flex-col items-center">
+            <p *ngFor="let msg of errMsgs" class="text-red-500">
+                {{msg}}
+            </p>
+        </div>
+        <div *ngIf="!userRequest.id" class="w-full grid grid-cols-12">
+            <label class="form-label">Username<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="userRequest.username"  class="form-input" type="text" placeholder="name"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">First Name<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="userRequest.firstName"  class="form-input" type="text" step="0.01" placeholder="First Name"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Last Name<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="userRequest.lastName"  class="form-input" type="text" step="0.01" placeholder="Last Name"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Phone Number<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="userRequest.phoneNumber"  class="form-input" type="number" placeholder="09.. or 07.."/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Email</label>
+            <input [(ngModel)] ="userRequest.email"  class="form-input" type="text" placeholder="email"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Profession<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="userRequest.profession"  class="form-input" type="text" placeholder="Profession"/>
+        </div>
+        <div *ngIf="!userRequest.id" class="w-full grid grid-cols-12">
+            <label class="form-label">Password<span class="text-red-400">*</span></label>
+            <input [formControl]="passwordControl" class="form-input" type="password" placeholder="password"/>
+        </div>
+        <div *ngIf="!userRequest.id && (showPassConfError || showPassMandatoryError || showPassLenghtError)" 
+            class="w-full grid grid-cols-12">
+            <p *ngIf="showPassConfError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
+                password didn't match
+            </p>
+            <p *ngIf="showPassMandatoryError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
+                password is Mandatory
+            </p>
+            <p *ngIf="showPassLenghtError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
+                Minimum password lenght is 4
+            </p>
+        </div> 
+        <div *ngIf="!userRequest.id" class="w-full grid grid-cols-12">
+            <label class="form-label">Confirm Password<span class="text-red-400">*</span></label>
+            <input [formControl]="confirmPassword" class="form-input" type="password" placeholder="confirm password"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Remark</label>
+            <input [(ngModel)] ="userRequest.remark"  class="form-input" type="text" placeholder="Remark"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Ekubs</label>
+            <div class="relative col-span-12 md:col-span-10">
+                <input [formControl]="ekubControl" class="form-input donthide" type="text" placeholder="search ekubs"/>
+                <div *ngIf="showEkubs"
+                    class="absolute donhide w-full flex flex-col items-center">
+                    <div *ngFor="let ekub of ekubList; let idx=index" 
+                        class="donthide w-2/3 flex bg-white shadow-md hover:bg-gray-400" 
+                        [ngClass]="{'rounded-t-md' : idx==0, 
+                            'rounded-b-md' : idx == (ekubList.length - 1)
+                        }"
+                        >
+                        <div class="flex gap-1 p-2 w-full donthide">
+                            <input type="checkbox" 
+                                (click)="onEkubSelected(ekub)" 
+                                class="cursor-pointer donthide" 
+                                [value]="ekub.id"
+                                [checked]="ekub.id && userRequest.ekubIds?.includes(ekub.id)"
+                            />
+                            <label>{{ekub.name}}</label>
+                        </div>           
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <div class="mt-2 col-start-3 col-end-12">
+                <span *ngFor="let ekubId of userRequest.ekubIds" 
+                    class="inline-flex gap-1 items-center mr-2 p-1 bg-gray-200 rounded">            
+                  <svg (click)="removeEkub(ekubId)" class="cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#de1010" d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"/></svg>
+                  <span>{{ ekubIdNameMap.get(ekubId) }}</span>
+                </span>
+            </div>
+        </div>     
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Enabled<span class="text-red-400">*</span></label>
+            <div class="w-full col-span-12 md:col-span-10 flex justify-start gap-5">
+                <div class="text-lg">
+                    <input [(ngModel)]="userRequest.enabled"  type="radio" [value]="true"
+                        class="w-5 h-5"/>
+                    Yes
+                </div>
+                <div class="text-lg">
+                    <input [(ngModel)]="userRequest.enabled" type="radio" [value]="false"
+                    class="w-5 h-5"/>
+                    No
+                </div>
+            </div>
+        </div>
+        <!-- profile picture, file selector-->
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">
+                <p>Profile Picture</p>
+            </label>
+            <div class="w-full flex items-center col-span-12 md:col-span-10 ">
+                <input 
+                    class="w-full p-2 rounded-lg text-lg outline-none"
+                    type="file" 
+                    (change)="onFileSelected($event,'profilePic')"
+                    accept="image/*"
+                />
+            </div>
+        </div>
+        <!--id card image file selector-->
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">
+                <p>Id Card Image</p>
+            </label>
+            <div class="w-full flex items-center col-span-12 md:col-span-10 ">
+                <input 
+                    class="w-full p-2 rounded-lg text-lg outline-none"
+                    type="file" 
+                    (change)="onFileSelected($event,'idCardImg')"
+                    accept="image/*"
+                />
+            </div>
+        </div>
+        <!--Profile Picture Displayer-->
+        <section class="w-full flex justify-evenly gap-10">
+            <div class="flex gap-4 justify-center w-28 h-28" *ngIf="selectedPictureString">
+                <img class="rounded-3xl" [src]="selectedPictureString" alt="profile picture" />
+            </div>
+            <div class="flex gap-4 justify-center w-38 h-28" *ngIf="selectedIdCardImageString">
+                <img (click)="openImageViewer()" class="rounded-3xl" 
+                  [src]="selectedIdCardImageString" alt="id card image" 
+                />
+            </div>
+        </section>
+
+        <div class="w-full flex  justify-evenly py-4">
+            <button class="form-button bg-grn hover:bg-green-900" (click)="onSave()">
+                <p class="text-xl">save</p>
+            </button>
+                <button class="form-button bg-blue-500 hover:bg-blue-900" (click)="onCancel()">
+                    <p class="text-xl">cancel</p>
+                </button>
+        </div>
+    </section>
+</main>

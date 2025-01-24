@@ -1,0 +1,21 @@
+<main class="max-container w-full h-full flex flex-col justify-center items-center">
+    <app-header *ngIf='onMobileView' class="w-full"  
+        [onSubPage]="true"
+        pageName="ዕቁብ"
+        [onMobileView]="onMobileView">
+    </app-header>
+
+    <!--Main Section-->
+    <section class="w-full h-full flex flex-col items-center justify-center"
+        [ngClass]="{'mt-16': onMobileView}">
+
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (ekub of ekubs; track $index) {
+               <div class="flex justify-center items-center p-4">
+                    <app-ekub [ekub]="ekub"></app-ekub>
+               </div>
+            }
+        </div>
+
+    </section>
+</main>

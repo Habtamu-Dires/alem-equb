@@ -1,0 +1,35 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: alem-ekub-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/alem_ekub_db
+    username: hab
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/alem-ekub"
+
+keycloak:
+  auth-server-url: http://localhost:9090
+  realm: alem-ekub
+  client-id: ekub-service
+  client-secret: Wli1Jho60iRdI0j52z8PQovbZvRQ7OsH
+
+application:
+  server:
+    url: ${SERVER_URL:http://localhost:8088/api/v1}
+  cors:
+    origins: ${ALLOWED_ORIGINS:http://localhost:4200}
+  file:
+    path: ${FILE_PATH:./photo}
+

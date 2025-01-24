@@ -1,0 +1,7 @@
+<div class="flex gap-4 md:gap-2 items-center p-2 cursor-pointer"
+    [ngClass]="{'rounded-lg text-grn' :  isActiveComponent}">
+    <div>
+         <ng-content></ng-content>   
+    </div>
+    <p class="md:text-lg">{{component}}</p>
+</div>

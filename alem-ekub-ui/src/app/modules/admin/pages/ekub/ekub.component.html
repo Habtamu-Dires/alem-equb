@@ -1,0 +1,85 @@
+<main>
+    <app-header
+      *ngIf="!showDetail"
+      componentName="Ekub"
+      (onCreateNewCliked)="onCreateNew()"
+    >
+    </app-header>
+    <!--list of ekubs-->
+    <section *ngIf="!showDetail">
+        <table class="min-w-full border border-gray-300 bg-white">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="table-head w-1/12">Name</th>
+                <th class="table-head w-1/12">Active</th>
+                <th class="table-head w-1/12">Type</th>
+                <th class="table-head w-1/12">Amount</th>
+                <th class="table-head w-1/12">No Of Members</th>
+                <th class="table-head w-1/12">Total Amount</th>
+                <th class="table-head w-1/12">Frequency In Days</th>
+                <th class="table-head w-1/12">Round Number</th>
+                <th class="table-head w-1/12">Next Draw Date</th>
+                <th class="table-head w-1/12">Last Draw Date</th>
+                <th class="table-head w-1/12">Start Date</th>
+                <th class="table-head w-1/12">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ekub of ekubList" class="border-b border-gray-300 hover:bg-gray-100">              
+                <td class="table-data">{{ ekub.name }}</td>
+                <td class="table-data">
+                    <span *ngIf="ekub.isActive">✔</span>
+                    <span *ngIf="!ekub.isActive">✘</span>
+                </td>
+                <td class="table-data">{{ ekub.type }}</td>
+                <td class="table-data">{{ ekub.amount }}</td>
+                <td class="table-data ">{{ ekub.roundNumber}}</td>
+                <td class="table-data">{{ ekub.totalAmount}}</td>
+                <td class="table-data">{{ ekub.frequencyInDays }}</td>
+                <td class="table-data ">{{ ekub.totalMember}}</td>
+                <td class="table-data ">{{formattedDateTime(ekub.nextDrawDateTime)}}</td>
+                <td class="table-data ">{{formattedDateTime(ekub.lastDrawDateTime)}}</td>
+                <td class="table-data ">{{formattedDateTime(ekub.startDateTime)}}</td>
+                <td class="table-data">
+                  <div class="flex gap-4 relative">
+                      <!-- <p class="text-blue-500 cursor-pointer">detail</p>  -->
+                      <svg (click)="onViewDetail(ekub.id)" class="cursor-pointer"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#888888" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v8.325q-.475-.275-.975-.5t-1.025-.4V9h-6v3.425q-1.15.35-2.15 1T9 15H5v4h2.05q.275.55.55 1.05t.6.95zm0-8h6V9H5zm0-6h14V5H5zm11 16q-2.275 0-4.2-1.2T9 18.5q.875-2.1 2.8-3.3T16 14t4.2 1.2t2.8 3.3q-.875 2.1-2.8 3.3T16 23m0-2q1.425 0 2.688-.65t2.062-1.85q-.8-1.2-2.062-1.85T16 16t-2.687.65t-2.063 1.85q.8 1.2 2.063 1.85T16 21m0-1q-.625 0-1.062-.437T14.5 18.5t.438-1.062T16 17t1.063.438t.437 1.062t-.437 1.063T16 20"/></svg>
+                      <svg (click)="toggelShowActions(ekub.id)" class="cursor-pointer donthide"
+                        xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M9.5 13a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"/></svg>
+                      <div *ngIf="showActions && ekub.id === selectedEkubId" 
+                       
+                        class="absolute -bottom-20 cursor-pointer bg-black rounded-md donthide">
+                        <div class="flex flex-col gap-2 text-white font-semibold">
+                           <p class="px-4 py-1 hover:bg-gray-500" (click)="onEdit(ekub.id)" >Edit</p>
+                           <p class="px-4 py-1 hover:bg-gray-500"  (click)="onDelete(ekub.id)">Delete</p>
+                        </div>
+                      </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        <app-pagination *ngIf="!isEmptyPage" class="w-full m-5 z-10"
+          [page]="page"
+          [size]="size"
+          [isFirstPage]="isFirstPage"
+          [isLastPage]="isLastPage"
+          [numberOfElements]="numberOfElements"
+          [totalElements]="totalElements"
+          [totalPages]="totalPages"
+          
+          (sizeChanged)="onSizeChanged($event)"
+          (pageChanged)="onPageChanged($event)"
+        >
+        </app-pagination>    
+    </section>
+    <section *ngIf="showDetail">
+      <!--cancel -->
+      <div class="fixed top-10 right-10">
+        <svg class="cursor-pointer" (click)="toggleShowDetail()"
+            xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275t-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275t.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275z"/></svg>
+      </div>
+      <app-view-ekub-detail [ekubId]="selectedEkubId"></app-view-ekub-detail>
+    </section>
+</main>

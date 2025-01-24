@@ -1,0 +1,18 @@
+<main class="w-[340px] flex flex-col gap-4 rounded-xl border-2 border-grn p-4">
+    <div class="flex flex-col px-4 font-normal gap-2">
+        <p class="text-2xl">{{ekub?.name}}</p>
+        <p class="text-lg"> ዐይነት:  <span class="font-semibold">{{ekub?.type}}</span></p>
+    </div>
+    <div class="px-4 flex flex-col text-md font-serif">
+        <p>መጠን: {{ekub?.amount | number }} Birr</p>
+        <p>አጠቃላይ የብር መጠን: {{ekub?.winAmount}} Birr</p>
+        <p>ዙር: {{ekub?.roundNumber}}</p>
+        <p>የቀረው ቀን: {{transfromDuration(ekub?.nextDrawDateTime)}}</p>
+        <p>የሚወጣበት ሰዓት: {{transformDateTime(ekub?.nextDrawDateTime)}}</p>
+        <div class="flex justify-center p-2">
+            <button class="bg-grn text-white rounded-md px-4 py-2" (click)="showDetails(ekub?.id)">
+                details
+            </button>
+        </div>
+    </div>
+</main>

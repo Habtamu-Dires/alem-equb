@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-slate-200/50;
+}
+
+
+@layer components {
+  .max-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    
+  .table-head{
+    @apply p-4 text-left font-mono text-gray-700;
+  }
+    
+  .table-data{
+    @apply p-4 text-gray-600;
+  }
+
+  .form-input{
+      @apply w-full p-2 rounded-lg text-lg outline-none col-span-11 md:col-span-10;
+  }
+  .form-label{
+      @apply col-span-12 md:col-span-2 flex items-center;
+  }
+  .form-button{
+      @apply p-2 rounded-lg flex justify-center w-1/6 text-white;
+  }
+}

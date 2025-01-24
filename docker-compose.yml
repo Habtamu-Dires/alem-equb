@@ -1,0 +1,36 @@
+services:
+  postgres:
+    container_name: postgres-ekub
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: hab
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: alem_ekub_db
+    volumes:
+      - ekubv:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - alem-ekub
+    restart: unless-stopped # always
+
+  keycloak:
+    container_name: keycloak-ekub
+    image: quay.io/keycloak/keycloak
+    ports:
+      - 9090:8080
+    environment:
+      KEYCLOAK_ADMIN: habt
+      KEYCLOAK_ADMIN_PASSWORD: password
+    networks:
+      - alem-ekub
+    command:
+      - "start-dev"
+
+volumes:
+  ekubv:
+    driver: local
+networks:
+  alem-ekub:
+    driver: bridge

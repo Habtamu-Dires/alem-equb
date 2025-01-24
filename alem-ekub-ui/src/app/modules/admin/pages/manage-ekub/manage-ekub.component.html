@@ -1,0 +1,67 @@
+<main class="max-container w-full min-h-screen flex flex-col justify-center items-center gap-5">
+    <!--cancel -->
+    <div class="fixed top-10 right-10">
+        <svg class="cursor-pointer" (click)="onCancel()"
+            xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275t-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275t.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275z"/></svg>
+      </div>
+    <header class="flex justify-center">
+        <p class="text-2xl font-mono">Manage Ekub</p>
+    </header>
+    <section class="w-full md:w-2/3 lg:w-2/3 space-y-3">
+        <div *ngIf="errMsgs" class="flex-col items-center">
+            <p *ngFor="let msg of errMsgs" class="text-red-500">
+                {{msg}}
+            </p>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Name<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.name"  class="form-input" type="text" placeholder="name"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Type<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.type"  class="form-input" type="text" placeholder="type"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Amount<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.amount"  class="form-input" type="number" step="0.01" placeholder="amount"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Frequency In Day<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.frequencyInDays"  class="form-input" type="number" placeholder="frequency in days"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Description<span class="text-red-400">*</span></label>
+            <textarea [(ngModel)] ="ekubRequest.description"  class="form-input" rows="3" type="text" placeholder="description">
+            </textarea> 
+        </div>
+        <div *ngIf="ekubRequest.id" class="w-full grid grid-cols-12">
+            <label class="form-label">Next Draw Date<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.nextDrawDateTime"  class="form-input" type="datetime-local" placeholder="start date"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">Start Date Time<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.startDateTime"  class="form-input" type="datetime-local" placeholder="start date"/>
+        </div>
+        <div *ngIf="ekubRequest.id" class="w-full grid grid-cols-12">
+            <label class="form-label">IS Active<span class="text-red-400">*</span></label>
+            <div class="w-full col-span-12 md:col-span-10 flex justify-start gap-5">
+                <div class="text-lg">
+                    <input [(ngModel)]="ekubRequest.isActive"  type="radio" [value]="true"
+                        class="w-5 h-5"/>
+                    Yes
+                </div>
+                <div class="text-lg">
+                    <input [(ngModel)]="ekubRequest.isActive" type="radio" [value]="false"
+                    class="w-5 h-5"/>
+                    No
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full flex  justify-evenly py-4">
+            <button class="form-button bg-grn hover:bg-green-900" (click)="onSave()">
+                <p class="text-xl">save</p>
+            </button>
+        </div>
+    </section>
+</main>

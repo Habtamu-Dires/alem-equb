@@ -1,0 +1,41 @@
+<main class="h-screen w-full flex flex-col gap-4 shadow-2xl">
+    <!--logo and nmae-->
+    <section class="w-full h-40 flex flex-col justify-center items-center gap-4 p-4 bg-grn shadow-lg text-white">
+        <div class="flex gap-2 justify-center items-center">
+            <img class="w-14 h-14 cursor-pointer" src="world-icon.png"/>
+            <p class="font-mono text-2xl cursor-pointer">
+                Alem EQub
+            </p>
+        </div>
+        <div class="flex flex-col gap-1 font-mono">
+            <p>Hello {{loggedUser?.firstName}} {{loggedUser?.lastName}}</p>
+        </div>
+    </section>
+    <!--drawer items-->
+    <section class="flex flex-col gap-4 p-4">
+        <app-drawer-item 
+            component="Personal-Info"
+            [isActiveComponent]="selectedItem === 'Personal-Info'"
+            (click)="selectItem('Personal-Info')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#888888" d="M12 21.577L9.423 19H4V3h16v16h-5.423zm-7-4.342q1.35-1.325 3.138-2.088T12 14.384t3.863.763T19 17.235V4H5zm7-5.158q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.885 18h12.23v-.173q-1.319-1.24-2.873-1.841T12 15.385q-1.65 0-3.213.591t-2.903 1.813zM12 11.077q-.817 0-1.409-.591Q10 9.894 10 9.077t.591-1.409q.592-.591 1.409-.591t1.409.591Q14 8.26 14 9.077t-.591 1.409t-1.409.591m0-.46"/></svg>
+        </app-drawer-item> 
+        <app-drawer-item 
+            component="Change-PIN"
+            [isActiveComponent]="selectedItem === 'Change-PIN'"
+            (click)="selectItem('Change-PIN')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="#888888"><path stroke-width="1.5" d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16s0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z"/><path stroke-linecap="round" stroke-width="1.5" d="M6 10V8a6 6 0 0 1 11.811-1.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.009m3.982 0H12m3.991 0H16"/></g></svg>
+        </app-drawer-item> 
+        <app-drawer-item 
+            component="About"
+            [isActiveComponent]="selectedItem === 'About'"
+            (click)="selectItem('About')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="none" stroke="#888888" d="M7 7h1v4.5m0 0H6.5m1.5 0h1.5M8 4.75h.005v.005H8zm.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0ZM14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z"/></svg>
+        </app-drawer-item>   
+        <app-drawer-item 
+            component="Logout"
+            [isActiveComponent]="selectedItem === 'Logout'"
+            (click)="logout()">
+            <svg (click)="logout()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M28 16H8m12-8l8 8l-8 8m-9 4H3V4h8"/></svg>                  
+        </app-drawer-item>   
+    </section>
+</main>

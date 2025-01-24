@@ -1,0 +1,66 @@
+<main class="max-container h-screen flex flex-col gap-4 justify-center items-center">
+    <section class="flex flex-col justify-center items-center mt-16">
+        <!--last round winner-->
+        <div *ngIf="currentRound > 2"  class="w-full p-4 text-lg font-semibold">
+            <div>
+                የዙር <span>{{currentRound - 1}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
+                <span>{{lastRoundWinner?.username}}</span>
+            </div>
+        </div>
+
+         <!--general information section-->
+        <div  class="text-xl font-semibold">
+            <p>General Information</p>
+        </div>
+        <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
+            <div class="p-5 shadow-lg font-semibold rounded-lg">
+                <p>የአባላት ብዛት: {{ekub?.totalMember}}</p>
+            </div>
+            <div class="p-5 shadow-lg font-semibold rounded-lg">
+                <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubWinnersList.length}}</p>
+            </div>
+            <div class="p-5 shadow-lg font-semibold rounded-lg">
+                <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{drawParticipantsList.length}}</p>
+            </div>
+            <div class="p-5 shadow-lg font-semibold rounded-lg">
+                <p>የተጀመረበት ቀን: {{transformDateTime(ekub?.startDateTime)}}</p>
+            </div>
+        </section>
+        <!--member list section with won status and payment status-->
+        <div class="p-4 text-xl font-semibold">
+            <p class="underline">Members List</p>
+        </div>
+        <section class="w-full p-5">
+            <section class="w-full flex justify-center max-h-96 overflow-auto">
+                <table class="w-full md:w-1/2 border border-gray-300 bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="table-head">Name</th>
+                            <th class="table-head">Has Won</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let member of ekubUsersList">
+                            <td class="table-data">{{member.fullName}}</td>
+                            <td class="table-data">
+                                <span *ngIf="hasWon(member.id)">✔</span>
+                                <span *ngIf="!hasWon(member.id)">✘</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+        <!--each rounds winner-->
+        
+        <!--Description-->
+        <div class="p-4 text-xl font-semibold">
+            <p class="underline">Description</p>
+        </div>
+        <section class="w-full p-5">
+            <div class="border-2 rounded-md p-4 max-h-96 overflow-y-auto">
+                {{ekub?.description}}
+            </div>
+        </section>
+    </section>
+</main>
