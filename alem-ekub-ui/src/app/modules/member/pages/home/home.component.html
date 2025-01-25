@@ -23,9 +23,9 @@
                 Alem EQub
             </p>
         </section>
-        <div class="w-full flex justify-center p-4 rounded-md ">
+        <article class="w-full flex justify-center p-4 rounded-md ">
             <p class="text-2xl font-semibold font-mono">{{user?.fullName}}</p>
-        </div>
+        </article>
         <!--menu section-->
         <section class="flex justify-center items-center">
             <section class="w-full p-5 grid grid-cols-2 gap-10 md:gap-16 md:grid-cols-4">
@@ -35,19 +35,19 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"><path fill="#1c594e" d="M12 16q-.825 0-1.412-.587T10 14t.588-1.412T12 12t1.413.588T14 14t-.587 1.413T12 16M7.375 7h9.25L17.9 4.45q.25-.5-.038-.975T17 3H7q-.575 0-.862.475T6.1 4.45zM8.4 21h7.2q2.25 0 3.825-1.562T21 15.6q0-.95-.325-1.85t-.925-1.625L17.15 9H6.85l-2.6 3.125q-.6.725-.925 1.625T3 15.6q0 2.275 1.563 3.838T8.4 21"/></svg>
                     <p class="text-sm font-mono">ዕቁብ</p>
                 </div>
-                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-lg cursor-pointer rounded-md"
-                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'pay'}"
-                    (click)="selectPage('pay')">
+                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-xl cursor-pointer rounded-md"
+                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'payment'}"
+                    (click)="selectPage('payment')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 576 512"><path fill="#1c594e" d="M64 64C28.7 64 0 92.7 0 128v256c0 35.3 28.7 64 64 64h448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64zm64 320H64v-64c35.3 0 64 28.7 64 64M64 192v-64h64c0 35.3-28.7 64-64 64m384 192c0-35.3 28.7-64 64-64v64zm64-192c-35.3 0-64-28.7-64-64h64zm-224-32a96 96 0 1 1 0 192a96 96 0 1 1 0-192"/></svg>
-                    <p class="text-sm font-mono">ወደ ክፍያ</p>
+                    <p class="text-sm font-mono">ክፍያ</p>
                 </div>
-                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-lg cursor-pointer rounded-md"
-                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'payments'}"
-                    (click)="selectPage('payments')">
+                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-xl cursor-pointer rounded-md"
+                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'payment-history'}"
+                    (click)="selectPage('payment-history')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#1c594e" d="M3 20q-.825 0-1.412-.587T1 18V7h2v11h17v2zm4-4q-.825 0-1.412-.587T5 14V6q0-.825.588-1.412T7 4h14q.825 0 1.413.588T23 6v8q0 .825-.587 1.413T21 16zm2-2q0-.825-.587-1.412T7 12v2zm10 0h2v-2q-.825 0-1.412.588T19 14m-5-1q1.25 0 2.125-.875T17 10t-.875-2.125T14 7t-2.125.875T11 10t.875 2.125T14 13M7 8q.825 0 1.413-.587T9 6H7zm14 0V6h-2q0 .825.588 1.413T21 8"/></svg>
                     <p class="text-sm font-mono">የቀደሙ ክፍያዎች</p>
                 </div>
-                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-lg cursor-pointer rounded-md"
+                <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-xl cursor-pointer rounded-md"
                         [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'search-ekubs'}"
                     (click)="selectPage('search-ekubs')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#1c594e" d="m14.75 20l2 2H6q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h9l5 6v12q0 .5-.213.913t-.587.687L14 16.45q-.425.275-.925.413T12 17q-1.65 0-2.825-1.175T8 13t1.175-2.825T12 9t2.825 1.175T16 13q0 .575-.137 1.075T15.45 15L18 17.6V8.7L14.05 4H6v16zM12 15q.825 0 1.413-.587T14 13t-.587-1.412T12 11t-1.412.588T10 13t.588 1.413T12 15m0-2"/></svg>
@@ -59,6 +59,10 @@
         <section *ngIf="!onMobileView">
             @if (selectedPage === 'ekubs') {
                 <app-ekubs></app-ekubs>
+            } @else if(selectedPage === 'payment-history') {
+                <app-payment-history></app-payment-history>
+            } @else if(selectedPage === 'payment') {
+                <app-payment></app-payment>
             }
         </section>
     </section>

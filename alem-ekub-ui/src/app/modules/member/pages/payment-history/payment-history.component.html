@@ -1,0 +1,32 @@
+<main class="max-container w-full h-full flex flex-col justify-center items-center">
+    <app-header *ngIf='onMobileView' class="w-full"  
+        [onSubPage]="true"
+        pageName="Payment History"
+        [onMobileView]="onMobileView">
+    </app-header>
+    
+    <!--Main section-->
+    <section *ngIf="paymentResponses.length > 0"
+        class="w-full flex flex-col justify-center items-center"
+            [ngClass]="{'mt-16': onMobileView}">
+        <table class="w-full border border-gray-300 bg-white">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="table-head">የብር መጠን</th>
+                    <th class="table-head">የዕቁብ ስም</th>
+                    <th class="table-head">ዙር</th>
+                    <th class="table-head">የተፈፀመበት ቀን እና ሰዓት</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let payment of paymentResponses">
+                    <td class="table-data">{{payment.amount}}</td>
+                    <td class="table-data">{{payment.ekubName}}</td>
+                    <td class="table-data">{{payment.round?.roundNumber}}</td>
+                    <td class="table-data">{{transformDateTime(payment.createdDate)}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+

@@ -14,6 +14,10 @@ export class UxService {
   headersSelectedItemSubject = new BehaviorSubject<string>('Home');
   headersSelectedItem$ = this.headersSelectedItemSubject.asObservable();
 
+  //home selected page in members during change of size
+  selectedPageSubject = new BehaviorSubject<string>('ekubs');
+  selectedPage$ = this.selectedPageSubject.asObservable();
+
   //page service
   paginationSizeSubject = new BehaviorSubject<number>(5);
   paginationSize$ = this.paginationSizeSubject.asObservable();
@@ -33,6 +37,11 @@ export class UxService {
   // update pagination size
   updatePaginationSize(value:number){
     this.paginationSizeSubject.next(value);
+  }
+
+  // update pagination size
+  updateSelectedPage(value:string){
+    this.selectedPageSubject.next(value);
   }
 
 

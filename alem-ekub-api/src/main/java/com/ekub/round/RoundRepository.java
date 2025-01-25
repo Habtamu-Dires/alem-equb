@@ -2,6 +2,7 @@ package com.ekub.round;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,19 @@ public interface RoundRepository extends JpaRepository<Round, UUID> {
             AND r.roundNumber =:roundNumber
             """)
     Optional<Round> findByEkubIdAndRoundNo(UUID ekubId, Integer roundNumber);
+
+    @Query("""
+            SELECT new  com.ekub.round.UserPendingPaymentResponse(
+                e.name,
+                r.id,
+                r.roundNumber,
+                r.endDateTime ,
+                e.amount
+            )
+            FROM Round r
+            JOIN r.ekub e
+            LEFT JOIN Payment p ON p.round.id = r.id AND p.user.id = :userId
+            WHERE p.id IS NULL
+            """)
+    List<UserPendingPaymentResponse> findUserPendingPayments(String userId);
 }

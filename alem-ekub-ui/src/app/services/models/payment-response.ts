@@ -7,8 +7,8 @@ import { UserResponse } from '../models/user-response';
 export interface PaymentResponse {
   amount?: number;
   createdDate?: string;
+  ekubName?: string;
   id?: string;
-  penaltyAmount?: number;
   round?: RoundResponse;
   user?: UserResponse;
 }

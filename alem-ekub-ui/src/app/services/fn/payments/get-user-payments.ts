@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { EkubPaymentStatusResponse } from '../../models/ekub-payment-status-response';
+import { PaymentResponse } from '../../models/payment-response';
 
-export interface GetEkubPaymentStatus$Params {
-  'ekub-id': string;
+export interface GetUserPayments$Params {
+  'user-id': string;
 }
 
-export function getEkubPaymentStatus(http: HttpClient, rootUrl: string, params: GetEkubPaymentStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EkubPaymentStatusResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getEkubPaymentStatus.PATH, 'get');
+export function getUserPayments(http: HttpClient, rootUrl: string, params: GetUserPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getUserPayments.PATH, 'get');
   if (params) {
-    rb.path('ekub-id', params['ekub-id'], {});
+    rb.path('user-id', params['user-id'], {});
   }
 
   return http.request(
@@ -25,9 +25,9 @@ export function getEkubPaymentStatus(http: HttpClient, rootUrl: string, params: 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<EkubPaymentStatusResponse>>;
+      return r as StrictHttpResponse<Array<PaymentResponse>>;
     })
   );
 }
 
-getEkubPaymentStatus.PATH = '/payments/payment-status/{ekub-id}';
+getUserPayments.PATH = '/payments/user/{user-id}';

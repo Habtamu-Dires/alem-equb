@@ -9,11 +9,14 @@ import { CommonModule } from '@angular/common';
 import { DrawerComponent } from "../../components/drawer/drawer.component";
 import { Router } from '@angular/router';
 import { EkubsComponent } from "../ekubs/ekubs.component";
+import { PaymentHistoryComponent } from '../payment-history/payment-history.component';
 import { UxService } from '../../../../services/ux-service/ux.service';
+import { PaymentComponent } from '../payment/payment.component';
 
 @Component({
   selector: 'app-home',
-  imports: [HeaderComponent, CommonModule, DrawerComponent, EkubsComponent],
+  imports: [HeaderComponent, CommonModule, DrawerComponent, EkubsComponent, 
+      PaymentHistoryComponent, PaymentComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -31,7 +34,7 @@ export class HomeComponent {
     private usersService: UsersService,
     private toastrService: ToastrService,
     private router: Router,
-    private uxService:UxService
+    private uxService:UxService,
   ){
 
   }
@@ -44,6 +47,8 @@ export class HomeComponent {
 
     //drawer status
     this.getDrawerStatus();
+    //selected page
+    this.getSelectedPage();
   }
 
   //fetch users by id
@@ -66,6 +71,13 @@ export class HomeComponent {
   getDrawerStatus(){
     this.uxService.showDrawer$.subscribe((value:boolean)=>{
       this.showDrawer = value;
+    })
+  }
+
+  //selected Page during page size change
+  getSelectedPage(){
+    this.uxService.selectedPage$.subscribe((value:string)=>{
+      this.selectedPage = value;
     })
   }
 
@@ -98,10 +110,9 @@ export class HomeComponent {
     this.uxService.updateShowDrawerStatus(false);
   }
 
-  
-
   // navigate to
   selectPage(page:string){
+    this.uxService.updateSelectedPage(page);
     if(this.onMobileView){
       this.router.navigate(['member', page]);
     } else {

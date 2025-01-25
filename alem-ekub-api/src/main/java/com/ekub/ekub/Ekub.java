@@ -25,6 +25,7 @@ public class Ekub extends BaseEntity {
 
     @Id
     private UUID id;
+    @Column(unique = true)
     private String name;
     private BigDecimal amount;
     private BigDecimal totalAmount;

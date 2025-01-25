@@ -23,4 +23,12 @@ public class RoundController {
     ){
         return ResponseEntity.ok(service.getRoundResByEkubId(ekbuId));
     }
+
+    // get user pending payments
+    @GetMapping("/user/pending-payments/{user-id}")
+    public ResponseEntity<List<UserPendingPaymentResponse>> getUserPendingPayments(
+            @PathVariable("user-id") String userId
+    ){
+        return ResponseEntity.ok(service.getUserPendingPayments(userId));
+    }
 }

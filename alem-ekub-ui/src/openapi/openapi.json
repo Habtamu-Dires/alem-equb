@@ -427,6 +427,29 @@
                 }
             }
         },
+        "/payments": {
+            "post": {
+                "tags": [
+                    "payments"
+                ],
+                "operationId": "createPayment",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/users/{user-id}": {
             "get": {
                 "tags": [
@@ -511,6 +534,39 @@
                 }
             }
         },
+        "/rounds/user/pending-payments/{user-id}": {
+            "get": {
+                "tags": [
+                    "rounds"
+                ],
+                "operationId": "getUserPendingPayments",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserPendingPaymentResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/payments/{ekub-id}/{round-no}": {
             "get": {
                 "tags": [
@@ -535,15 +591,15 @@
                 }
             }
         },
-        "/payments/payment-status/{ekub-id}": {
+        "/payments/user/{user-id}": {
             "get": {
                 "tags": [
                     "payments"
                 ],
-                "operationId": "getEkubPaymentStatus",
+                "operationId": "getUserPayments",
                 "parameters": [
                     {
-                        "name": "ekub-id",
+                        "name": "user-id",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -559,8 +615,58 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/EkubPaymentStatusResponse"
+                                        "$ref": "#/components/schemas/PaymentResponse"
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payments/user/round/{ekub-id}": {
+            "get": {
+                "tags": [
+                    "payments"
+                ],
+                "operationId": "getUserRoundPayments",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PageResponseUserRoundPaymentResponse"
                                 }
                             }
                         }
@@ -1031,6 +1137,25 @@
                     "type"
                 ]
             },
+            "PaymentRequest": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "string"
+                    },
+                    "roundId": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "amount",
+                    "roundId",
+                    "userId"
+                ]
+            },
             "PageResponseUserResponse": {
                 "type": "object",
                 "properties": {
@@ -1159,6 +1284,29 @@
                     }
                 }
             },
+            "UserPendingPaymentResponse": {
+                "type": "object",
+                "properties": {
+                    "equbName": {
+                        "type": "string"
+                    },
+                    "roundId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "roundNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "endDateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "amount": {
+                        "type": "number"
+                    }
+                }
+            },
             "PaymentResponse": {
                 "type": "object",
                 "properties": {
@@ -1168,13 +1316,13 @@
                     "user": {
                         "$ref": "#/components/schemas/UserResponse"
                     },
+                    "ekubName": {
+                        "type": "string"
+                    },
                     "round": {
                         "$ref": "#/components/schemas/RoundResponse"
                     },
                     "amount": {
-                        "type": "number"
-                    },
-                    "penaltyAmount": {
                         "type": "number"
                     },
                     "createdDate": {
@@ -1183,22 +1331,53 @@
                     }
                 }
             },
-            "EkubPaymentStatusResponse": {
+            "PageResponseUserRoundPaymentResponse": {
                 "type": "object",
                 "properties": {
-                    "userId": {
-                        "type": "string"
-                    },
-                    "username": {
-                        "type": "string"
-                    },
-                    "hasWon": {
-                        "type": "boolean"
-                    },
-                    "roundPaymentsStatus": {
+                    "content": {
                         "type": "array",
                         "items": {
-                            "type": "boolean"
+                            "$ref": "#/components/schemas/UserRoundPaymentResponse"
+                        }
+                    },
+                    "number": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalElements": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "numberOfElements": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "last": {
+                        "type": "boolean"
+                    },
+                    "first": {
+                        "type": "boolean"
+                    },
+                    "empty": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "UserRoundPaymentResponse": {
+                "type": "object",
+                "properties": {
+                    "row": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object"
                         }
                     }
                 }

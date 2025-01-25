@@ -33,8 +33,8 @@ public class Round {
     @OneToOne
     private User winner;
 
-    private LocalDateTime createdDate;
-    private LocalDateTime endDate;
+    private LocalDateTime createdDateTime;
+    private LocalDateTime endDateTime;
     private boolean paid;
 
 }

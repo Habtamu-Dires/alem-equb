@@ -22,7 +22,6 @@ public class Payment {
     @Id
     private UUID id;
     private BigDecimal amount;
-    private BigDecimal penaltyAmount;
     private LocalDateTime createdDate;
 
     @ManyToOne

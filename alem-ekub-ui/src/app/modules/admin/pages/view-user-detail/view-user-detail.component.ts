@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from '../../../../services/services';
 import { UserResponse } from '../../../../services/models';
@@ -11,16 +11,14 @@ import { UserResponse } from '../../../../services/models';
 })
 export class ViewUserDetailComponent implements OnInit{
 
-  userId:string | undefined;
+  @Input() userId:string | undefined;
   user:UserResponse | undefined;
 
   constructor(
-    private activatedRoute:ActivatedRoute,
     private usersService:UsersService
   ) { }
 
   ngOnInit(): void {
-    this.userId = this.activatedRoute.snapshot.params['userId'];
     this.fetchUserById();
   }
 
@@ -38,7 +36,4 @@ export class ViewUserDetailComponent implements OnInit{
     
   }
 
-  onCancel(){
-    
-  }
 }

@@ -9,8 +9,8 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { UsersService } from './services/users.service';
 import { EkubsService } from './services/ekubs.service';
 import { EkubUsersService } from './services/ekub-users.service';
-import { RoundsService } from './services/rounds.service';
 import { PaymentsService } from './services/payments.service';
+import { RoundsService } from './services/rounds.service';
 import { FilesService } from './services/files.service';
 
 /**
@@ -24,8 +24,8 @@ import { FilesService } from './services/files.service';
     UsersService,
     EkubsService,
     EkubUsersService,
-    RoundsService,
     PaymentsService,
+    RoundsService,
     FilesService,
     ApiConfiguration
   ],

@@ -18,8 +18,8 @@ public class RoundMapper {
                 .roundNumber(round.getRoundNumber())
                 .totalAmount(round.getTotalAmount())
                 .paid(round.isPaid())
-                .createdDate(round.getCreatedDate())
-                .endDate(round.getEndDate())
+                .createdDate(round.getCreatedDateTime())
+                .endDate(round.getEndDateTime())
                 .build();
     }
 }

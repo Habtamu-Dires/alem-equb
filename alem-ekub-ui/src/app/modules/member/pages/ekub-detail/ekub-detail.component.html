@@ -45,26 +45,24 @@
         <div class="p-4 text-xl font-semibold">
             <p class="underline">የአባላት ዝርዝር</p>
         </div>
-        <section class="w-full p-5">
-            <section class="w-full flex justify-center max-h-96 overflow-auto">
-                <table class="w-full md:w-1/2 border border-gray-300 bg-white">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="table-head">የአባላት ስም</th>
-                            <th class="table-head">የዕጣ ሁኔታ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let member of ekubUsersList">
-                            <td class="table-data">{{member.fullName}}</td>
-                            <td class="table-data">
-                                <span *ngIf="hasWon(member.id)">✔</span>
-                                <span *ngIf="!hasWon(member.id)">✘</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+        <section class="w-full p-5 flex justify-center max-h-96 overflow-auto">
+            <table class="w-full md:w-1/2 border border-gray-300 bg-white">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="table-head">የአባላት ስም</th>
+                        <th class="table-head">የዕጣ ሁኔታ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let member of ekubUsersList">
+                        <td class="table-data">{{member.fullName}}</td>
+                        <td class="table-data">
+                            <span *ngIf="hasWon(member.id)">✔</span>
+                            <span *ngIf="!hasWon(member.id)">✘</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </section>
 </main>

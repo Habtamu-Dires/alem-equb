@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 public record PaymentResponse(
         String id,
         UserResponse user,
+        String ekubName,
         RoundResponse round,
         BigDecimal amount,
-        BigDecimal penaltyAmount,
         LocalDateTime createdDate
 ) {
 }

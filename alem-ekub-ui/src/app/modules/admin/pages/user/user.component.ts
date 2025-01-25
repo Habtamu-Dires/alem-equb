@@ -8,10 +8,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
+import { ViewUserDetailComponent } from "../view-user-detail/view-user-detail.component";
 
 @Component({
   selector: 'app-user',
-  imports: [HeaderComponent, CommonModule, PaginationComponent],
+  imports: [HeaderComponent, CommonModule, PaginationComponent, ViewUserDetailComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
@@ -20,6 +21,7 @@ export class UserComponent implements OnInit{
   userList:UserResponse[] = [];
   selectedUserId:string | undefined;
   showActions:boolean = false;
+  showDetail:boolean = false;
   // pagination
   page:number = 0;
   size:number = 5;
@@ -82,8 +84,13 @@ export class UserComponent implements OnInit{
   }
   // on view detail
   onViewDetail(userId:any){
-    this.router.navigate(['admin','users', userId as string]);
+    // this.router.navigate(['admin','users', userId as string]);
+    this.selectedUserId = userId as string;
+    this.showDetail = true;
+  }
 
+  toggleShowDetail(){
+    this.showDetail = !this.showDetail;
   }
 
 

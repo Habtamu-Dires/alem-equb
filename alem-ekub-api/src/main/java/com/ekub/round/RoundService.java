@@ -1,13 +1,15 @@
 package com.ekub.round;
 
 import com.ekub.ekub.Ekub;
-import com.ekub.user.UserResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +31,8 @@ public class RoundService {
                     .id(UUID.randomUUID())
                     .ekub(ekub)
                     .roundNumber(ekub.getRoundNumber()+1)
-                    .createdDate(LocalDateTime.now())
-                    .endDate(endDate)
+                    .createdDateTime(LocalDateTime.now())
+                    .endDateTime(endDate)
                     .totalAmount(BigDecimal.ZERO)
                     .payments(List.of())
                     .paid(false)
@@ -70,6 +72,36 @@ public class RoundService {
     // save round
     public void save(Round round){
         repository.save(round);
+    }
+
+
+    //get user pending payments
+    public List<UserPendingPaymentResponse> getUserPendingPayments(String userId){
+        LocalDateTime now = LocalDateTime.now();
+
+        List<UserPendingPaymentResponse> unPaidPayments = repository.findUserPendingPayments(userId);
+        List<UserPendingPaymentResponse> responses = new ArrayList<>();
+
+        for (UserPendingPaymentResponse payment : unPaidPayments){
+            if(payment.endDateTime().isBefore(now)){
+                long daysOverdue = Duration.between(payment.endDateTime(), now).toDays();
+                BigDecimal dailyPenaltyRate = new BigDecimal("0.01");
+                BigDecimal penalty = dailyPenaltyRate.multiply(new BigDecimal(daysOverdue + 1)); // +1 to include the first overdue day
+                BigDecimal totalAmount = payment.amount().add(penalty);
+                responses.add(
+                        UserPendingPaymentResponse.builder()
+                                .equbName(payment.equbName())
+                                .roundId(payment.roundId())
+                                .roundNumber(payment.roundNumber())
+                                .amount(totalAmount)
+                                .build()
+                );
+
+            } else {
+                responses.add(payment);
+            }
+        }
+        return responses;
     }
 
 }

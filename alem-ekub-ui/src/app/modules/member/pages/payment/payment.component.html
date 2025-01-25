@@ -1,0 +1,42 @@
+<main class="max-container w-full h-full flex flex-col justify-center items-center">
+    <app-header *ngIf='onMobileView' class="w-full"  
+        [onSubPage]="true"
+        pageName="Payment"
+        [onMobileView]="onMobileView">
+    </app-header>
+    
+    <!--Main section-->
+    <section *ngIf="pendingPayments.length > 0"
+        class="w-full flex flex-col justify-center items-center"
+        [ngClass]="{'mt-16': onMobileView}">
+        <table class="w-full border border-gray-300 bg-white">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="table-head">የዕቁብ ስም</th>
+                    <th class="table-head">ዙር</th>
+                    <th class="table-head">የብር መጠን</th>
+                    <th class="table-head">የቀረው ቀን</th>
+                    <th class="table-head">የሚያበቃበት ቀን እና ሰዓት</th>
+                    <th class="table-head"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let payment of pendingPayments">
+                    <td class="table-data">{{payment.equbName}}</td>
+                    <td class="table-data">{{payment.roundNumber}}</td>
+                    <td class="table-data">{{payment.amount}}</td>
+                    <td class="table-data">{{transfromDuration(payment.endDateTime)}}</td>
+                    <td class="table-data">{{transformDateTime(payment.endDateTime)}}</td>
+                    <td class="table-data">
+                        <button class="bg-grn px-4 py-2 rounded-lg hover:bg-green-300"
+                            (click)="onPayment(payment)">
+                            Pay
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+

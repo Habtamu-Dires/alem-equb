@@ -1,12 +1,11 @@
 package com.ekub.payment;
 
+import com.ekub.common.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +16,33 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService service;
+
+    //create payment
+    @PostMapping
+    public ResponseEntity<Void> createPayment(
+            @RequestBody @Valid PaymentRequest request
+    ){
+        service.createPayment(request);
+        return ResponseEntity.accepted().build();
+    }
+
+    //get payments of a user
+    @GetMapping("/user/{user-id}")
+    public ResponseEntity<List<PaymentResponse>> getUserPayments(
+            @PathVariable("user-id") String userId
+    ){
+        return ResponseEntity.ok(this.service.getUserPayments(userId));
+    }
+
+    //get user round payments
+    @GetMapping("/user/round/{ekub-id}")
+    public ResponseEntity<PageResponse<UserRoundPaymentResponse>> getUserRoundPayments(
+            @PathVariable("ekub-id") String ekubId,
+            @RequestParam(value = "page", defaultValue = "10", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size
+    ){
+        return ResponseEntity.ok(service.getUserRoundPayments(ekubId,page,size));
+    }
 
     // get payments of current round
     @GetMapping("/current-round/{ekub-id}")
@@ -35,11 +61,4 @@ public class PaymentController {
         return ResponseEntity.ok(service.getLstOfPayment(ekubId,roundNo));
     }
 
-    // get payment status of of a user in ekub
-    @GetMapping("/payment-status/{ekub-id}")
-    public ResponseEntity<List<EkubPaymentStatusResponse>> getEkubPaymentStatus(
-            @PathVariable("ekub-id") String ekubId
-    ) {
-        return ResponseEntity.ok(service.getEkubPaymentStatus(ekubId));
-    }
 }

@@ -20,7 +20,7 @@ public record EkubRequest(
 
         BigDecimal totalAmount,
 
-        @NotNull(message = "Draw amount is Mandatory")
+        @NotNull(message = "Draw paymentAmount is Mandatory")
         BigDecimal amount,
 
         @NotEmpty(message = "Type is Mandatory")

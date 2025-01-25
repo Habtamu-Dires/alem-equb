@@ -5,6 +5,6 @@
 export { UsersService } from './services/users.service';
 export { EkubsService } from './services/ekubs.service';
 export { EkubUsersService } from './services/ekub-users.service';
-export { RoundsService } from './services/rounds.service';
 export { PaymentsService } from './services/payments.service';
+export { RoundsService } from './services/rounds.service';
 export { FilesService } from './services/files.service';
