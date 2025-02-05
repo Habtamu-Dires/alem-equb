@@ -10,6 +10,7 @@ import {ToastrService} from 'ngx-toastr';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { EkubDetailComponent } from "../../../member/pages/ekub-detail/ekub-detail.component";
 import { ViewEkubDetailComponent } from "../view-ekub-detail/view-ekub-detail.component";
+import { InvitationDialogComponent } from '../../components/invitation-dialog/invitation-dialog.component';
 
 @Component({
   selector: 'app-ekub',
@@ -21,7 +22,7 @@ import { ViewEkubDetailComponent } from "../view-ekub-detail/view-ekub-detail.co
 export class EkubComponent implements OnInit {
 
   ekubList:EkubResponse[] =[];
-  selectedEkubId:string | undefined;
+  selectedEkub:EkubResponse | undefined;
   showActions:boolean = false;
    // pagination
    page:number = 0;
@@ -90,14 +91,14 @@ export class EkubComponent implements OnInit {
   }
 
   // toggle show actions
-  toggelShowActions(ekubId:any){
-    this.selectedEkubId =  ekubId as string;
-    this.showActions = !this.showActions;
+  onShowActions(ekub:any){
+    this.selectedEkub =  ekub;
+    this.showActions = true;
   }
 
   // onView detail
-  onViewDetail(ekubId:any){
-    this.selectedEkubId = ekubId as string;
+  onViewDetail(ekub:any){
+    this.selectedEkub = ekub;
     this.showDetail = true;
   }
 
@@ -126,6 +127,16 @@ export class EkubComponent implements OnInit {
     })
   }
 
+  // on invite user
+  onInviteUser(ekubId:any){
+    const dialogRef = this.matDialog.open(InvitationDialogComponent,{
+      width:'400px',
+      data:{
+        ekubId: ekubId as string
+      }
+    });
+  }
+
   //pagination methods
   onPageChanged(page:number){
     this.page = page;
@@ -141,7 +152,8 @@ export class EkubComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   hideDeleteBtn(event: MouseEvent){
     const target = event.target as HTMLElement;
-    if(!target.classList.contains('donthide')){
+    if(!target.classList.contains('donthide') && this.showActions === true){
+      console.log("hiding")
       this.showActions = false;
     }
   }

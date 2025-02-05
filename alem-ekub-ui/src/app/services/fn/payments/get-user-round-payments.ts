@@ -8,20 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseUserRoundPaymentResponse } from '../../models/page-response-user-round-payment-response';
+import { UserRoundPaymentResponse } from '../../models/user-round-payment-response';
 
 export interface GetUserRoundPayments$Params {
   'ekub-id': string;
-  page?: number;
-  size?: number;
+  version: number;
 }
 
-export function getUserRoundPayments(http: HttpClient, rootUrl: string, params: GetUserRoundPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserRoundPaymentResponse>> {
+export function getUserRoundPayments(http: HttpClient, rootUrl: string, params: GetUserRoundPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserRoundPaymentResponse>>> {
   const rb = new RequestBuilder(rootUrl, getUserRoundPayments.PATH, 'get');
   if (params) {
     rb.path('ekub-id', params['ekub-id'], {});
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.query('version', params.version, {});
   }
 
   return http.request(
@@ -29,7 +27,7 @@ export function getUserRoundPayments(http: HttpClient, rootUrl: string, params: 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseUserRoundPaymentResponse>;
+      return r as StrictHttpResponse<Array<UserRoundPaymentResponse>>;
     })
   );
 }

@@ -4,6 +4,9 @@
 
 export interface PaymentRequest {
   amount: number;
+  paymentMethod: string;
+  remark: string;
   roundId: string;
+  type: 'MEMBER_PAYMENT' | 'WINNING_PAYOUT';
   userId: string;
 }

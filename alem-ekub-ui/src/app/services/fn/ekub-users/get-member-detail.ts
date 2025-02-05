@@ -8,16 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserResponse } from '../../models/user-response';
+import { MemberDetailResponse } from '../../models/member-detail-response';
 
-export interface GetDrawParticipants$Params {
+export interface GetMemberDetail$Params {
   'ekub-id': string;
+  version: number;
 }
 
-export function getDrawParticipants(http: HttpClient, rootUrl: string, params: GetDrawParticipants$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getDrawParticipants.PATH, 'get');
+export function getMemberDetail(http: HttpClient, rootUrl: string, params: GetMemberDetail$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MemberDetailResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getMemberDetail.PATH, 'get');
   if (params) {
     rb.path('ekub-id', params['ekub-id'], {});
+    rb.path('version', params.version, {});
   }
 
   return http.request(
@@ -25,9 +27,9 @@ export function getDrawParticipants(http: HttpClient, rootUrl: string, params: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<UserResponse>>;
+      return r as StrictHttpResponse<Array<MemberDetailResponse>>;
     })
   );
 }
 
-getDrawParticipants.PATH = '/ekub-users/participants/{ekub-id}';
+getMemberDetail.PATH = '/ekub-users/member-detail/{ekub-id}/{version}';

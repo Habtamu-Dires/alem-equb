@@ -1,0 +1,21 @@
+<main class="flex flex-col justify-center items-center p-4 gap-3 shadow-xl 
+      font-mono bg-grn/40 rounded-lg">
+  <h2 class="w-full text-lg font-semibold">Invite Users to {{ekubName}}</h2>
+  <section class="w-full relative">
+    <input [formControl]="userControl" class="form-input" type="text" placeholder="search user first name"/>
+    <div *ngIf="users.length > 0"
+        class="absolute w-full bg-white rounded-lg mb-5">
+        @for (user of users; track $index) {
+            <div class="flex justify-between p-4">
+                <p>{{user.fullName}}</p>
+                <button (click)="invite(user.id)" class="text-blue-500">
+                    Invite
+                </button>
+            </div>
+        }
+    </div>
+  </section>
+  <div class="flex justify-evenly w-full pt-4">
+    <button (click)="cancel()">Cancel</button>
+  </div>
+</main>

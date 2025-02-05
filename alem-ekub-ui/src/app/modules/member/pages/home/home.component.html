@@ -1,8 +1,8 @@
 <main class="relative max-container w-full min-h-screen flex flex-col">
-    <app-header class="w-full" 
+    <app-header class="w-full sticky top-0" 
         [onMobileView]="onMobileView"
         (onOpenDrawer)="openDrawer()"
-        [onSubPage]="false"
+        [onHomePage]="true"
         >
     </app-header>
     <!--side bar-->
@@ -48,8 +48,8 @@
                     <p class="text-sm font-mono">የቀደሙ ክፍያዎች</p>
                 </div>
                 <div class="flex flex-col items-center p-6 gap-4 w-44 h-32 shadow-xl cursor-pointer rounded-md"
-                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'search-ekubs'}"
-                    (click)="selectPage('search-ekubs')">
+                        [ngClass]="{'border-2 border-grn': !onMobileView && selectedPage === 'new-ekubs'}"
+                    (click)="selectPage('new-ekubs')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#1c594e" d="m14.75 20l2 2H6q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h9l5 6v12q0 .5-.213.913t-.587.687L14 16.45q-.425.275-.925.413T12 17q-1.65 0-2.825-1.175T8 13t1.175-2.825T12 9t2.825 1.175T16 13q0 .575-.137 1.075T15.45 15L18 17.6V8.7L14.05 4H6v16zM12 15q.825 0 1.413-.587T14 13t-.587-1.412T12 11t-1.412.588T10 13t.588 1.413T12 15m0-2"/></svg>
                     <p class="text-sm font-mono">አዲስ ዕቁቦች</p>
                 </div>
@@ -63,6 +63,8 @@
                 <app-payment-history></app-payment-history>
             } @else if(selectedPage === 'payment') {
                 <app-payment></app-payment>
+            }@else if(selectedPage === 'new-ekubs') {
+                <app-new-ekubs></app-new-ekubs>
             }
         </section>
     </section>

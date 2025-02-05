@@ -1,10 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EkubsService, EkubUsersService } from '../../../../services/services';
-import { EkubResponse, UserResponse } from '../../../../services/models';
-import { HttpErrorResponse } from '@angular/common/http';
+import { EkubsService, EkubUsersService, RoundsService, UserGuaranteesService } from '../../../../services/services';
+import { BooleanResponse, EkubResponse, EkubStatusResponse, MemberDetailResponse, RoundResponse, UserResponse } from '../../../../services/models';
 import { HeaderComponent } from "../../components/header/header.component";
 import { CommonModule, DatePipe } from '@angular/common';
+import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { MemberService } from '../../../../services/member-services/member.service';
 
 @Component({
   selector: 'app-ekub-detail',
@@ -17,82 +21,63 @@ export class EkubDetailComponent implements OnInit {
   
   onMobileView:boolean = true;
   ekub:EkubResponse | undefined;
-  currentRound:number = 0;
-  lastRoundWinner:UserResponse | undefined;
-  ekubUsersList:UserResponse[] = [];
-  ekubWinnersList:UserResponse[] = [];
-  drawParticipantsList:UserResponse[]=[];
+  lastRoundNo:number = 0;
+  lastRound:RoundResponse | undefined;
+  loggedUserId:string | undefined;
+  isAllowedToBeGuarantor:boolean = false;
+  ekubStatus:EkubStatusResponse | undefined;
+  membersDetailList: MemberDetailResponse[] = [];
+  ekubType:string = '';
+  currentVersion:number | undefined;
 
   constructor(
+    private memberService:MemberService,
     private activatedRoute: ActivatedRoute,
+    private keycloakService:KeycloakService,
     private ekubService:EkubsService,
     private ekubUsersService:EkubUsersService,
-    private datePipe:DatePipe
+    private userGuaranteeService:UserGuaranteesService,
+    private roundsService:RoundsService,
+    private datePipe:DatePipe,
+    private dialog:MatDialog,
+    private toastrService:ToastrService
   ){}
 
   ngOnInit(): void {
     this.checkScreenSzie(window.innerWidth);
-    const ekubId = this.activatedRoute.snapshot.params['ekubId'];
-    if(ekubId){
-      this.fetchEkubById(ekubId);
-      this.fetchEkubUsers(ekubId);
-      this.fetchEkubWinners(ekubId);
-      this.fetchEkubDrawParticipants(ekubId);
-    }
-  }
+    this.ekubType = this.activatedRoute.snapshot.params['type'];
+    this.loggedUserId = this.keycloakService.profile.id;
+    
+    // get ekub 
+    this.memberService.selectedEkub$.subscribe((ekub:EkubResponse)=>{
+      this.ekub = ekub;
 
-  //get ekbu by id
-  fetchEkubById(ekubId:string){
-    this.ekubService.getEkubById({
-      'ekub-id': ekubId
-    }).subscribe({
-      next:(res:EkubResponse)=>{
-        this.ekub = res;
-        this.currentRound = res.roundNumber as number;
-        //fetch last round winner
-        this.fetchLastRoundWinner(ekubId);
-      }, error:(err:HttpErrorResponse)=>{
-        console.log(err);
+      //upate  lastRound number
+      if(this.ekub.isActive && ekub.roundNumber && ekub.roundNumber > 1){
+        this.lastRoundNo = ekub.roundNumber as number - 1;
+      } else {
+        this.lastRoundNo = ekub.roundNumber as number;
+      }
+      // fetch datas
+      if(ekub.id && ekub.version){
+        this.currentVersion = ekub.version;
+        this.fetchEkubStatus(ekub.id,ekub.version);
+        this.fetcLasthRound(ekub.id,ekub.version);
+        this.fetchMembersDetail(ekub.id, ekub.version);
+        this.fetchIsAllowedToGuarantor(ekub.id,ekub.version );
       }
     })
+
   }
 
-  //fetch ekub users list
-  fetchEkubUsers(ekubId:string){
-    this.ekubUsersService.getEkubUsers({
-      'ekub-id': ekubId
+  //fetch ekub status information
+  fetchEkubStatus(ekubId:string, version:number){
+    this.ekubService.getEkubStatus({
+      'ekub-id':ekubId,
+      'version':version
     }).subscribe({
-      next:(res:UserResponse[])=>{
-        console.log(res);
-        this.ekubUsersList = res;
-      },
-      error:(err:HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
-  }
-
-  //fetch ekub winners list 
-  fetchEkubWinners(ekubId:string){
-    this.ekubUsersService.getEkubWinners({
-      'ekub-id': ekubId
-    }).subscribe({
-      next:(res:UserResponse[])=>{
-        this.ekubWinnersList = res;
-      },
-      error:(err:HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
-  }
-
-  //fetch ekub draw participants list
-  fetchEkubDrawParticipants(ekubId:string){
-    this.ekubUsersService.getDrawParticipants({
-      'ekub-id': ekubId
-    }).subscribe({
-      next:(res:UserResponse[]) =>{
-        this.drawParticipantsList = res;
+      next:(res:EkubStatusResponse)=>{
+        this.ekubStatus = res;
       },
       error:(err)=>{
         console.log(err);
@@ -100,31 +85,87 @@ export class EkubDetailComponent implements OnInit {
     })
   }
 
-  //fetch a last round winner
-  fetchLastRoundWinner(ekubId:string){
-    const lastRound = this.currentRound - 1;
-    if(lastRound < 1){
-      this.ekubUsersService.getRoundWinner({
-        'ekub-id': ekubId,
-        'round-no': lastRound
-      }).subscribe({
-        next:(res:UserResponse)=>{
-          this.lastRoundWinner = res;
-        },
-        error:(err)=>{
-          console.log(err);
-        }
-      })
-    }
+  //get members detail
+  fetchMembersDetail(ekubId:string,version:number){
+    this.ekubUsersService.getMemberDetail({
+      'ekub-id':ekubId,
+      'version':version
+    }).subscribe({
+      next:(res:MemberDetailResponse[])=>{
+        this.membersDetailList = res;
+        console.log(version);
+        console.log("memers detail" , res);
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
   }
 
-  // is a user a winer
-  hasWon(userId:any){
-    return this.ekubWinnersList
-                .filter(user => user.id === userId as string)
-                .length > 0;
+  //fetch round by ekubId and round no
+  fetcLasthRound(ekubId:string,version:number){
+    this.roundsService.getRoundByEkubAndRoundNo({
+      'ekub-id': ekubId,
+      'version': version,
+      'round-no': this.lastRoundNo
+    }).subscribe({
+      next:(res:RoundResponse)=>{
+        this.lastRound = res;
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
   }
 
+  // isAllowedToGuarant
+  fetchIsAllowedToGuarantor(ekubId:string,version:number){
+    this.userGuaranteeService.isAllowedToBeGuarantor({
+      'ekub-id': ekubId,
+      'version': version
+    }).subscribe({
+      next:(res:BooleanResponse)=>{
+        this.isAllowedToBeGuarantor = res.result as boolean;
+        console.log(this.isAllowedToBeGuarantor , " allowed to be guarantor ")
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
+  }
+
+  //guarantee
+  guarantWinner(winRoundId:string, winnerId:string){
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+          width: '400px',
+          data:{
+            message:'Are you sure you wants to guarantee user',
+            buttonName: 'guarantee'
+          }
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      if(result){
+        this.userGuaranteeService.guaranteeUser({
+          'round-id': winRoundId,
+          'user-id': winnerId
+        }).subscribe({
+          next:()=>{
+            this.isAllowedToBeGuarantor = false;
+            // fetch update member detail
+            this.fetchMembersDetail(
+                this.ekub?.id as string,
+                this.currentVersion as number
+            );
+            this.toastrService.success("Successfully guaranteed user")
+          },
+          error:(err)=>{
+            console.log(err);
+            this.toastrService.error("Something went wrong", 'Ooops');
+          }
+        })
+      }
+    })
+  }
 
   // transform date time
   transformDateTime(dateString:any){

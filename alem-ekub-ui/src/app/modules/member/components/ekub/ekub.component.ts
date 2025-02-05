@@ -1,13 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EkubResponse } from '../../../../services/models';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { formatDistanceToNow } from 'date-fns';
 import { Router } from '@angular/router';
+import { MemberService } from '../../../../services/member-services/member.service';
 
 
 @Component({
   selector: 'app-ekub',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, CommonModule],
   providers: [DatePipe],
   templateUrl: './ekub.component.html',
   styleUrl: './ekub.component.scss'
@@ -15,14 +16,35 @@ import { Router } from '@angular/router';
 export class EkubComponent {
 
   @Input() ekub:EkubResponse | undefined;
+  @Input() isNewEkub:boolean = false;
+  @Output() onJoinEkub = new EventEmitter<string>();
+  @Output() onLeaveEkub = new EventEmitter<string>();
+
 
   constructor(
     private datePipe:DatePipe,
-    private router:Router
-  ) { }
+    private router:Router,
+    private memberService:MemberService
+  ) {}
 
-  showDetails(ekubId:any){
-    this.router.navigate(['member','ekub-detail',ekubId]);
+  // show detail
+  showDetails(ekub:EkubResponse){
+    this.memberService.updateSelectedEkub(ekub);
+    let type = 'joined'
+    if(this.isNewEkub){
+      type = 'new'
+    }
+    this.router.navigate(['member','ekub-detail',type]);
+  }
+
+  // join ekubs
+  joinEkub(ekubId:any){
+    this.onJoinEkub.emit(ekubId);
+  }
+
+  // unJoin ekub
+  leaveEkub(ekubId:any){
+    this.onLeaveEkub.emit(ekubId);
   }
 
   //transfrom date
@@ -48,7 +70,7 @@ export class EkubComponent {
   //transfrom  duaration
   transfromDuration(dateString:any){
     const date = new Date(dateString);
-    const duration = formatDistanceToNow(date)
+    const duration = formatDistanceToNow(date, {addSuffix: true})
     return duration;
   }
 

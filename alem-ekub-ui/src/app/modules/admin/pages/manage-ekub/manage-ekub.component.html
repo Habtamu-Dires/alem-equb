@@ -26,6 +26,10 @@
             <input [(ngModel)] ="ekubRequest.amount"  class="form-input" type="number" step="0.01" placeholder="amount"/>
         </div>
         <div class="w-full grid grid-cols-12">
+            <label class="form-label">Penalty % Per Day<span class="text-red-400">*</span></label>
+            <input [(ngModel)] ="ekubRequest.penaltyPercentPerDay"  class="form-input" type="number" step="0.01" placeholder="amount"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
             <label class="form-label">Frequency In Day<span class="text-red-400">*</span></label>
             <input [(ngModel)] ="ekubRequest.frequencyInDays"  class="form-input" type="number" placeholder="frequency in days"/>
         </div>
@@ -38,20 +42,35 @@
             <label class="form-label">Next Draw Date<span class="text-red-400">*</span></label>
             <input [(ngModel)] ="ekubRequest.nextDrawDateTime"  class="form-input" type="datetime-local" placeholder="start date"/>
         </div>
-        <div class="w-full grid grid-cols-12">
+        <div *ngIf="!ekubRequest.id || ekubResponse.roundNumber === 0" class="w-full grid grid-cols-12">
             <label class="form-label">Start Date Time<span class="text-red-400">*</span></label>
             <input [(ngModel)] ="ekubRequest.startDateTime"  class="form-input" type="datetime-local" placeholder="start date"/>
+        </div>
+        <div class="w-full grid grid-cols-12">
+            <label class="form-label">IS Exclusive<span class="text-red-400">*</span></label>
+            <div class="w-full col-span-12 md:col-span-10 flex justify-start gap-5">
+                <div class="text-lg">
+                    <input [(ngModel)]="ekubRequest.isExclusive" name="isExclusive"  type="radio" [value]="true"
+                        class="w-5 h-5"/>
+                    Yes
+                </div>
+                <div class="text-lg">
+                    <input [(ngModel)]="ekubRequest.isExclusive"  name="isExclusive" type="radio" [value]="false"
+                    class="w-5 h-5"/>
+                    No
+                </div>
+            </div>
         </div>
         <div *ngIf="ekubRequest.id" class="w-full grid grid-cols-12">
             <label class="form-label">IS Active<span class="text-red-400">*</span></label>
             <div class="w-full col-span-12 md:col-span-10 flex justify-start gap-5">
                 <div class="text-lg">
-                    <input [(ngModel)]="ekubRequest.isActive"  type="radio" [value]="true"
+                    <input [(ngModel)]="ekubRequest.isActive"  name="isActive"  type="radio" [value]="true"
                         class="w-5 h-5"/>
                     Yes
                 </div>
                 <div class="text-lg">
-                    <input [(ngModel)]="ekubRequest.isActive" type="radio" [value]="false"
+                    <input [(ngModel)]="ekubRequest.isActive"  name="isActive" type="radio" [value]="false"
                     class="w-5 h-5"/>
                     No
                 </div>

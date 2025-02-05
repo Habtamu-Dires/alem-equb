@@ -6,9 +6,9 @@ services:
       POSTGRES_USER: hab
       POSTGRES_PASSWORD: password
       PGDATA: /var/lib/postgresql/data
-      POSTGRES_DB: alem_ekub_db
+      POSTGRES_DB: keycloak_db
     volumes:
-      - ekubv:/data/postgres
+      - alem_ekub_volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -23,13 +23,20 @@ services:
     environment:
       KEYCLOAK_ADMIN: habt
       KEYCLOAK_ADMIN_PASSWORD: password
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-ekub:5432/keycloak_db
+      KC_DB_USERNAME: hab
+      KC_DB_PASSWORD: password
+      KEYCLOAK_THEME: my-custom-theme
+    volumes:
+      - ./keycloak-custom-theme/my-custom-theme:/opt/keycloak/themes/my-custom-theme
     networks:
       - alem-ekub
     command:
       - "start-dev"
 
 volumes:
-  ekubv:
+  alem_ekub_volume:
     driver: local
 networks:
   alem-ekub:

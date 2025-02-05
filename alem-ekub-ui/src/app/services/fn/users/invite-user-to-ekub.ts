@@ -9,14 +9,16 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface RemoveProfilePicture$Params {
+export interface InviteUserToEkub$Params {
   'user-id': string;
+  'ekub-id': string;
 }
 
-export function removeProfilePicture(http: HttpClient, rootUrl: string, params: RemoveProfilePicture$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, removeProfilePicture.PATH, 'delete');
+export function inviteUserToEkub(http: HttpClient, rootUrl: string, params: InviteUserToEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, inviteUserToEkub.PATH, 'post');
   if (params) {
-    rb.query('user-id', params['user-id'], {});
+    rb.path('user-id', params['user-id'], {});
+    rb.query('ekub-id', params['ekub-id'], {});
   }
 
   return http.request(
@@ -29,4 +31,4 @@ export function removeProfilePicture(http: HttpClient, rootUrl: string, params: 
   );
 }
 
-removeProfilePicture.PATH = '/users/profile-picture';
+inviteUserToEkub.PATH = '/users/invite/{user-id}';

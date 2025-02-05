@@ -14,8 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,27 +38,90 @@ public class EkubService {
         if(repository.findByName(request.name()).isPresent()){
             throw new EntityExistsException("Ekub with name " + request.name() + " already exists");
         }
-        System.out.println("The request " + request);
         Ekub ekub = repository.save(
                 Ekub.builder()
                         .id(UUID.randomUUID())
                         .name(request.name())
+                        .version(0)
                         .description(request.description())
+                        .exclusive(request.isExclusive())
                         .amount(request.amount())
+                        .penaltyPercentPerDay(request.penaltyPercentPerDay())
                         .frequencyInDays(request.frequencyInDays())
                         .type(request.type())
                         .nextDrawDateTime(request.startDateTime())
                         .roundNumber(0)
                         .startDateTime(request.startDateTime())
+                        .mpesaAccountNumber(request.mpesaAccountNumber())
+                        .telebirrAccountNumber(request.telebirrAccountNumber())
+                        .archived(request.isArchived())
                         .build()
         );
 
-        // if ekub is active create first round
-        if(ekub.isActive()){
-            Round newRound = roundService.createNewRound(ekub);
-            ekub.setRoundNumber(newRound.getRoundNumber());
-            repository.save(ekub);
+    }
+
+    // update ekub
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
+    public void updateEkubInfo(EkubRequest request){
+        Ekub ekub = findEkubById(request.id());
+
+        ekub.setName(request.name());
+        ekub.setAmount(request.amount());
+        ekub.setPenaltyPercentPerDay(request.penaltyPercentPerDay());
+        ekub.setType(request.type());
+        ekub.setFrequencyInDays(request.frequencyInDays());
+        ekub.setNextDrawDateTime(request.nextDrawDateTime());
+        ekub.setStartDateTime(request.startDateTime());
+        ekub.setExclusive(request.isExclusive());
+        ekub.setMpesaAccountNumber(request.mpesaAccountNumber());
+        ekub.setTelebirrAccountNumber(request.telebirrAccountNumber());
+        ekub.setArchived(request.isArchived());
+
+        Ekub savedEkub = repository.save(ekub);
+        // if ekub is updated to be active
+        if( request.isActive()
+            && !savedEkub.isActive()
+            && savedEkub.getNextDrawDateTime() != null)
+        {
+            System.out.println("Ekub activated so reset");
+            resetEkub(savedEkub);
+        } else if(!request.isActive() && savedEkub.isActive()) { // de-activate
+            savedEkub.setActive(false);
+            repository.save(savedEkub);
         }
+    }
+
+    //reset ekub
+    @Transactional
+    public void resetEkub(Ekub ekub){
+        ekub.setActive(true); //activate ekub
+        //start new version of ekub
+        ekub.setVersion(ekub.getVersion() + 1);
+        ekub.setRoundNumber(0);
+        ekub.setTotalAmount(BigDecimal.ZERO);
+        //create new round
+        Round newRound = roundService.createNewRound(ekub);
+        ekub.setRoundNumber(newRound.getRoundNumber());
+        //clear invitation list for ekub
+        repository.deleteInvitationsForEkub(ekub.getId());  //directly delete entries in the join table
+        ekub.getInvitedUsers().clear(); // optional: clear cached relationship in the entities
+        repository.save(ekub);
+    }
+
+
+    // update total amount of ekub
+    public void updateTotalAmountOfEkub(UUID ekubId, BigDecimal amount){
+        Ekub ekub = repository.findById(ekubId)
+                .orElseThrow(()-> new EntityNotFoundException("Ekub not found"));
+
+        BigDecimal prvAmount = ekub.getTotalAmount();
+        if(prvAmount == null){  //TODO: This is Temp , solved by at initialization
+            prvAmount = BigDecimal.ZERO;
+        }
+        BigDecimal updated = prvAmount.add(amount);
+        ekub.setTotalAmount(updated);
+        repository.save(ekub);
     }
 
     // get ekubs
@@ -83,35 +150,6 @@ public class EkubService {
                 .orElseThrow(() -> new EntityNotFoundException("Ekub not found exception"));
     }
 
-    // find ekub by name
-    public Ekub findEkubByName(String name){
-        return repository.findByName(name)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Ekub with name %s not found exception",name)));
-    }
-
-    // update ekub
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void updateEkubInfo(EkubRequest request){
-        Ekub ekub = this.findEkubById(request.id());
-
-        ekub.setName(request.name());
-        ekub.setAmount(request.amount());
-        ekub.setType(request.type());
-        ekub.setFrequencyInDays(request.frequencyInDays());
-        ekub.setNextDrawDateTime(request.nextDrawDateTime());
-        ekub.setStartDateTime(request.startDateTime());
-        ekub.setActive(request.isActive());
-
-        Ekub savedEkub = repository.save(ekub);
-        // if ekub is updated to be active
-        if(savedEkub.isActive() && savedEkub.getRoundNumber() == 0){
-            Round newRound = roundService.createNewRound(ekub);
-            ekub.setRoundNumber(newRound.getRoundNumber());
-            repository.save(ekub);
-        }
-    }
-
     // delete ekub
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteEkub(String ekubId){
@@ -121,7 +159,10 @@ public class EkubService {
 
     //get current round of ekub
     public Round getCurrentRound(Ekub ekub){
-        return roundService.getRoundByEkubIdAndRoundNo(ekub.getId(),ekub.getRoundNumber());
+        return roundService.findRoundByEkubAndRoundNo(
+                ekub.getId(),
+                ekub.getVersion(),
+                ekub.getRoundNumber());
     }
 
     // get current RoundResponse of ekbu
@@ -149,4 +190,37 @@ public class EkubService {
                 .map(mapper::toEkubResponse)
                 .toList();
     }
+
+    // get public ekbus
+    public List<EkubResponse> getPublicEkubsToJoin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUserId = authentication.getName();
+        return   repository.findPublicEkub(loggedUserId)
+                 .stream()
+                 .map(mapper::toEkubResponse)
+                 .toList();
+    }
+
+    // find ekub with invitedUsers
+    public Ekub findEkubWithInvitedUsers(String ekubId){
+        return repository.findEkubWithInvitedUsers(UUID.fromString(ekubId))
+                .orElseThrow(() -> new EntityNotFoundException("Ekub not found"));
+    }
+
+    // find InvitedEkubs not joined yet
+    public List<EkubResponse> getInvitedEkubsYetToJoin(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUserId = authentication.getName();
+
+        return repository.findInvitedEkubsYetToJoin(loggedUserId)
+                .stream()
+                .map(mapper::toEkubResponse)
+                .toList();
+    }
+
+    //get ekub status
+    public EkubStatusResponse getEkubStatus(String ekubId, int version){
+        return repository.findEkubStatus(UUID.fromString(ekubId),version);
+    }
+
 }

@@ -22,8 +22,8 @@ spring:
 keycloak:
   auth-server-url: http://localhost:9090
   realm: alem-ekub
-  client-id: ekub-service
-  client-secret: Wli1Jho60iRdI0j52z8PQovbZvRQ7OsH
+  client-id: backend-service
+  client-secret: Ot54gUJCZcGKo3wm4z2xBu6OvMFoX63G
 
 application:
   server:

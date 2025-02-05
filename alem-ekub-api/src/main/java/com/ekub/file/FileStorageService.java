@@ -48,9 +48,9 @@ public class FileStorageService {
             throw new RuntimeException(e.getMessage());
         }
         final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
-        String targetFilePath = uploadDir + separator + id +"-"+ currentTimeMillis() +"." + fileExtension;
+        String targetFiltPath = uploadDir + separator + id +"-"+ currentTimeMillis() +"." + fileExtension;
 
-        Path filePath = Paths.get(targetFilePath);
+        Path filePath = Paths.get(targetFiltPath);
 
         try {
             Files.write(filePath,sourceFile.getBytes());
@@ -59,7 +59,7 @@ public class FileStorageService {
             throw new RuntimeException(e.getMessage());
         }
         //construct and return url
-        return constructUrl(targetFilePath);
+        return constructUrl(targetFiltPath);
     }
 
     // construct url

@@ -1,1 +1,52 @@
-<p>payment works!</p>
+<main class="flex flex-col h-screen w-full">
+   <div class="sticky top-0 w-full z-10 bg-white">
+      <app-header 
+        componentName="Payment"
+      >
+      </app-header>
+   </div>
+    <section>
+        <table class="min-w-full border border-gray-300 bg-white overflow-auto">
+            <thead class="bg-gray-200 sticky top-16">
+              <tr>
+                <th class="table-head w-1/12">Name</th>
+                <th class="table-head w-1/12">Type</th>
+                <th class="table-head w-1/12">Amount</th>
+                <th class="table-head w-1/12">Equb</th>
+                <th class="table-head w-1/12">Version</th>
+                <th class="table-head w-1/12">Round</th>
+                <th class="table-head w-1/12">Date & Time</th>
+                <th class="table-head w-1/12">Remark</th>
+                <th class="table-head w-1/12">Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let payment of paymentList"
+                class="border-b border-gray-300 hover:bg-gray-100">              
+                    <td class="table-data">{{payment.user?.username}}</td>
+                    <td class="table-data">{{payment.type}}</td>
+                    <td class="table-data">{{payment.amount}}</td>
+                    <td class="table-data">{{payment.ekubName}}</td>
+                    <td class="table-data">{{payment.round?.version}}</td>
+                    <td class="table-data">{{payment.round?.roundNumber}}</td>
+                    <td class="table-data">{{formattedDateTime(payment.createdDate)}}</td>
+                    <td class="table-data">{{payment.remark}}</td>
+                    <td class="table-data">{{payment.paymentMethod}}</td>
+              </tr>
+            </tbody>
+        </table> 
+        <app-pagination *ngIf="!isEmptyPage" class="w-full m-5 z-10 sticky bottom-0 bg-white"
+          [page]="page"
+          [size]="size"
+          [isFirstPage]="isFirstPage"
+          [isLastPage]="isLastPage"
+          [numberOfElements]="numberOfElements"
+          [totalElements]="totalElements"
+          [totalPages]="totalPages"
+          
+          (sizeChanged)="onSizeChanged($event)"
+          (pageChanged)="onPageChanged($event)"
+        >
+        </app-pagination>     
+    </section>
+</main>

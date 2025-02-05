@@ -23,8 +23,16 @@ public class EkubController {
     public ResponseEntity<Void> createEkub(
             @RequestBody @Valid EkubRequest ekubRequest
     ) {
-        System.out.println("we hre ?");
         service.createEkub(ekubRequest);
+        return ResponseEntity.accepted().build();
+    }
+
+    // update ekub
+    @PutMapping
+    public ResponseEntity<Void> updateEkub(
+            @RequestBody @Valid EkubRequest request
+    ){
+        service.updateEkubInfo(request);
         return ResponseEntity.accepted().build();
     }
 
@@ -35,6 +43,12 @@ public class EkubController {
             @RequestParam(value = "size", defaultValue = "10", required = false) int size
     ){
         return ResponseEntity.ok(service.getPageOfEkubs(page,size));
+    }
+
+    //get public not active ekubs
+    @GetMapping("/public")
+    private ResponseEntity<List<EkubResponse>> getPublicEkubs(){
+        return ResponseEntity.ok(service.getPublicEkubsToJoin());
     }
 
     // get ekub by id
@@ -53,14 +67,6 @@ public class EkubController {
         return ResponseEntity.ok(service.getCurrentRound(ekubId));
     }
 
-    // update ekub
-    @PutMapping
-    public ResponseEntity<Void> updateEkub(
-            @RequestBody @Valid EkubRequest request
-    ){
-        service.updateEkubInfo(request);
-        return ResponseEntity.accepted().build();
-    }
 
     // delete ekub id
     @DeleteMapping("/{ekub-id}")
@@ -78,4 +84,20 @@ public class EkubController {
     ){
         return ResponseEntity.ok(service.searchEkubByName(ekubName));
     }
+
+    //find invited ekubs yet to join
+    @GetMapping("/invited-ekubs")
+    public ResponseEntity<List<EkubResponse>> getInvitedEkubsYetToJoin(){
+        return ResponseEntity.ok(service.getInvitedEkubsYetToJoin());
+    }
+
+    //get ekub status
+    @GetMapping("/ekub-status/{ekub-id}/{version}")
+    public ResponseEntity<EkubStatusResponse> getEkubStatus(
+            @PathVariable("ekub-id") String ekubId,
+            @PathVariable("version") int version
+    ){
+        return ResponseEntity.ok(service.getEkubStatus(ekubId,version));
+    }
+
 }

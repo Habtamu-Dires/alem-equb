@@ -8,18 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserResponse } from '../../models/user-response';
+import { PageResponsePaymentResponse } from '../../models/page-response-payment-response';
 
-export interface GetRoundWinner$Params {
-  'ekub-id': string;
-  'round-no': number;
+export interface GetPageOfPayments$Params {
+  page?: number;
+  size?: number;
 }
 
-export function getRoundWinner(http: HttpClient, rootUrl: string, params: GetRoundWinner$Params, context?: HttpContext): Observable<StrictHttpResponse<UserResponse>> {
-  const rb = new RequestBuilder(rootUrl, getRoundWinner.PATH, 'get');
+export function getPageOfPayments(http: HttpClient, rootUrl: string, params?: GetPageOfPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponsePaymentResponse>> {
+  const rb = new RequestBuilder(rootUrl, getPageOfPayments.PATH, 'get');
   if (params) {
-    rb.path('ekub-id', params['ekub-id'], {});
-    rb.query('round-no', params['round-no'], {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
   }
 
   return http.request(
@@ -27,9 +27,9 @@ export function getRoundWinner(http: HttpClient, rootUrl: string, params: GetRou
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserResponse>;
+      return r as StrictHttpResponse<PageResponsePaymentResponse>;
     })
   );
 }
 
-getRoundWinner.PATH = '/ekub-users/winner/{ekub-id}';
+getPageOfPayments.PATH = '/payments';

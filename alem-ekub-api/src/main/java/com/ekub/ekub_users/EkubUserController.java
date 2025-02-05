@@ -27,6 +27,20 @@ public class EkubUserController {
         return ResponseEntity.accepted().build();
     }
 
+    // join ekub
+    @PostMapping("/{ekub-id}")
+    public ResponseEntity<Void> joinEkub(@PathVariable("ekub-id") String ekubId){
+        service.joinEkub(ekubId);
+        return ResponseEntity.accepted().build();
+    }
+
+    // leave ekub
+    @DeleteMapping("/{ekub-id}")
+    public ResponseEntity<Void> unJoinEkub(@PathVariable("ekub-id") String ekubId){
+        service.leaveEkub(ekubId);
+        return ResponseEntity.accepted().build();
+    }
+
     // remove user from ekub
     @PutMapping("/{ekub_id}/{user_id}")
     public ResponseEntity<Void> removeUser(
@@ -42,23 +56,9 @@ public class EkubUserController {
     public ResponseEntity<List<UserResponse>> getEkubUsers(
             @PathVariable("ekub-id") String ekubId
     ){
-        return  ResponseEntity.ok(service.getEkubUserResponses(ekubId));
+        return  ResponseEntity.ok(service.getEkubUsers(ekubId));
     }
 
-    // get list of winners
-    @GetMapping("/winners/{ekub-id}")
-    public ResponseEntity<List<UserResponse>> getEkubWinners(
-            @PathVariable("ekub-id") String ekubId
-    ){
-        return ResponseEntity.ok(service.getEkubWinnerResponses(ekubId));
-    }
-    //get list of draw participants
-    @GetMapping("/participants/{ekub-id}")
-    public ResponseEntity<List<UserResponse>> getDrawParticipants(
-            @PathVariable("ekub-id") String ekubId
-    ){
-        return ResponseEntity.ok(service.getEkubDrawParticipantResponses(ekubId));
-    }
 
     // get list of equbs of a user
     @GetMapping("/equbs/{user-id}")
@@ -68,14 +68,14 @@ public class EkubUserController {
         return ResponseEntity.ok(service.getEkubsOfUser(userId));
     }
 
-    //get round winner by ekubId and round number
-    @GetMapping("/winner/{ekub-id}")
-    public ResponseEntity<UserResponse> getRoundWinner(
-            @PathVariable("ekub-id") String ekubId,
-            @RequestParam("round-no") Integer roundNumber
-    ){
-        return ResponseEntity.ok(service.getRoundWinner(ekubId,roundNumber));
-    }
 
+    // get member detail response
+    @GetMapping("/member-detail/{ekub-id}/{version}")
+    public ResponseEntity<List<MemberDetailResponse>> getMemberDetail(
+            @PathVariable("ekub-id") String ekubId,
+            @PathVariable("version") int version
+    ){
+        return ResponseEntity.ok(service.findMemberDetail(ekubId,version));
+    }
 
 }

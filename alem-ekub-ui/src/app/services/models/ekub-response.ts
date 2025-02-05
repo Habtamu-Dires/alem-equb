@@ -8,13 +8,19 @@ export interface EkubResponse {
   frequencyInDays?: number;
   id?: string;
   isActive?: boolean;
+  isArchived?: boolean;
+  isExclusive?: boolean;
   lastDrawDateTime?: string;
+  mpesaAccountNumber?: number;
   name?: string;
   nextDrawDateTime?: string;
+  penaltyPercentPerDay?: number;
   roundNumber?: number;
   startDateTime?: string;
+  telebirrAccountNumber?: number;
   totalAmount?: number;
   totalMember?: number;
   type?: string;
+  version?: number;
   winAmount?: number;
 }

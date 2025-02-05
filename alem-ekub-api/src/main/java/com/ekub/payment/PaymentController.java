@@ -26,6 +26,15 @@ public class PaymentController {
         return ResponseEntity.accepted().build();
     }
 
+    //get all payments
+    @GetMapping
+    public ResponseEntity<PageResponse<PaymentResponse>> getPageOfPayments(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size
+    ){
+        return ResponseEntity.ok(service.getPageOfPayments(page,size));
+    }
+
     //get payments of a user
     @GetMapping("/user/{user-id}")
     public ResponseEntity<List<PaymentResponse>> getUserPayments(
@@ -36,12 +45,11 @@ public class PaymentController {
 
     //get user round payments
     @GetMapping("/user/round/{ekub-id}")
-    public ResponseEntity<PageResponse<UserRoundPaymentResponse>> getUserRoundPayments(
+    public ResponseEntity<List<UserRoundPaymentResponse>> getUserRoundPayments(
             @PathVariable("ekub-id") String ekubId,
-            @RequestParam(value = "page", defaultValue = "10", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size
+            @RequestParam("version") int version
     ){
-        return ResponseEntity.ok(service.getUserRoundPayments(ekubId,page,size));
+        return ResponseEntity.ok(service.getUserRoundPayments(ekubId,version));
     }
 
     // get payments of current round

@@ -8,16 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserResponse } from '../../models/user-response';
+import { EkubResponse } from '../../models/ekub-response';
 
-export interface GetEkubWinners$Params {
-  'ekub-id': string;
+export interface GetInvitedEkubsYetToJoin$Params {
 }
 
-export function getEkubWinners(http: HttpClient, rootUrl: string, params: GetEkubWinners$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getEkubWinners.PATH, 'get');
+export function getInvitedEkubsYetToJoin(http: HttpClient, rootUrl: string, params?: GetInvitedEkubsYetToJoin$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EkubResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getInvitedEkubsYetToJoin.PATH, 'get');
   if (params) {
-    rb.path('ekub-id', params['ekub-id'], {});
   }
 
   return http.request(
@@ -25,9 +23,9 @@ export function getEkubWinners(http: HttpClient, rootUrl: string, params: GetEku
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<UserResponse>>;
+      return r as StrictHttpResponse<Array<EkubResponse>>;
     })
   );
 }
 
-getEkubWinners.PATH = '/ekub-users/winners/{ekub-id}';
+getInvitedEkubsYetToJoin.PATH = '/ekubs/invited-ekubs';

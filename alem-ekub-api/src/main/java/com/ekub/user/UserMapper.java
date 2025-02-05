@@ -19,25 +19,25 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .profession(user.getProfession())
-                .guarantor(user.getGuarantor() != null? user.getGuarantor().getUsername() : null)
+//                .s(user.getGuarantor() != null? user.getGuarantor().getUsername() : null)
                 .profilePicUrl(user.getProfilePicUrl())
                 .idCardImageUrl(user.getIdCardImageUrl())
                 .enabled(user.isEnabled())
                 .remark(user.getRemark())
-                .ekubIds((user.getEkubs() != null && !user.getEkubs().isEmpty()) ? getEkubIds(user) : List.of())
-                .ekubs((user.getEkubs() != null && !user.getEkubs().isEmpty()) ? getEkubNames(user) : List.of())
+                .ekubIds((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubIds(user) : List.of())
+                .ekubs((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubNames(user) : List.of())
                 .build();
     }
 
     public List<String> getEkubNames(User user){
-        return user.getEkubs().stream()
+        return user.getEkubUsers().stream()
                 .sorted(Comparator.comparing(EkubUser::getCreatedDate))
                 .map(ekubUser -> ekubUser.getEkub().getName())
                 .toList();
     }
 
     public List<String> getEkubIds(User user){
-        return user.getEkubs().stream()
+        return user.getEkubUsers().stream()
                 .sorted(Comparator.comparing(EkubUser::getCreatedDate))
                 .map(ekubUser -> ekubUser.getEkub().getId().toString())
                 .toList();

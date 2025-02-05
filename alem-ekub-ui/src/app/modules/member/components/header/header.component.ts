@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit{
   @Input() onMobileView:boolean= false;
   @Input() onSubPage:boolean = false;
   @Input() pageName:string | undefined;
+  @Input() onHomePage:boolean = false;
   loggedUser: UserProfile | undefined;
   showActions: boolean = false;
   @Output() onOpenDrawer:EventEmitter<boolean> = new EventEmitter<boolean>();

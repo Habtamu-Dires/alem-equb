@@ -51,7 +51,7 @@ export class UserComponent implements OnInit{
       next:(res:PageResponseUserResponse)=>{
         this.userList = res.content as UserResponse[];
         // hello
-        console.log("Profile Url: " , this.userList[0].profilePicUrl);
+        
         // pagination
         this.isEmptyPage = res.empty as boolean;
         this.isFirstPage = res.first;
@@ -78,9 +78,9 @@ export class UserComponent implements OnInit{
   }
 
   // togel show actions [ edit and delete]
-  toggelShowActions(userId:any){
+  onShowActions(userId:any){
     this.selectedUserId =  userId as string;
-    this.showActions = !this.showActions;
+    this.showActions = true;
   }
   // on view detail
   onViewDetail(userId:any){

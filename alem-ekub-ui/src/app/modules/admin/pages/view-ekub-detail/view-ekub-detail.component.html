@@ -1,11 +1,52 @@
-<main class="max-container w-full h-screen flex flex-col gap-4 justify-center items-center">
-    <section class="flex flex-col justify-center items-center mt-16">
+<main class="max-container w-full min-h-screen flex flex-col gap-4 justify-center items-center">
+     <!--version-->
+     <section class="w-full mt-16 sticky top-5">
+        <div class="flex gap-2">
+            <label> Version: </label>
+            <select class="ps-2 rounded-lg" [(ngModel)] = "currentVersion" (change)="setVersion()">
+                @for (version of ekubVesions; track $index) {
+                    <option>{{version}}</option>
+                }
+            </select>
+        </div>
+     </section>
+    <section class="flex flex-col justify-center items-center overflow-auto">
         <!--last round winner-->
-        <article *ngIf="currentRound > 2"  class="w-full p-4 text-lg font-semibold">
-            <div>
-                የዙር <span>{{currentRound - 1}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                <span>{{lastRoundWinner?.username}}</span>
-            </div>
+        <article *ngIf="lastRound > 0"  
+                class="w-full flex flex-col gap-2 justify-center items-center text-lg font-semibold">
+            <section *ngIf="rounds.length > 0"
+                 class="w-full flex justify-evenly p-4">
+                <div>
+                    የዙር <span>{{lastRound}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
+                    <span>{{rounds[lastRound-1].winner?.username}}</span>
+                </div>
+                <div class="flex gap-2">
+                    Guarantors: 
+                    <p *ngFor="let userGuarantee of rounds[lastRound-1].userGuarantees"
+                        class="flex gap-1">
+                        <span>{{userGuarantee.guarantor}} </span>
+                    </p>
+                </div>
+            </section>
+            <section class="w-full flex justify-evenly p-4">
+                <div *ngIf="rounds[lastRound-1] 
+                    && !hasGuarantor(rounds[lastRound -1])
+                    && !rounds[lastRound-1].paid">
+                    <button (click)="guarantWinner(rounds[lastRound-1])" 
+                        class="text-blue-400 hover:text-blue-600">
+                        guarantee 
+                    </button>
+                </div>
+                <div *ngIf="rounds[lastRound-1] 
+                        && rounds[lastRound-1].winner
+                        && hasGuarantor(rounds[lastRound -1])
+                        && !rounds[lastRound-1].paid">
+                    <button (click)="payRoundWinner(rounds[lastRound-1])" 
+                         class="px-5 py-2 text-white rounded-lg bg-grn text-center hover:bg-green-600">
+                        Pay
+                    </button>
+                </div>
+            </section>
         </article>
 
          <!--general information section-->
@@ -15,54 +56,93 @@
             </div>
             <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የአባላት ብዛት: {{ekub?.totalMember}}</p>
+                    <p>የአባላት ብዛት: {{ekubStatus?.totalMembers}}</p>
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubWinnersList.length}}</p>
+                    <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubStatus?.winnersCount}}</p>
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{drawParticipantsList.length}}</p>
+                    <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</p>
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የተጀመረበት ቀን: {{transformDateTime(ekub?.startDateTime)}}</p>
+                    <p>የተጀመረበት ቀን: {{transformDateTime(ekubStatus?.startDate)}}</p>
                 </div>
             </section>
         </section>
-        <!--member list section with won status-->
-        <section class="w-full flex flex-col justify-center items-center">
+        <!--each rounds winner-->
+        <section *ngIf="rounds.length !== 0" 
+                class="w-full p-4 flex flex-col justify-center items-center">
             <div class="p-2 text-xl font-semibold">
-                <p class="underline">Members List</p>
+                <p class="underline">Round Winners List</p>
             </div>
-            <section class="w-full p-5">
-                <section class="w-full flex justify-center max-h-96 overflow-auto">
-                    <table class="w-full md:w-1/2 border border-gray-300 bg-white">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th class="table-head">Name</th>
-                                <th class="table-head">Has Won</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let member of ekubUsersList">
-                                <td class="table-data">{{member.fullName}}</td>
+            <section class="w-full flex justify-center overflow-auto">
+                <table class="w-full border border-gray-300 bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="table-head">Round</th>
+                            @for (round of rounds; track $index) {
+                                <th class="table-head">Round {{round.roundNumber}}</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="table-data">Winner</td>
+                            @for (round of rounds; track $index) {
+                                <td class="table-data">{{round.winner?.username}}</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td class="table-data">Guarantors</td>
+                            @for (round of rounds; track $index) {
                                 <td class="table-data">
-                                    <span *ngIf="hasWon(member.id)">✔</span>
-                                    <span *ngIf="!hasWon(member.id)">✘</span>
+                                    <div *ngIf="round.winner && hasGuarantor(round)" class="flex gap-1">
+                                        <p *ngFor="let guarantee of round.userGuarantees"
+                                          class="flex gap-1">
+                                            <span>{{guarantee.guarantor}}</span>
+                                            <span *ngIf="!round.paid"
+                                                (click)="removeGuarantor(round,guarantee.guarantorId)"
+                                              class="cursor-pointer text-red-300">
+                                              X
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div *ngIf="round.winner && !hasGuarantor(round)">
+                                        <button (click)="guarantWinner(round)" 
+                                            class="text-blue-400 hover:text-blue-600">
+                                            guarantee 
+                                        </button>
+                                    </div>
+                                    
                                 </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                            }
+                        </tr>
+                        <tr>
+                            <td class="table-data">IsPaid</td>
+                            @for (round of rounds; track $index) {
+                                <td *ngIf="round.winner" class="table-data">
+                                    <span *ngIf="round.paid">✔</span>
+                                    <span *ngIf="!round.paid && hasGuarantor(round)">
+                                        <button (click)="payRoundWinner(round)"
+                                            class="px-5 py-2 text-white rounded-lg bg-grn text-center hover:bg-green-600">
+                                            Pay
+                                        </button>
+                                    </span>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
             </section>
         </section>
         <!--User Round Payments section-->
         <section *ngIf="userRoundPayments.length !== 0" 
-                class="w-full flex flex-col items-center justify-center">
+            class="w-full flex flex-col items-center justify-center">
             <div class="p-2 text-xl font-semibold">
                 <p class="underline">User Round Payments</p>
             </div>
-            <section class="w-full flex flex-col items-center justify-center overflow-auto">
-                <table class="w-full md:w-1/2 border border-gray-300 bg-white">
+            <section class="w-full p-4 flex flex-col items-center justify-center overflow-auto">
+                <table class="w-full border border-gray-300 bg-white">
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="table-head">Username</th>
@@ -80,49 +160,64 @@
                         </tr>
                     </tbody>
                 </table>
-                <app-pagination *ngIf="!isEmptyPage" class="w-full my-5 z-10"
-                    [page]="page"
-                    [size]="size"
-                    [isFirstPage]="isFirstPage"
-                    [isLastPage]="isLastPage"
-                    [numberOfElements]="numberOfElements"
-                    [totalElements]="totalElements"
-                    [totalPages]="totalPages"
-                    
-                    (sizeChanged)="onSizeChanged($event)"
-                    (pageChanged)="onPageChanged($event)"
-                >
-                </app-pagination>    
             </section>
-        </section>
-        <!--each rounds winner-->
-        <section *ngIf="rounds.length !== 0" 
-                class="w-full flex flex-col justify-center items-center">
+        </section>    
+        <!--Member List-->
+        <section *ngIf="memberDetails.length > 0" class="w-full flex flex-col justify-center items-center">
             <div class="p-2 text-xl font-semibold">
-                <p class="underline">Round Winners List</p>
+                <p class="underline">Members List</p>
             </div>
-            <section class="w-full p-5">
-                <section class="w-full flex justify-center overflow-auto">
-                    <table class="w-full md:w-1/2 border border-gray-300 bg-white">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th class="table-head">Round</th>
-                                @for (round of rounds; track $index) {
-                                    <th class="table-head">Round {{$index + 1}}</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let round of rounds">
-                                <td class="table-data">Winner</td>
-                                <td class="table-data">{{round.winner?.username}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+            <section class="w-full p-4 flex justify-center max-h-96 overflow-auto">
+                <table class="w-full border border-gray-300 bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="table-head">Username</th>
+                            <th class="table-head">First Name</th>
+                            <th class="table-head">Won in Round</th>
+                            <th class="table-head">Guarantor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let member of memberDetails">
+                            <td class="table-data">{{member.username}}</td>
+                            <td class="table-data">{{member.fullName}}</td>
+                            <td class="table-data">{{member.roundNumber}}</td>
+                            <td class="table-data">{{member.guarantor}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
             </section>
         </section>
-        
+        <!--invited users list-->
+        <section *ngIf="ekub?.isExclusive && !ekub?.isActive && invitedUsers.length > 0" 
+            class="w-full flex flex-col justify-center items-center">
+            <div class="p-2 text-xl font-semibold">
+                <p>Invited User List</p>
+            </div>
+            <section class="w-full p-4 flex justify-center max-h-96 overflow-auto">
+                <table class="w-full border border-gray-300 bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="table-head">Username</th>
+                            <th class="table-head">FullName</th>
+                            <th class="table-head">Cancel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of invitedUsers">
+                            <td class="table-data">{{user.username}}</td>
+                            <td class="table-data">{{user.fullName}}</td>
+                            <td class="table-data">
+                                <p (click)="cancelInvitation(user.id)" class="cursor-pointer">
+                                    X
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
         <!--Description-->
         <section class="w-full flex flex-col justify-center items-center">
             <div class="p-4 text-xl font-semibold">

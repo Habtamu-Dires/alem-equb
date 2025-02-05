@@ -9,9 +9,13 @@ import java.time.LocalDateTime;
 public record EkubResponse(
         String id,
         String name,
+        Integer version,
         boolean isActive,
+        boolean isExclusive,
+        boolean isArchived,
         BigDecimal amount,
         BigDecimal totalAmount,
+        Double penaltyPercentPerDay,
         Integer frequencyInDays,
         String type,
         Integer roundNumber,
@@ -20,6 +24,7 @@ public record EkubResponse(
         String description,
         LocalDateTime nextDrawDateTime,
         LocalDateTime lastDrawDateTime,
-        LocalDateTime startDateTime
-
+        LocalDateTime startDateTime,
+        Integer mpesaAccountNumber,
+        Integer telebirrAccountNumber
 ) {}

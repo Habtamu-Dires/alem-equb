@@ -14,18 +14,19 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { addEkubUser } from '../fn/ekub-users/add-ekub-user';
 import { AddEkubUser$Params } from '../fn/ekub-users/add-ekub-user';
 import { EkubResponse } from '../models/ekub-response';
-import { getDrawParticipants } from '../fn/ekub-users/get-draw-participants';
-import { GetDrawParticipants$Params } from '../fn/ekub-users/get-draw-participants';
 import { getEkubsOfUser } from '../fn/ekub-users/get-ekubs-of-user';
 import { GetEkubsOfUser$Params } from '../fn/ekub-users/get-ekubs-of-user';
 import { getEkubUsers } from '../fn/ekub-users/get-ekub-users';
 import { GetEkubUsers$Params } from '../fn/ekub-users/get-ekub-users';
-import { getEkubWinners } from '../fn/ekub-users/get-ekub-winners';
-import { GetEkubWinners$Params } from '../fn/ekub-users/get-ekub-winners';
-import { getRoundWinner } from '../fn/ekub-users/get-round-winner';
-import { GetRoundWinner$Params } from '../fn/ekub-users/get-round-winner';
+import { getMemberDetail } from '../fn/ekub-users/get-member-detail';
+import { GetMemberDetail$Params } from '../fn/ekub-users/get-member-detail';
+import { joinEkub } from '../fn/ekub-users/join-ekub';
+import { JoinEkub$Params } from '../fn/ekub-users/join-ekub';
+import { MemberDetailResponse } from '../models/member-detail-response';
 import { removeUser } from '../fn/ekub-users/remove-user';
 import { RemoveUser$Params } from '../fn/ekub-users/remove-user';
+import { unJoinEkub } from '../fn/ekub-users/un-join-ekub';
+import { UnJoinEkub$Params } from '../fn/ekub-users/un-join-ekub';
 import { UserResponse } from '../models/user-response';
 
 @Injectable({ providedIn: 'root' })
@@ -84,78 +85,78 @@ export class EkubUsersService extends BaseService {
     );
   }
 
-  /** Path part for operation `getEkubWinners()` */
-  static readonly GetEkubWinnersPath = '/ekub-users/winners/{ekub-id}';
+  /** Path part for operation `joinEkub()` */
+  static readonly JoinEkubPath = '/ekub-users/{ekub-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getEkubWinners()` instead.
+   * To access only the response body, use `joinEkub()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getEkubWinners$Response(params: GetEkubWinners$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-    return getEkubWinners(this.http, this.rootUrl, params, context);
+  joinEkub$Response(params: JoinEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return joinEkub(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getEkubWinners$Response()` instead.
+   * To access the full response (for headers, for example), `joinEkub$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getEkubWinners(params: GetEkubWinners$Params, context?: HttpContext): Observable<Array<UserResponse>> {
-    return this.getEkubWinners$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
+  joinEkub(params: JoinEkub$Params, context?: HttpContext): Observable<void> {
+    return this.joinEkub$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `getRoundWinner()` */
-  static readonly GetRoundWinnerPath = '/ekub-users/winner/{ekub-id}';
+  /** Path part for operation `unJoinEkub()` */
+  static readonly UnJoinEkubPath = '/ekub-users/{ekub-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getRoundWinner()` instead.
+   * To access only the response body, use `unJoinEkub()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getRoundWinner$Response(params: GetRoundWinner$Params, context?: HttpContext): Observable<StrictHttpResponse<UserResponse>> {
-    return getRoundWinner(this.http, this.rootUrl, params, context);
+  unJoinEkub$Response(params: UnJoinEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return unJoinEkub(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getRoundWinner$Response()` instead.
+   * To access the full response (for headers, for example), `unJoinEkub$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getRoundWinner(params: GetRoundWinner$Params, context?: HttpContext): Observable<UserResponse> {
-    return this.getRoundWinner$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserResponse>): UserResponse => r.body)
+  unJoinEkub(params: UnJoinEkub$Params, context?: HttpContext): Observable<void> {
+    return this.unJoinEkub$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `getDrawParticipants()` */
-  static readonly GetDrawParticipantsPath = '/ekub-users/participants/{ekub-id}';
+  /** Path part for operation `getMemberDetail()` */
+  static readonly GetMemberDetailPath = '/ekub-users/member-detail/{ekub-id}/{version}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getDrawParticipants()` instead.
+   * To access only the response body, use `getMemberDetail()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDrawParticipants$Response(params: GetDrawParticipants$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-    return getDrawParticipants(this.http, this.rootUrl, params, context);
+  getMemberDetail$Response(params: GetMemberDetail$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MemberDetailResponse>>> {
+    return getMemberDetail(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getDrawParticipants$Response()` instead.
+   * To access the full response (for headers, for example), `getMemberDetail$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDrawParticipants(params: GetDrawParticipants$Params, context?: HttpContext): Observable<Array<UserResponse>> {
-    return this.getDrawParticipants$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
+  getMemberDetail(params: GetMemberDetail$Params, context?: HttpContext): Observable<Array<MemberDetailResponse>> {
+    return this.getMemberDetail$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MemberDetailResponse>>): Array<MemberDetailResponse> => r.body)
     );
   }
 

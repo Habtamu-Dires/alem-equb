@@ -1,10 +1,7 @@
 package com.ekub.payment;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,10 +24,10 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
             JOIN p.user u
             JOIN p.round r
             WHERE r.ekub.id = :ekubId
+            AND r.version = :version
+            AND p.type = 'MEMBER_PAYMENT'
             ORDER BY u.username, r.roundNumber
             """)
-    Page<UserRoundPaymentsDTO> findUserRoundPayments(UUID ekubId, Pageable pageable);
-
-
+    List<UserRoundPaymentsDTO> findUserRoundPayments(UUID ekubId, int version);
 
 }

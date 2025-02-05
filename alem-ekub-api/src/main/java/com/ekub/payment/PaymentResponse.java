@@ -10,10 +10,13 @@ import java.time.LocalDateTime;
 @Builder
 public record PaymentResponse(
         String id,
+        String type,
         UserResponse user,
         String ekubName,
         RoundResponse round,
         BigDecimal amount,
+        String paymentMethod,
+        String remark,
         LocalDateTime createdDate
 ) {
 }

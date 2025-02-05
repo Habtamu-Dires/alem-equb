@@ -2,12 +2,16 @@ package com.ekub.user;
 
 import com.ekub.common.IdResponse;
 import com.ekub.common.PageResponse;
+import com.ekub.ekub.EkubResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -18,9 +22,20 @@ public class UserController {
     private final UserService service;
 
     // create user
-    @PostMapping
-    public ResponseEntity<IdResponse> createUser(@RequestBody @Valid UserRequest request) {
-        return ResponseEntity.ok(service.createUser(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IdResponse> createUser(@RequestPart @Valid UserRequest request,
+                                                 @RequestPart MultipartFile profilePic,
+                                                 @RequestPart MultipartFile idCardImg
+    ) {
+        service.createUser(request,profilePic,idCardImg);
+        return ResponseEntity.accepted().build();
+    }
+
+    // update user
+    @PutMapping
+    public ResponseEntity<IdResponse> updateUser(
+            @RequestBody UserRequest request) {
+        return ResponseEntity.ok( service.updateUser(request));
     }
 
     // list page of users
@@ -40,12 +55,6 @@ public class UserController {
         return ResponseEntity.ok(service.getUserById(userId));
     }
 
-    // update user
-    @PutMapping
-    public ResponseEntity<IdResponse> updateUser(
-            @RequestBody UserRequest request) {
-        return ResponseEntity.ok( service.updateUser(request));
-    }
     // delete user
     @DeleteMapping("/{user-id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("user-id") String userId) {
@@ -91,12 +100,42 @@ public class UserController {
         return ResponseEntity.accepted().build();
     }
 
-    // delete profile picture . is it necessary ?
-    @DeleteMapping("/profile-picture")
-    public ResponseEntity<Void> removeProfilePicture(
-            @RequestParam("user-id") String userId
+    // invite a user to ekub
+    @PostMapping("/invite/{user-id}")
+    public ResponseEntity<Void> inviteUserToEkub(
+            @PathVariable("user-id") String userId,
+            @RequestParam("ekub-id") String ekubId
     ){
-        service.removeProfilePicture(userId);
+        service.inviteUserToEkub(userId,ekubId);
         return ResponseEntity.accepted().build();
     }
+
+    // cancel invitation
+    @PutMapping("/cancel-invitation/{user-id}")
+    public ResponseEntity<Void> cancelInvitation(
+            @PathVariable("user-id") String userId,
+            @RequestParam("ekub-id") String ekubId
+    ){
+        service.cancelInvitation(userId,ekubId);
+        return ResponseEntity.accepted().build();
+    }
+
+    // get users invited in ekub and not joined
+    @GetMapping("/invited-users/{ekub-id}")
+    public ResponseEntity<List<UserResponse>> getInvitedUsersInEkubAndNotJoined(
+            @PathVariable("ekub-id") String ekubId
+    ){
+        return ResponseEntity.ok(service.getUsersInvitedInEkubsAndNotJoined(ekubId));
+    }
+
+    //search user to invite into ekub
+    @GetMapping("/search-to-invite/{ekub-id}")
+    public ResponseEntity<List<UserResponse>> searchUsersToInvite(
+            @PathVariable("ekub-id") String ekubId,
+            @RequestParam("search-term") String searchTerm
+    ){
+        return ResponseEntity.ok(service.searchUsersToInvite(ekubId,searchTerm));
+    }
+
+
 }

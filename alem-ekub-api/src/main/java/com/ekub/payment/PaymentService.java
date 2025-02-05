@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,6 +31,7 @@ public class PaymentService {
     private final EkubUserService ekubUserService;
 
     // create payments
+    @Transactional
     public void createPayment(PaymentRequest request){
         User user = userService.findUserById(request.userId());
         Round round = roundService.findRoundById(request.roundId());
@@ -39,12 +39,46 @@ public class PaymentService {
         paymentRepository.save(
             Payment.builder()
                 .id(UUID.randomUUID())
+                .type(request.type())
                 .user(user)
                 .round(round)
                 .amount(request.amount())
+                .paymentMethod(request.paymentMethod())
                 .createdDate(LocalDateTime.now())
+                .remark(request.remark())
                 .build()
         );
+
+        BigDecimal newAmount = request.amount();
+        if(request.type().equals(PaymentType.WINNING_PAYOUT)){
+            //update total amount
+            newAmount = newAmount.multiply(new BigDecimal(-1));
+            //update round to paid
+            roundService.setPaymentStatusToPaid(round);
+        }
+        //update total amount of ekub
+        ekubService.updateTotalAmountOfEkub(round.getEkub().getId(),newAmount);
+
+    }
+
+    //get all payments
+    public PageResponse<PaymentResponse> getPageOfPayments(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Payment> res = paymentRepository.findAll(pageable);
+
+        List<PaymentResponse> paymentResponseList = res.map(mapper::toPaymentResponse).toList();
+
+        return PageResponse.<PaymentResponse>builder()
+                .content(paymentResponseList)
+                .totalElements(res.getTotalElements())
+                .numberOfElements(res.getNumberOfElements())
+                .totalPages(res.getTotalPages())
+                .size(res.getSize())
+                .number(res.getNumber())
+                .first(res.isFirst())
+                .last(res.isLast())
+                .empty(res.isEmpty())
+                .build();
     }
 
     // get payments of round
@@ -58,7 +92,7 @@ public class PaymentService {
     //get payment of a round
     public List<PaymentResponse> getLstOfPayment(String ekubId, int roundNumber){
         Ekub ekub = ekubService.findEkubById(ekubId);
-        Round round = roundService.getRoundByEkubIdAndRoundNo(ekub.getId(), roundNumber);
+        Round round = roundService.findRoundByEkubAndRoundNo(ekub.getId(),ekub.getVersion(), roundNumber);
         return getRoundPayments(round.getId());
     }
 
@@ -69,40 +103,39 @@ public class PaymentService {
         return getRoundPayments(round.getId());
     }
 
-
     // pay to a winner
-    public void payToAWinner(String ekubId, String userId){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        User winner = userService.findUserById(userId);
-        // is the user a winner of previous round
-        Round round = roundService
-                .getRoundByEkubIdAndRoundNo(ekub.getId(), ekub.getRoundNumber() - 1);
-        if(round.isPaid() || !round.getWinner().getId().equals(winner.getId())){
-            throw new AccessDeniedException("The user is not a winner");
-        }
+//    public void payToAWinner(String ekubId, String userId){
+//        Ekub ekub = ekubService.findEkubById(ekubId);
+//        User winner = userService.findUserById(userId);
+//        // is the user a winner of previous round
+//        Round round = roundService
+//                .getRoundByEkubAndRoundNo(ekub.getId(),ekub.getVersion(),ekub.getRoundNumber() - 1);
+//        if(round.isPaid() || !round.getWinner().getId().equals(winner.getId())){
+//            throw new AccessDeniedException("The user is not a winner");
+//        }
+//
+//        List<User> members = ekubUserService.getEkubUsers(ekub.getId());
+//        List<User> winners = ekubUserService.getEKubWinners(ekub.getId(), ekub.getVersion());
+//
+//        //check if user has a guarantor
+//        User guarantor = winner.getGuarantor();
+//        if(guarantor != null){
+//            throw new AccessDeniedException("The user doesn't hava a guarantor");
+//        }
+//        if(!members.contains(guarantor)){
+//            throw new AccessDeniedException("The guarantor is not member of "+ ekub.getName());
+//        }
+//
+//        if(winners.contains(guarantor)){
+//            throw new AccessDeniedException("The guarantor has already won");
+//        }
 
-        List<User> members = ekubUserService.getEkubUsers(ekub.getId());
-        List<User> winners = ekubUserService.getEKubWinners(ekub.getId());
-
-        //check if user has a guarantor
-        User guarantor = winner.getGuarantor();
-        if(guarantor != null){
-            throw new AccessDeniedException("The user doesn't hava a guarantor");
-        }
-        if(!members.contains(guarantor)){
-            throw new AccessDeniedException("The guarantor is not member of "+ ekub.getName());
-        }
-
-        if(winners.contains(guarantor)){
-            throw new AccessDeniedException("The guarantor has already won");
-        }
-
-//        System.out.println("pay with paymentAmount " + ekub.getWinAmount());
-
-        //upate round status to paid
-        round.setPaid(true);
-        roundService.save(round);
-    }
+////        System.out.println("pay with paymentAmount " + ekub.getWinAmount());
+//
+//        //upate round status to paid
+//        round.setPaid(true);
+//        roundService.save(round);
+//    }
 
 
     //get User payments
@@ -115,16 +148,18 @@ public class PaymentService {
     }
 
     //get user round payments
-    public PageResponse<UserRoundPaymentResponse> getUserRoundPayments(String ekubId, int page, int size){
+    public List<UserRoundPaymentResponse> getUserRoundPayments(
+            String ekubId, int version)
+    {
         Ekub ekub = ekubService.findEkubById(ekubId);
 
-        Pageable pageable = PageRequest.of(page,size);
-        Page<UserRoundPaymentsDTO> res = paymentRepository
-                .findUserRoundPayments(ekub.getId(), pageable);
+
+        List<UserRoundPaymentsDTO> res = paymentRepository
+                .findUserRoundPayments(ekub.getId(), version);
 
         //group by username and round
         Map<String, Map<Integer, BigDecimal>> groupedData = new HashMap<>();
-        for(UserRoundPaymentsDTO dto : res.getContent()){
+        for(UserRoundPaymentsDTO dto : res){
             groupedData.computeIfAbsent(dto.username(), k -> new HashMap<>())
                     .put(dto.roundNumber(), dto.paymentAmount());
         }
@@ -142,18 +177,9 @@ public class PaymentService {
                 })
                 .map(UserRoundPaymentResponse::new)
                 .toList();
+        return table;
 
-        return PageResponse.<UserRoundPaymentResponse>builder()
-                .content(table)
-                .totalElements(res.getTotalElements())
-                .numberOfElements(res.getNumberOfElements())
-                .totalPages(res.getTotalPages())
-                .size(res.getSize())
-                .number(res.getNumber())
-                .first(res.isFirst())
-                .last(res.isLast())
-                .empty(res.isEmpty())
-                .build();
     }
+
 
 }

@@ -12,13 +12,17 @@ import { IdResponse } from '../../models/id-response';
 import { UserRequest } from '../../models/user-request';
 
 export interface CreateUser$Params {
-      body: UserRequest
+      body?: {
+'request': UserRequest;
+'profilePic': Blob;
+'idCardImg': Blob;
+}
 }
 
-export function createUser(http: HttpClient, rootUrl: string, params: CreateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<IdResponse>> {
+export function createUser(http: HttpClient, rootUrl: string, params?: CreateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<IdResponse>> {
   const rb = new RequestBuilder(rootUrl, createUser.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

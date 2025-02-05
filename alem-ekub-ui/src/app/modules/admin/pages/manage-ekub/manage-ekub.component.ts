@@ -17,6 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ManageEkubComponent implements OnInit{
 
+  ekubResponse:EkubResponse = {};
   ekubRequest:EkubRequest ={
     name: '',
     description:'',
@@ -24,6 +25,7 @@ export class ManageEkubComponent implements OnInit{
     frequencyInDays: Number(undefined),
     type: '',
     isActive: false,
+    penaltyPercentPerDay:Number(undefined)
   };
   errMsgs:Array<string> = [];
 
@@ -68,6 +70,7 @@ export class ManageEkubComponent implements OnInit{
       "ekub-id": ekubId
     }).subscribe({
       next:(res:EkubResponse) =>{
+        this.ekubResponse = res;
         this.ekubRequest = {
           id: res.id,
           name: res.name as string,
@@ -77,7 +80,9 @@ export class ManageEkubComponent implements OnInit{
           frequencyInDays:res.frequencyInDays as number,
           startDateTime: res.startDateTime ,
           nextDrawDateTime: res.nextDrawDateTime,
-          isActive: res.isActive
+          isActive: res.isActive,
+          isExclusive:res.isExclusive,
+          penaltyPercentPerDay: res.penaltyPercentPerDay as number
         }
       },
       error:(err) => {

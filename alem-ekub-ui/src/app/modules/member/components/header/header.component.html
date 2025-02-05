@@ -1,22 +1,22 @@
-<main class="absolute max-container z-10 flex justify-between items-center py-4 w-full">
+<main class="absolute max-container z-10 flex justify-between items-center py-4 w-full bg-white">
     <!-- side bar toggler -->
-    <div *ngIf="onMobileView && !onSubPage">
+    <div *ngIf="onMobileView && onHomePage">
         <svg class="drawer cursor-pointer mx-4 my-5"
             (click)="openDrawer()"
             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.5 2H.5m13 5H.5m13 5H.5"/>
         </svg>
     </div>
     <!--back button-->
-    <div *ngIf="onSubPage && onMobileView" class="md:px-4">
+    <div *ngIf="(onMobileView && !onHomePage) || onSubPage" class="md:px-4">
         <svg (click)="back()" class="cursor-pointer" 
             xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M16 22L6 12L16 2l1.775 1.775L9.55 12l8.225 8.225z"/></svg>
     </div>
     <!--Page Name-->
-    <div *ngIf="onSubPage && onMobileView">
+    <div *ngIf="onMobileView && !onHomePage">
         <p class="font-mono text-lg">{{pageName}}</p>
     </div>
     <!--on big screen-->
-    <section *ngIf="!onMobileView"
+    <section *ngIf="!onMobileView && !onSubPage"
         class="flex items-center w-3/4 gap-4">
         <!--logo-->
         <section class="w-1/6 flex justify-start items-center gap-2 px-2">

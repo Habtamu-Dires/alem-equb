@@ -7,7 +7,7 @@
     </app-header>
     <section *ngIf="!showDetail">
         <table class="min-w-full border border-gray-300 bg-white">
-            <thead class="bg-gray-200">
+            <thead class="bg-gray-200 sticky top-16">
               <tr>
                 <th class="table-head w-1/12">Photo</th>
                 <th class="table-head w-1/12">Username</th>
@@ -17,7 +17,6 @@
                 <th class="table-head w-1/12">PhoneNumber</th>
                 <th class="table-head w-1/12">Email</th>
                 <th class="table-head w-1/12">Profession</th>
-                <th class="table-head w-1/12">Guarantor</th>
                 <th class="table-head w-1/12">Actions</th>
               </tr>
             </thead>
@@ -36,17 +35,18 @@
                 <td class="table-data">{{ user.phoneNumber }}</td>
                 <td class="table-data ">{{ user.email}}</td>
                 <td class="table-data ">{{ user.profession}}</td>
-                <td class="table-data ">{{ user.guarantor}}</td>
                 <td class="table-data">
                   <div class="flex gap-5 relative">
                     <!-- <p class="text-blue-500 cursor-pointer">detail</p>  -->
                     <svg (click)="onViewDetail(user.id)" class="cursor-pointer"
                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#888888" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v8.325q-.475-.275-.975-.5t-1.025-.4V9h-6v3.425q-1.15.35-2.15 1T9 15H5v4h2.05q.275.55.55 1.05t.6.95zm0-8h6V9H5zm0-6h14V5H5zm11 16q-2.275 0-4.2-1.2T9 18.5q.875-2.1 2.8-3.3T16 14t4.2 1.2t2.8 3.3q-.875 2.1-2.8 3.3T16 23m0-2q1.425 0 2.688-.65t2.062-1.85q-.8-1.2-2.062-1.85T16 16t-2.687.65t-2.063 1.85q.8 1.2 2.063 1.85T16 21m0-1q-.625 0-1.062-.437T14.5 18.5t.438-1.062T16 17t1.063.438t.437 1.062t-.437 1.063T16 20"/></svg>
-                    <svg (click)="toggelShowActions(user.id)" class="cursor-pointer donthide"
-                      xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M9.5 13a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"/></svg>
+                    <div (click)="onShowActions(user.id)" class="cursor-pointer donthide">
+                      <svg class="donthide"
+                        xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M9.5 13a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0"/></svg>
+                    </div>
                     <div *ngIf="showActions && user.id === selectedUserId" 
                      
-                      class="absolute -bottom-20 cursor-pointer bg-black rounded-md donthide">
+                      class="absolute -bottom-20 z-20 cursor-pointer bg-black rounded-md donthide">
                       <div class="flex flex-col gap-2 text-white font-semibold">
                          <p class="px-4 py-1 hover:bg-gray-500" (click)="onEdit(user.id)" >Edit</p>
                          <p class="px-4 py-1 hover:bg-gray-500"  (click)="onDelete(user.id)">Delete</p>
@@ -57,7 +57,7 @@
               </tr>
             </tbody>
         </table>
-        <app-pagination *ngIf="!isEmptyPage" class="w-full m-5 z-10"
+        <app-pagination *ngIf="!isEmptyPage" class="w-full m-5 z-10 sticky bottom-0 bg-white"
           [page]="page"
           [size]="size"
           [isFirstPage]="isFirstPage"

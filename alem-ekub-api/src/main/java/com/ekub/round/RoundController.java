@@ -19,9 +19,20 @@ public class RoundController {
     // get list of rounds
     @GetMapping("/{ekub-id}")
     public ResponseEntity<List<RoundResponse>> getEkubRounds(
-            @PathVariable("ekub-id") String ekbuId
+            @PathVariable("ekub-id") String ekbuId,
+            @RequestParam("version") int version
     ){
-        return ResponseEntity.ok(service.getRoundResByEkubId(ekbuId));
+        return ResponseEntity.ok(service.getRoundResByEkub(ekbuId,version));
+    }
+
+    //get round by ekubId, version and number
+    @GetMapping("/{ekub-id}/{version}/{round-no}")
+    public ResponseEntity<RoundResponse> getRoundByEkubAndRoundNo(
+            @PathVariable("ekub-id") String ekubId,
+            @PathVariable("version") int version,
+            @PathVariable("round-no") int roundNo
+    ){
+        return ResponseEntity.ok(service.getRoundByEkubAndRoundNo(ekubId,version,roundNo));
     }
 
     // get user pending payments
@@ -31,4 +42,5 @@ public class RoundController {
     ){
         return ResponseEntity.ok(service.getUserPendingPayments(userId));
     }
+
 }

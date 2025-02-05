@@ -9,6 +9,7 @@ public record KeycloakUserRequest(
         String firstName,
         String lastName,
         String email,
+        String phoneNumber,
         boolean enabled
 ) {
 }

@@ -20,7 +20,11 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const injector = inject(Injector);
       const kcService = injector.get(KeycloakService);
-      return kcService.init();
+      const isRegistrationPage = window.location.pathname === '/registration';
+
+      return kcService.init({
+        onLoad: isRegistrationPage ? 'check-sso' : 'login-required',
+      });
     }),
     provideAnimations(),
     provideAnimationsAsync(),

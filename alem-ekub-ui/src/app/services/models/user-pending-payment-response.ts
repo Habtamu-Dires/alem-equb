@@ -6,6 +6,9 @@ export interface UserPendingPaymentResponse {
   amount?: number;
   endDateTime?: string;
   equbName?: string;
+  penalty?: number;
   roundId?: string;
   roundNumber?: number;
+  totalAmount?: number;
+  version?: number;
 }

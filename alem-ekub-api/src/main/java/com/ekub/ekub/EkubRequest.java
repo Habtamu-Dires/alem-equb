@@ -1,7 +1,9 @@
 package com.ekub.ekub;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -18,8 +20,6 @@ public record EkubRequest(
         @NotNull(message = "Description is Mandatory")
         String description,
 
-        BigDecimal totalAmount,
-
         @NotNull(message = "Draw paymentAmount is Mandatory")
         BigDecimal amount,
 
@@ -30,9 +30,16 @@ public record EkubRequest(
         @NotNull(message = "Drawn Frequency is Mandatory")
         int frequencyInDays,
 
+        BigDecimal totalAmount,
+
+        @NotNull(message = "Drawn Frequency is Mandatory")
+        Double penaltyPercentPerDay,
         LocalDateTime nextDrawDateTime,
-
+        LocalDateTime startDateTime,
         boolean isActive,
+        boolean isExclusive,
+        boolean isArchived,
 
-        LocalDateTime startDateTime
+        Integer mpesaAccountNumber,
+        Integer telebirrAccountNumber
 ) {}

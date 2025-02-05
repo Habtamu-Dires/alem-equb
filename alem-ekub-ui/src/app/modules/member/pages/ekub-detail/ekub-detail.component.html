@@ -1,68 +1,114 @@
 <main class="max-container min-h-screen flex flex-col">
-    <app-header 
-        [pageName]="ekub?.name"
+    <app-header class="sticky top-0 z-10"
         [onSubPage]="true"
+        [pageName]="ekub?.name"
         [onMobileView]="onMobileView"
     ></app-header>
     <!--body-->
-    <section class="flex flex-col justify-center items-center mt-16">
+    <section class="flex flex-col justify-center items-center mt-[68px]">
         <!--last round winner-->
-        <div *ngIf="currentRound > 2"  class="w-full p-4 text-lg font-semibold">
+        <section *ngIf="lastRound?.winner"  
+            class="w-full flex justify-evenly p-4 text-lg font-semibold">
             <div>
-                የዙር <span>{{currentRound - 1}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                <span>{{lastRoundWinner?.username}}</span>
+                የዙር <span>{{lastRound?.roundNumber}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
+                <span>{{lastRound?.winner?.username}}</span>
             </div>
-        </div>
-
-         <!--general information section-->
-        <div  class="text-xl font-semibold">
-            <p class="underline">የዕቁቡ አጠቃላይ መረጃ</p>
-        </div>
-        <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
-            <div class="p-5 shadow-lg font-semibold rounded-lg">
-                <p>የአባላት ብዛት: {{ekub?.totalMember}}</p>
+            
+            <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
+                <button (click)="guarantWinner(
+                                lastRound?.id ?? '',
+                                lastRound?.winner?.id ?? '')" 
+                    class="text-blue-400 hover:text-blue-600">
+                        guarantee 
+                </button>
             </div>
-            <div class="p-5 shadow-lg font-semibold rounded-lg">
-                <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubWinnersList.length}}</p>
+        </section>
+        <!--general information section-->
+        <section class="w-full flex flex-col justify-center items-center">
+            <div  class="text-xl font-semibold">
+                <p>General Information</p>
             </div>
-            <div class="p-5 shadow-lg font-semibold rounded-lg">
-                <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{drawParticipantsList.length}}</p>
-            </div>
-            <div class="p-5 shadow-lg font-semibold rounded-lg">
-                <p>የተጀመረበት ቀን: {{transformDateTime(ekub?.startDateTime)}}</p>
-            </div>
+            <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
+                <div class="p-5 shadow-lg font-semibold rounded-lg">
+                    <p>የአባላት ብዛት: {{ekubStatus?.totalMembers}}</p>
+                </div>
+                <div class="p-5 shadow-lg font-semibold rounded-lg">
+                    <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubStatus?.winnersCount}}</p>
+                </div>
+                <div class="p-5 shadow-lg font-semibold rounded-lg">
+                    <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</p>
+                </div>
+                <div class="p-5 shadow-lg font-semibold rounded-lg">
+                    <p>የተጀመረበት ቀን: {{transformDateTime(ekubStatus?.startDate)}}</p>
+                </div>
+            </section>
         </section>
         <!--Description-->
-        <div class="p-4 text-xl font-semibold">
-            <p class="underline">የ {{ekub?.name}} ዕቁቡ ህግ እና ደንብ</p>
-        </div>
-        <section class="w-full p-5">
-            <div class="border-2 rounded-md p-4 max-h-96 overflow-y-auto">
-                {{ekub?.description}}
+        <section class="w-full flex flex-col justify-center items-center">
+            <div class="p-4 text-xl font-semibold">
+                <p class="underline">Description</p>
             </div>
+            <section class="w-full p-5">
+                <div class="border-2 rounded-md p-4 max-h-96 overflow-y-auto">
+                    {{ekub?.description}}
+                </div>
+            </section>
         </section>
-        <!--member list section with won status and payment status-->
-        <div class="p-4 text-xl font-semibold">
-            <p class="underline">የአባላት ዝርዝር</p>
-        </div>
-        <section class="w-full p-5 flex justify-center max-h-96 overflow-auto">
-            <table class="w-full md:w-1/2 border border-gray-300 bg-white">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="table-head">የአባላት ስም</th>
-                        <th class="table-head">የዕጣ ሁኔታ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let member of ekubUsersList">
-                        <td class="table-data">{{member.fullName}}</td>
-                        <td class="table-data">
-                            <span *ngIf="hasWon(member.id)">✔</span>
-                            <span *ngIf="!hasWon(member.id)">✘</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!--member list section with won status -->
+        <section *ngIf="membersDetailList.length > 0" 
+            class="w-full flex flex-col justify-center items-center"
+            [ngClass]="{'md:w-1/3' : ekubType === 'new'}">
+            <div class="p-2 text-xl font-semibold">
+                <p class="underline">የአባላት ዝርዝር</p>
+            </div>
+            <section class="w-full p-4 flex justify-center max-h-96 overflow-auto">
+                <table class="w-full border border-gray-300 bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th></th>
+                            <th *ngIf="ekubType === 'joined'" class="table-head">
+                                Username
+                            </th>
+                            <th class="table-head">FullName</th>
+                            <th *ngIf="ekubType === 'joined'" class="table-head">
+                                Won in Round
+                            </th>
+                            <th *ngIf="ekubType === 'joined'" class="table-head">
+                                Guarantor
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (member of membersDetailList; track $index) {
+                            <tr>
+                                <td class="table-data">{{$index + 1}}</td>
+                                <td *ngIf="ekubType === 'joined'" class="table-data">
+                                    {{member.username}}
+                                </td>
+                                <td class="table-data">{{member.fullName}}</td>
+                                <td *ngIf="ekubType === 'joined'" class="table-data">
+                                    {{member.roundNumber}}
+                                </td>
+                                <td *ngIf="ekubType === 'joined'" class="table-data">
+                                    @if (member.guarantor) {
+                                        <span>{{member.guarantor}}</span>
+                                    } @else if(isAllowedToBeGuarantor 
+                                                && member.winRoundId
+                                                && !member.isPaid){
+                                        <button (click)="guarantWinner(
+                                                    member.winRoundId,                                            
+                                                    member.userId ?? '')" 
+                                            class="text-blue-400 hover:text-blue-600">
+                                                guarantee 
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    
+                    </tbody>
+                </table>
+            </section>
         </section>
     </section>
 </main>

@@ -16,12 +16,19 @@ import { CreateEkub$Params } from '../fn/ekubs/create-ekub';
 import { deleteEkub } from '../fn/ekubs/delete-ekub';
 import { DeleteEkub$Params } from '../fn/ekubs/delete-ekub';
 import { EkubResponse } from '../models/ekub-response';
+import { EkubStatusResponse } from '../models/ekub-status-response';
 import { getCurrentRound } from '../fn/ekubs/get-current-round';
 import { GetCurrentRound$Params } from '../fn/ekubs/get-current-round';
 import { getEkubById } from '../fn/ekubs/get-ekub-by-id';
 import { GetEkubById$Params } from '../fn/ekubs/get-ekub-by-id';
+import { getEkubStatus } from '../fn/ekubs/get-ekub-status';
+import { GetEkubStatus$Params } from '../fn/ekubs/get-ekub-status';
+import { getInvitedEkubsYetToJoin } from '../fn/ekubs/get-invited-ekubs-yet-to-join';
+import { GetInvitedEkubsYetToJoin$Params } from '../fn/ekubs/get-invited-ekubs-yet-to-join';
 import { getPageOfEkubs } from '../fn/ekubs/get-page-of-ekubs';
 import { GetPageOfEkubs$Params } from '../fn/ekubs/get-page-of-ekubs';
+import { getPublicEkubs } from '../fn/ekubs/get-public-ekubs';
+import { GetPublicEkubs$Params } from '../fn/ekubs/get-public-ekubs';
 import { PageResponseEkubResponse } from '../models/page-response-ekub-response';
 import { RoundResponse } from '../models/round-response';
 import { searchEkubByName } from '../fn/ekubs/search-ekub-by-name';
@@ -182,6 +189,81 @@ export class EkubsService extends BaseService {
   searchEkubByName(params: SearchEkubByName$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
     return this.searchEkubByName$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getPublicEkubs()` */
+  static readonly GetPublicEkubsPath = '/ekubs/public';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPublicEkubs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicEkubs$Response(params?: GetPublicEkubs$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EkubResponse>>> {
+    return getPublicEkubs(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPublicEkubs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicEkubs(params?: GetPublicEkubs$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
+    return this.getPublicEkubs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getInvitedEkubsYetToJoin()` */
+  static readonly GetInvitedEkubsYetToJoinPath = '/ekubs/invited-ekubs';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getInvitedEkubsYetToJoin()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getInvitedEkubsYetToJoin$Response(params?: GetInvitedEkubsYetToJoin$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EkubResponse>>> {
+    return getInvitedEkubsYetToJoin(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getInvitedEkubsYetToJoin$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getInvitedEkubsYetToJoin(params?: GetInvitedEkubsYetToJoin$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
+    return this.getInvitedEkubsYetToJoin$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getEkubStatus()` */
+  static readonly GetEkubStatusPath = '/ekubs/ekub-status/{ekub-id}/{version}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getEkubStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEkubStatus$Response(params: GetEkubStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<EkubStatusResponse>> {
+    return getEkubStatus(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getEkubStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEkubStatus(params: GetEkubStatus$Params, context?: HttpContext): Observable<EkubStatusResponse> {
+    return this.getEkubStatus$Response(params, context).pipe(
+      map((r: StrictHttpResponse<EkubStatusResponse>): EkubStatusResponse => r.body)
     );
   }
 

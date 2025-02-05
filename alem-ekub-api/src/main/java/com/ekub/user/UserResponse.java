@@ -16,7 +16,7 @@ public record UserResponse(
         String profession,
         String profilePicUrl,
         String idCardImageUrl,
-        String guarantor,
+        List<String> guarantors,
         boolean enabled,
         List<String> ekubs,
         List<String> ekubIds,

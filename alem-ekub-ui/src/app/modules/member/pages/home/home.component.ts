@@ -12,11 +12,12 @@ import { EkubsComponent } from "../ekubs/ekubs.component";
 import { PaymentHistoryComponent } from '../payment-history/payment-history.component';
 import { UxService } from '../../../../services/ux-service/ux.service';
 import { PaymentComponent } from '../payment/payment.component';
+import { NewEkubsComponent } from '../new-ekubs/new-ekubs.component';
 
 @Component({
   selector: 'app-home',
   imports: [HeaderComponent, CommonModule, DrawerComponent, EkubsComponent, 
-      PaymentHistoryComponent, PaymentComponent],
+      PaymentHistoryComponent, PaymentComponent, NewEkubsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

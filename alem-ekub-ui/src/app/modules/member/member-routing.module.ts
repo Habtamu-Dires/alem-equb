@@ -10,6 +10,7 @@ import { EkubComponent } from './components/ekub/ekub.component';
 import { EkubDetailComponent } from './pages/ekub-detail/ekub-detail.component';
 import { PaymentHistoryComponent } from './pages/payment-history/payment-history.component';
 import { PaymentComponent } from './pages/payment/payment.component';
+import { NewEkubsComponent } from './pages/new-ekubs/new-ekubs.component';
 
 const routes: Routes = [
   {path:'',component:MainComponent,
@@ -20,9 +21,11 @@ const routes: Routes = [
     {path:'change-pin',component:ChangePasswordComponent},
     {path:'about',component:AboutComponent},
     {path:'ekubs',component:EkubsComponent},
-    {path:'ekub-detail/:ekubId',component:EkubDetailComponent},
+    {path:'ekub-detail/:type',component:EkubDetailComponent},
     {path:'payment', component:PaymentComponent},
-    {path:'payment-history', component:PaymentHistoryComponent}
+    {path:'payment-history', component:PaymentHistoryComponent},
+    {path:'new-ekubs', component:NewEkubsComponent}
+
   ]
  }
 ];

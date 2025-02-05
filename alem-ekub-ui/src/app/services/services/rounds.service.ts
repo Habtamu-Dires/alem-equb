@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getEkubRounds } from '../fn/rounds/get-ekub-rounds';
 import { GetEkubRounds$Params } from '../fn/rounds/get-ekub-rounds';
+import { getRoundByEkubAndRoundNo } from '../fn/rounds/get-round-by-ekub-and-round-no';
+import { GetRoundByEkubAndRoundNo$Params } from '../fn/rounds/get-round-by-ekub-and-round-no';
 import { getUserPendingPayments } from '../fn/rounds/get-user-pending-payments';
 import { GetUserPendingPayments$Params } from '../fn/rounds/get-user-pending-payments';
 import { RoundResponse } from '../models/round-response';
@@ -46,6 +48,31 @@ export class RoundsService extends BaseService {
   getEkubRounds(params: GetEkubRounds$Params, context?: HttpContext): Observable<Array<RoundResponse>> {
     return this.getEkubRounds$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<RoundResponse>>): Array<RoundResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getRoundByEkubAndRoundNo()` */
+  static readonly GetRoundByEkubAndRoundNoPath = '/rounds/{ekub-id}/{version}/{round-no}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRoundByEkubAndRoundNo()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRoundByEkubAndRoundNo$Response(params: GetRoundByEkubAndRoundNo$Params, context?: HttpContext): Observable<StrictHttpResponse<RoundResponse>> {
+    return getRoundByEkubAndRoundNo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRoundByEkubAndRoundNo$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRoundByEkubAndRoundNo(params: GetRoundByEkubAndRoundNo$Params, context?: HttpContext): Observable<RoundResponse> {
+    return this.getRoundByEkubAndRoundNo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoundResponse>): RoundResponse => r.body)
     );
   }
 

@@ -9,8 +9,11 @@ import java.util.UUID;
 @Builder
 public record UserPendingPaymentResponse(
         String equbName,
+        Integer version,
         UUID roundId,
         int roundNumber,
         LocalDateTime endDateTime,
-        BigDecimal amount
+        BigDecimal amount,
+        BigDecimal penalty,
+        BigDecimal totalAmount
 ) {}

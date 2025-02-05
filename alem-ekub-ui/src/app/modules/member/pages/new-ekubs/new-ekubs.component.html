@@ -1,0 +1,31 @@
+<main class="max-container h-full flex flex-col justify-center items-center">
+    <app-header *ngIf='onMobileView' class="w-full sticky top-0"  
+        [onSubPage]="true"
+        pageName="ዕቁብ"
+        [onMobileView]="onMobileView">
+    </app-header>
+    <section class="flex justify-evenly gap-8">
+        <p class="px-4 py-2 rounded-lg cursor-pointer" (click)="selectCategory('public')"
+           [ngClass]="{'bg-grn': selectedCategory === 'public'}">
+            Public
+        </p>
+        <p class="px-4 py-2 rounded-lg cursor-pointer" (click)="selectCategory('invited')"
+           [ngClass]="{'bg-grn': selectedCategory === 'invited'}">
+            Invited
+        </p>
+    </section>
+    <section class="flex flex-col items-center justify-center">
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (ekub of ekubs; track $index) {
+               <div class="flex justify-center items-center p-4">
+                    <app-ekub 
+                        [ekub]="ekub"
+                        [isNewEkub]="true"
+                        (onJoinEkub)="onJoinEkub($event)"
+                        >
+                    </app-ekub>
+               </div>
+            }
+        </div>  
+    </section>
+</main>

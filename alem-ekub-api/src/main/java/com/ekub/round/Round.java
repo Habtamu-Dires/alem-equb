@@ -3,6 +3,7 @@ package com.ekub.round;
 import com.ekub.ekub.Ekub;
 import com.ekub.payment.Payment;
 import com.ekub.user.User;
+import com.ekub.user_guarantee.UserGuarantee;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -22,19 +23,25 @@ public class Round {
     @Id
     private UUID id;
     private Integer roundNumber;
+    private Integer version;
     private BigDecimal totalAmount;
+
     @ManyToOne
     @JoinColumn(name = "ekub_id")
     private Ekub ekub;
 
-    @OneToMany(mappedBy = "round")
+    @OneToMany(mappedBy = "round", cascade = {CascadeType.REMOVE,CascadeType.DETACH})
     private List<Payment> payments;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name="winner_id")
     private User winner;
 
     private LocalDateTime createdDateTime;
     private LocalDateTime endDateTime;
-    private boolean paid;
+    private boolean paid = false;
+
+    @OneToMany(mappedBy = "round", cascade = {CascadeType.REMOVE,CascadeType.DETACH})
+    public List<UserGuarantee> guarantees;
 
 }

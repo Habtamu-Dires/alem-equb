@@ -1,0 +1,53 @@
+<main class="flex flex-col justify-center items-center p-4 gap-3 shadow-xl 
+      font-mono bg-grn/40 rounded-lg">
+  <h2 class="w-full text-lg font-semibold">Payment Confirmation:</h2>
+  <section class="flex flex-col gap-2">
+    <div class="grid grid-cols-6 text-md space-x-6">
+      <p class="col-span-3">Username:</p>
+      <p class="col-span-3">{{ username }}</p>
+    </div>
+    <div class="grid grid-cols-6 text-md space-x-6">
+      <p class="col-span-3">FullName:</p>
+      <p class="col-span-3">{{ fullName }}</p>
+    </div>
+    <div class="grid grid-cols-6 text-md space-x-6">
+      <p class="col-span-3">PhoneNumber:</p>
+      <p class="col-span-3">{{ phoneNumber }}</p>
+    </div>
+    <div class="grid grid-cols-6 text-md space-x-6">
+      <p class="col-span-3">Amount:</p>
+      <p class="col-span-3">{{ amount | number}}</p>
+    </div>
+  </section>
+  <div class="w-full">
+    <input [(ngModel)]="remark" class="form-input" type="text" placeholder="remark"/>
+    <p *ngIf="showRemarkErr" class="text-sm text-red-400">enter remark</p>
+  </div>
+  <section class="flex flex-col gap-2 w-full">
+    <p class="font-semibold text-md">Payment method:</p>
+    <div class="flex justify-center gap-4 p-2 overflow-x-auto">
+      <img *ngIf="phoneNumber.startsWith('09')" 
+          class="w-12 h-12 cursor-pointer rounded-md" 
+          [ngClass]="{'border-2 border-green-700': selectedPaymentMethod === 'telebirr'}"
+          (click)="selectPaymentMethod('telebirr')" 
+          src="telebirr-logo.png"
+      />
+      <img *ngIf="phoneNumber.startsWith('07')" 
+          class="w-12 h-12 cursor-pointer rounded-md"
+          [ngClass]="{'border-2 border-green-700': selectedPaymentMethod === 'telebirr'}"
+          (click)="selectPaymentMethod('m-pesa')" 
+          src="m-pesa-logo.png"
+        />
+    </div>
+    <p *ngIf="showMethodErr" class="text-sm text-red-400">select payment method</p>
+  </section>
+  
+  <div class="flex justify-evenly w-full">
+    <button 
+      class="px-4 py-2 rounded-lg bg-green-200 hover:bg-green-700"
+      (click)="submit()">
+      Pay
+    </button>
+    <button (click)="cancel()">Cancel</button>
+  </div>
+</main>

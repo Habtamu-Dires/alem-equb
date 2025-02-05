@@ -40,7 +40,6 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit(){
     this.checkScreenSzie(window.innerWidth);
     this.loggedUser = this.keycloakService.profile;
-    console.log(this.loggedUser);
     this.passwordUpdateRequest.username = this.loggedUser?.username as string;
     this.passwordFormControl();
     this.confirmPasswordControl();
@@ -55,9 +54,7 @@ export class ChangePasswordComponent implements OnInit {
       next:() =>{
         this.toastrService.success('Password updated successfully','Done');
         //clear form
-        this.passwordControl.setValue('');
-        this.confirmPassword.setValue('');
-        this.passwordUpdateRequest.oldPassword = '';
+        this.keycloakService.logout();
       },
       error:(err:HttpErrorResponse)=>{
         const errMsg = JSON.parse(err.error);
@@ -121,8 +118,8 @@ export class ChangePasswordComponent implements OnInit {
 
     // Listen for window resize events
     @HostListener('window:resize',['$event'])
-    onResize(event:any){
-      this.checkScreenSzie(event.target.innerWidth);
+      onResize(event:any){
+        this.checkScreenSzie(event.target.innerWidth);
     }
   
     // check screen size and set hideSideBar value

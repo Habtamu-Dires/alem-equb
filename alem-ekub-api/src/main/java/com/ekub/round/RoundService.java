@@ -3,13 +3,15 @@ package com.ekub.round;
 import com.ekub.ekub.Ekub;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,22 +19,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RoundService {
 
-    private final RoundRepository repository;
+    private final RoundRepository roundRepository;
     private final RoundMapper mapper;
 
     // create new round
     public Round createNewRound(Ekub ekub){
-        LocalDateTime endDate = ekub.getStartDateTime().plusDays(ekub.getFrequencyInDays());
-        if(ekub.getLastDrawDateTime() != null){
-            endDate = ekub.getLastDrawDateTime().plusDays(ekub.getFrequencyInDays());
-        }
-        return repository.save(
+        LocalDateTime endDateTime = ekub.getNextDrawDateTime();
+        return roundRepository.save(
                 Round.builder()
                     .id(UUID.randomUUID())
                     .ekub(ekub)
+                    .version(ekub.getVersion())
                     .roundNumber(ekub.getRoundNumber()+1)
                     .createdDateTime(LocalDateTime.now())
-                    .endDateTime(endDate)
+                    .endDateTime(endDateTime)
                     .totalAmount(BigDecimal.ZERO)
                     .payments(List.of())
                     .paid(false)
@@ -42,66 +42,104 @@ public class RoundService {
 
     // get round by id
     public Round findRoundById(String roundId){
-        return repository.findById(UUID.fromString(roundId))
+        return roundRepository.findById(UUID.fromString(roundId))
                 .orElseThrow(() -> new EntityNotFoundException("Round not Found"));
     }
 
     // get round list by ekbu
-    public List<Round> getRoundsByEkubId(UUID ekubId){
-        return repository.findByEkubId(ekubId);
+    public List<Round> getRoundsByEkub(UUID ekubId, int version){
+        return roundRepository.findByEkub(ekubId,version);
     }
 
 
     // get round response by ekub
-    public List<RoundResponse> getRoundResByEkubId(String ekubId) {
-        return this.getRoundsByEkubId(UUID.fromString(ekubId))
+    public List<RoundResponse> getRoundResByEkub(String ekubId, int version) {
+        return this.getRoundsByEkub(UUID.fromString(ekubId),version)
                 .stream()
+                .sorted(Comparator.comparing(Round::getRoundNumber))
                 .map(mapper::toRoundResponse)
                 .toList();
     }
 
     // get round by ekub id and round number
-    public Round getRoundByEkubIdAndRoundNo(UUID ekubId, Integer roundNumber) {
-        return repository.findByEkubIdAndRoundNo(ekubId,roundNumber)
+    public Round findRoundByEkubAndRoundNo(UUID ekubId, int version, int roundNumber) {
+        return roundRepository.findByEkubAndRoundNo(ekubId,version,roundNumber)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Round with Ekub id %s and round number %s not found",ekubId,roundNumber
                         ))
                 );
     }
 
-    // save round
-    public void save(Round round){
-        repository.save(round);
+    // get round response by ekubId, version and round-no
+    public RoundResponse getRoundByEkubAndRoundNo(String ekubId, int version, int roundNo) {
+            return mapper.toRoundResponse(
+                    findRoundByEkubAndRoundNo(UUID.fromString(ekubId),version,roundNo)
+            );
+
     }
 
+    // save round
+    public void save(Round round){
+        roundRepository.save(round);
+    }
 
     //get user pending payments
     public List<UserPendingPaymentResponse> getUserPendingPayments(String userId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUserId = authentication.getName();
+
         LocalDateTime now = LocalDateTime.now();
 
-        List<UserPendingPaymentResponse> unPaidPayments = repository.findUserPendingPayments(userId);
+        List<UserPendingPaymentDTO> unPaidPayments = roundRepository
+                .findUserPendingPayments(loggedUserId);
+
         List<UserPendingPaymentResponse> responses = new ArrayList<>();
 
-        for (UserPendingPaymentResponse payment : unPaidPayments){
+        for (UserPendingPaymentDTO payment : unPaidPayments){
             if(payment.endDateTime().isBefore(now)){
+                double penaltyPercent = payment.penaltyPercentPerDay();
+
                 long daysOverdue = Duration.between(payment.endDateTime(), now).toDays();
-                BigDecimal dailyPenaltyRate = new BigDecimal("0.01");
-                BigDecimal penalty = dailyPenaltyRate.multiply(new BigDecimal(daysOverdue + 1)); // +1 to include the first overdue day
+
+                BigDecimal dailyPenaltyRate = new BigDecimal(penaltyPercent/100);
+                BigDecimal penaltyRate = dailyPenaltyRate.multiply(new BigDecimal(daysOverdue + 1)); // +1 to include the first overdue day
+                BigDecimal penalty = payment.amount().multiply(penaltyRate);
+
                 BigDecimal totalAmount = payment.amount().add(penalty);
                 responses.add(
                         UserPendingPaymentResponse.builder()
                                 .equbName(payment.equbName())
+                                .version(payment.version())
                                 .roundId(payment.roundId())
                                 .roundNumber(payment.roundNumber())
-                                .amount(totalAmount)
+                                .amount(payment.amount())
+                                .penalty(penalty)
+                                .totalAmount(totalAmount)
+                                .endDateTime(payment.endDateTime())
                                 .build()
                 );
 
             } else {
-                responses.add(payment);
+                responses.add(
+                    UserPendingPaymentResponse.builder()
+                            .equbName(payment.equbName())
+                            .version(payment.version())
+                            .roundId(payment.roundId())
+                            .roundNumber(payment.roundNumber())
+                            .amount(payment.amount())
+                            .penalty(BigDecimal.ZERO)
+                            .totalAmount(payment.amount())
+                            .endDateTime(payment.endDateTime())
+                            .build()
+                );
             }
         }
         return responses;
     }
 
+    // set payment status
+    public void setPaymentStatusToPaid(Round round) {
+        round.setPaid(true);
+        roundRepository.save(round);
+    }
 }

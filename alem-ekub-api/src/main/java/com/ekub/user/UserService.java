@@ -3,6 +3,8 @@ package com.ekub.user;
 import com.ekub.common.IdResponse;
 import com.ekub.common.PageResponse;
 import com.ekub.ekub.Ekub;
+import com.ekub.ekub.EkubMapper;
+import com.ekub.ekub.EkubResponse;
 import com.ekub.ekub.EkubService;
 import com.ekub.ekub_users.EkubUser;
 import com.ekub.file.FileStorageService;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -34,12 +37,16 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final EkubService ekubService;
+    private final EkubMapper ekubMapper;
     private final FileStorageService fileStorageService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
-    public IdResponse createUser(UserRequest request) {
+    public void createUser(UserRequest request,
+                           MultipartFile profilePic,
+                           MultipartFile idCardImg) {
         String keyCloakUserId = null;
+        User savedUser = null;
         try{
             KeycloakUserRequest keycloakUserRequest = KeycloakUserRequest.builder()
                     .username(request.username())
@@ -47,6 +54,7 @@ public class UserService {
                     .firstName(request.firstName())
                     .lastName(request.lastName())
                     .email(request.email())
+                    .phoneNumber(request.phoneNumber())
                     .enabled(request.enabled())
                     .build();
             //save to keycloak
@@ -64,9 +72,13 @@ public class UserService {
                     .build();
 
            // save to database
-            user.setEkubs(createEkubUsers(request.ekubIds(),user));
-            User savedUser = repository.save(user);
-            return new IdResponse(savedUser.getId());
+            user.setEkubUsers(createEkubUsers(request.ekubIds(),user));
+            savedUser = repository.save(user);
+            repository.flush();
+
+            // save profile picture and id image.
+            uploadProfilePicture(savedUser.getId(), profilePic);
+            uploadIdCardImage(savedUser.getId(), idCardImg);
 
         } catch (Exception e){
             // RollBack in keycloak if database operation failed
@@ -77,7 +89,25 @@ public class UserService {
                     throw new RuntimeException("Failed to rollback Keycloak user creation after database failure", ex);
                 }
             }
-            throw new RuntimeException("Failed to create user in database or in keycloak"
+            //Roll back database if file upload failed
+            if(savedUser != null){
+                try{
+                    //delete profile pic
+                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
+                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
+                    }
+                    //delete id card image
+                    if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
+                        fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
+                    }
+                    //delete user
+                    repository.deleteById(savedUser.getId());
+                } catch (Exception ex){
+                    throw new RuntimeException("Failed to rollback database after file failed", ex);
+                }
+            }
+
+            throw new RuntimeException("Something went wrong: "
                     + e.getMessage());
         }
 
@@ -89,15 +119,87 @@ public class UserService {
         ekubIds.forEach(ekubId -> {
             Ekub ekub = ekubService.findEkubById(ekubId);
             EkubUser ekubUser = EkubUser.builder()
-                            .id(UUID.randomUUID())
-                            .user(user)
-                            .ekub(ekub)
-                            .build();
+                    .id(UUID.randomUUID())
+                    .user(user)
+                    .ekub(ekub)
+                    .build();
             ekubUserList.add(ekubUser);
         });
 
         return ekubUserList;
     }
+
+
+    // registration
+    public void register(UserRequest request,
+                               MultipartFile profilePic,
+                               MultipartFile idCardImg)
+    {
+        String keyCloakUserId = null;
+        User savedUser = null;
+        try{
+            KeycloakUserRequest keycloakUserRequest = KeycloakUserRequest.builder()
+                    .username(request.username())
+                    .password(request.password())
+                    .firstName(request.firstName())
+                    .lastName(request.lastName())
+                    .phoneNumber(request.phoneNumber())
+                    .email(request.email())
+                    .build();
+            //save to keycloak
+            keyCloakUserId = keycloakService.registration(keycloakUserRequest);
+
+            User user = User.builder()
+                    .id(keyCloakUserId)
+                    .username(request.username())
+                    .firstName(request.firstName())
+                    .lastName(request.lastName())
+                    .email(request.email())
+                    .phoneNumber(request.phoneNumber())
+                    .profession(request.profession())
+                    .build();
+
+            // save to database
+            savedUser = repository.save(user);
+            repository.flush();
+
+            // save profile picture and id image.
+            uploadProfilePicture(savedUser.getId(), profilePic);
+            uploadIdCardImage(savedUser.getId(), idCardImg);
+
+        } catch (Exception e){
+            // RollBack in keycloak if database operation failed
+            if(keyCloakUserId != null){
+                try{
+                    keycloakService.deleteUser(keyCloakUserId);
+                } catch (Exception ex){
+                    throw new RuntimeException("Failed to rollback Keycloak user creation after database failure", ex);
+                }
+            }
+            //Roll back database if file upload failed
+            if(savedUser != null){
+                try{
+                    //delete profile pic
+                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
+                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
+                    }
+                    //delete id card image
+                    if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
+                        fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
+                    }
+                    //delete user
+                    repository.deleteById(savedUser.getId());
+                } catch (Exception ex){
+                    throw new RuntimeException("Failed to rollback database after file failed", ex);
+                }
+            }
+
+            throw new RuntimeException("Something went wrong: "
+                    + e.getMessage());
+        }
+    }
+
+
 
     // get list of users
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -129,6 +231,7 @@ public class UserService {
                     .firstName(request.firstName())
                     .lastName(request.lastName())
                     .email(request.email())
+                    .phoneNumber(request.phoneNumber())
                     .enabled(request.enabled())
                     .build();
             keycloakService.updateUser(user.getId(), keycloakUserRequest);
@@ -153,6 +256,7 @@ public class UserService {
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
                     .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
                     .enabled(user.isEnabled())
                     .build();
             keycloakService.updateUser(user.getId(), keycloakUserRequest);
@@ -166,6 +270,8 @@ public class UserService {
         User user = findUserById(request.id());
         try{
             KeycloakUserRequest keycloakUserRequest = KeycloakUserRequest.builder()
+                    .username(request.username())
+                    .phoneNumber(request.phoneNumber())
                     .email(request.email())
                     .build();
             keycloakService.updateProfile(user.getId(), keycloakUserRequest);
@@ -174,6 +280,7 @@ public class UserService {
         }
 
         try{
+            user.setUsername(request.username());
             user.setEmail(request.email());
             user.setPhoneNumber(request.phoneNumber());
             user.setProfession(request.profession());
@@ -182,6 +289,7 @@ public class UserService {
         } catch (Exception e) {
             //roll back the keycloak update
             KeycloakUserRequest keycloakUserRequest = KeycloakUserRequest.builder()
+                    .username(user.getUsername())
                     .email(user.getEmail())
                     .build();
             keycloakService.updateProfile(user.getId(), keycloakUserRequest);
@@ -232,22 +340,6 @@ public class UserService {
         keycloakService.logoutUserFromAllDevices(userId);
     }
 
-    //TODO: Both should be a member of the same ekub
-    public void updateGuaranteed(String guaranteedUserId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUserId = authentication.getName();
-
-        User loggedUser = findUserById(loggedInUserId);
-        User guaranteedUser = findUserById(guaranteedUserId);
-
-        // if guaranteedUser has no guarantor
-        if(guaranteedUser.getGuarantor() == null){
-            loggedUser.setGuaranteedUser(guaranteedUser);
-            guaranteedUser.setGuarantor(loggedUser);
-            repository.save(loggedUser);
-            repository.save(guaranteedUser);
-        }
-    }
 
     // find user by id
     public User findUserById(String userId){
@@ -258,6 +350,13 @@ public class UserService {
     // get user response by id
     public UserResponse getUserById(String userId) {
         return mapper.toUserResponse(findUserById(userId));
+    }
+
+    //find user by username
+    public User findByUsername(String username){
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "User not with username: "+ username + "found"));
     }
 
     // upload profile picture
@@ -275,8 +374,8 @@ public class UserService {
     // upload id card
     public void uploadIdCardImage(String userId, MultipartFile file) {
         User user = this.findUserById(userId);
-        if(user.getProfilePicUrl() != null && !user.getProfilePicUrl().isBlank()){
-            fileStorageService.deleteFile(user.getProfilePicUrl());
+        if(user.getIdCardImageUrl() != null && !user.getIdCardImageUrl().isBlank()){
+            fileStorageService.deleteFile(user.getIdCardImageUrl());
         }
         String url = fileStorageService.saveFile(file, userId, "id-card");
 
@@ -284,11 +383,63 @@ public class UserService {
         repository.save(user);
     }
 
-    // remove profile picture is it necessary ?
-    public void removeProfilePicture(String userId){
-        User user = this.findUserById(userId);
-        if(user.getProfilePicUrl() != null && !user.getProfilePicUrl().isBlank()){
-            fileStorageService.deleteFile(user.getProfilePicUrl());
-        }
+
+    // invite a user into ekub
+    @Transactional
+    public void inviteUserToEkub(String userId, String ekubId){
+        User user = findUserById(userId);
+        Ekub ekub = ekubService.findEkubById(ekubId);
+
+        user.addInvitedEkub(ekub); // helper method
+        repository.save(user);
     }
+
+    // cancel invitation of user
+    @Transactional // it will commit automatically thanks to transaction
+    public void cancelInvitation(String userId, String ekubId){
+        User user = findUserById(userId);
+        Ekub ekub = ekubService.findEkubById(ekubId);
+
+        user.removeInvitedEkub(ekub);
+
+        // the transaction commit automatically thanks to Transactional
+    }
+
+    // get invited ekubs
+    @Transactional  //note: Required to keep the session open.
+    public List<EkubResponse> getInvitedEkubs() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUserId = authentication.getName();
+        User user = findUserById(loggedUserId);
+
+        //access the collection inside a transaction to trigger lazy loading
+        return user.getInvitedEkubs()
+                .stream()
+                .map(ekubMapper::toEkubResponse)
+                .toList();
+    }
+
+    // get users invited in ekub but not joined
+    public List<UserResponse> getUsersInvitedInEkubsAndNotJoined(String ekubId){
+        return  repository
+                .findUsersInvitedInEkubAndNotJoined(UUID.fromString(ekubId))
+                .stream()
+                .map(mapper::toUserResponse)
+                .toList();
+    }
+
+    // search user to invite into ekub
+    public List<UserResponse> searchUsersToInvite(String ekubId, String searchTerm) {
+        Ekub ekub = ekubService.findEkubById(ekubId);
+
+        Specification<User> spec = UserSpecification
+                    .searchUsersNotInEkubOrInvited(searchTerm, ekub.getId());
+
+        return repository.findAll(spec)
+                .stream()
+                .map(mapper::toUserResponse)
+                .toList();
+    }
+
+
 }

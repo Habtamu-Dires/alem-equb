@@ -11,18 +11,24 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { cancelInvitation } from '../fn/users/cancel-invitation';
+import { CancelInvitation$Params } from '../fn/users/cancel-invitation';
 import { createUser } from '../fn/users/create-user';
 import { CreateUser$Params } from '../fn/users/create-user';
 import { deleteUser } from '../fn/users/delete-user';
 import { DeleteUser$Params } from '../fn/users/delete-user';
+import { getInvitedUsersInEkubAndNotJoined } from '../fn/users/get-invited-users-in-ekub-and-not-joined';
+import { GetInvitedUsersInEkubAndNotJoined$Params } from '../fn/users/get-invited-users-in-ekub-and-not-joined';
 import { getPageOfUsers } from '../fn/users/get-page-of-users';
 import { GetPageOfUsers$Params } from '../fn/users/get-page-of-users';
 import { getUserById } from '../fn/users/get-user-by-id';
 import { GetUserById$Params } from '../fn/users/get-user-by-id';
 import { IdResponse } from '../models/id-response';
+import { inviteUserToEkub } from '../fn/users/invite-user-to-ekub';
+import { InviteUserToEkub$Params } from '../fn/users/invite-user-to-ekub';
 import { PageResponseUserResponse } from '../models/page-response-user-response';
-import { removeProfilePicture } from '../fn/users/remove-profile-picture';
-import { RemoveProfilePicture$Params } from '../fn/users/remove-profile-picture';
+import { searchUsersToInvite } from '../fn/users/search-users-to-invite';
+import { SearchUsersToInvite$Params } from '../fn/users/search-users-to-invite';
 import { updatePassword } from '../fn/users/update-password';
 import { UpdatePassword$Params } from '../fn/users/update-password';
 import { updateProfile } from '../fn/users/update-profile';
@@ -98,9 +104,9 @@ export class UsersService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createUser()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  createUser$Response(params: CreateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<IdResponse>> {
+  createUser$Response(params?: CreateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<IdResponse>> {
     return createUser(this.http, this.rootUrl, params, context);
   }
 
@@ -108,9 +114,9 @@ export class UsersService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createUser$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  createUser(params: CreateUser$Params, context?: HttpContext): Observable<IdResponse> {
+  createUser(params?: CreateUser$Params, context?: HttpContext): Observable<IdResponse> {
     return this.createUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<IdResponse>): IdResponse => r.body)
     );
@@ -166,6 +172,31 @@ export class UsersService extends BaseService {
     );
   }
 
+  /** Path part for operation `cancelInvitation()` */
+  static readonly CancelInvitationPath = '/users/cancel-invitation/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `cancelInvitation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelInvitation$Response(params: CancelInvitation$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return cancelInvitation(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `cancelInvitation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelInvitation(params: CancelInvitation$Params, context?: HttpContext): Observable<void> {
+    return this.cancelInvitation$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
   /** Path part for operation `uploadProfilePicture()` */
   static readonly UploadProfilePicturePath = '/users/profile-picture';
 
@@ -191,27 +222,27 @@ export class UsersService extends BaseService {
     );
   }
 
-  /** Path part for operation `removeProfilePicture()` */
-  static readonly RemoveProfilePicturePath = '/users/profile-picture';
+  /** Path part for operation `inviteUserToEkub()` */
+  static readonly InviteUserToEkubPath = '/users/invite/{user-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `removeProfilePicture()` instead.
+   * To access only the response body, use `inviteUserToEkub()` instead.
    *
    * This method doesn't expect any request body.
    */
-  removeProfilePicture$Response(params: RemoveProfilePicture$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return removeProfilePicture(this.http, this.rootUrl, params, context);
+  inviteUserToEkub$Response(params: InviteUserToEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return inviteUserToEkub(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `removeProfilePicture$Response()` instead.
+   * To access the full response (for headers, for example), `inviteUserToEkub$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  removeProfilePicture(params: RemoveProfilePicture$Params, context?: HttpContext): Observable<void> {
-    return this.removeProfilePicture$Response(params, context).pipe(
+  inviteUserToEkub(params: InviteUserToEkub$Params, context?: HttpContext): Observable<void> {
+    return this.inviteUserToEkub$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
@@ -288,6 +319,56 @@ export class UsersService extends BaseService {
   deleteUser(params: DeleteUser$Params, context?: HttpContext): Observable<void> {
     return this.deleteUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `searchUsersToInvite()` */
+  static readonly SearchUsersToInvitePath = '/users/search-to-invite/{ekub-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `searchUsersToInvite()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchUsersToInvite$Response(params: SearchUsersToInvite$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
+    return searchUsersToInvite(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `searchUsersToInvite$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchUsersToInvite(params: SearchUsersToInvite$Params, context?: HttpContext): Observable<Array<UserResponse>> {
+    return this.searchUsersToInvite$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getInvitedUsersInEkubAndNotJoined()` */
+  static readonly GetInvitedUsersInEkubAndNotJoinedPath = '/users/invited-users/{ekub-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getInvitedUsersInEkubAndNotJoined()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getInvitedUsersInEkubAndNotJoined$Response(params: GetInvitedUsersInEkubAndNotJoined$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
+    return getInvitedUsersInEkubAndNotJoined(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getInvitedUsersInEkubAndNotJoined$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getInvitedUsersInEkubAndNotJoined(params: GetInvitedUsersInEkubAndNotJoined$Params, context?: HttpContext): Observable<Array<UserResponse>> {
+    return this.getInvitedUsersInEkubAndNotJoined$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
     );
   }
 

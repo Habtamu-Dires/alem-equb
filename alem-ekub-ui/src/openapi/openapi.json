@@ -102,13 +102,30 @@
                 "operationId": "createUser",
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserRequest"
+                                "type": "object",
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/UserRequest"
+                                    },
+                                    "profilePic": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "idCardImg": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "idCardImg",
+                                    "profilePic",
+                                    "request"
+                                ]
                             }
                         }
-                    },
-                    "required": true
+                    }
                 },
                 "responses": {
                     "200": {
@@ -173,6 +190,37 @@
                     },
                     "required": true
                 },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/cancel-invitation/{user-id}": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "cancelInvitation",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ekub-id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -363,15 +411,25 @@
                         "description": "OK"
                     }
                 }
-            },
-            "delete": {
+            }
+        },
+        "/users/invite/{user-id}": {
+            "post": {
                 "tags": [
                     "users"
                 ],
-                "operationId": "removeProfilePicture",
+                "operationId": "inviteUserToEkub",
                 "parameters": [
                     {
                         "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ekub-id",
                         "in": "query",
                         "required": true,
                         "schema": {
@@ -427,7 +485,125 @@
                 }
             }
         },
+        "/user-guarantee/{round-id}/{user-id}": {
+            "post": {
+                "tags": [
+                    "userGuarantees"
+                ],
+                "operationId": "guaranteeUser",
+                "parameters": [
+                    {
+                        "name": "round-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/registration/register": {
+            "post": {
+                "tags": [
+                    "registration"
+                ],
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/UserRequest"
+                                    },
+                                    "profilePic": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "idCardImg": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "idCardImg",
+                                    "profilePic",
+                                    "request"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/payments": {
+            "get": {
+                "tags": [
+                    "payments"
+                ],
+                "operationId": "getPageOfPayments",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PageResponsePaymentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "payments"
@@ -443,6 +619,50 @@
                     },
                     "required": true
                 },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/ekub-users/{ekub-id}": {
+            "post": {
+                "tags": [
+                    "ekub-users"
+                ],
+                "operationId": "joinEkub",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ekub-users"
+                ],
+                "operationId": "unJoinEkub",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -501,12 +721,53 @@
                 }
             }
         },
-        "/rounds/{ekub-id}": {
+        "/users/search-to-invite/{ekub-id}": {
             "get": {
                 "tags": [
-                    "rounds"
+                    "users"
                 ],
-                "operationId": "getEkubRounds",
+                "operationId": "searchUsersToInvite",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "search-term",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/invited-users/{ekub-id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getInvitedUsersInEkubAndNotJoined",
                 "parameters": [
                     {
                         "name": "ekub-id",
@@ -525,8 +786,219 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user-guarantee/guarantors/{round-id}/{user-id}": {
+            "get": {
+                "tags": [
+                    "userGuarantees"
+                ],
+                "operationId": "getGuarantors",
+                "parameters": [
+                    {
+                        "name": "round-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user-guarantee/guaranteed-users/{round-id}/{user-id}": {
+            "get": {
+                "tags": [
+                    "userGuarantees"
+                ],
+                "operationId": "getGuaranteedUsers",
+                "parameters": [
+                    {
+                        "name": "round-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user-guarantee/allowed-guarantor/{ekub-id}/{version}": {
+            "get": {
+                "tags": [
+                    "userGuarantees"
+                ],
+                "operationId": "isAllowedToBeGuarantor",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BooleanResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rounds/{ekub-id}": {
+            "get": {
+                "tags": [
+                    "rounds"
+                ],
+                "operationId": "getEkubRounds",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
                                         "$ref": "#/components/schemas/RoundResponse"
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rounds/{ekub-id}/{version}/{round-no}": {
+            "get": {
+                "tags": [
+                    "rounds"
+                ],
+                "operationId": "getRoundByEkubAndRoundNo",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "round-no",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoundResponse"
                                 }
                             }
                         }
@@ -640,23 +1112,12 @@
                         }
                     },
                     {
-                        "name": "page",
+                        "name": "version",
                         "in": "query",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "integer",
-                            "format": "int32",
-                            "default": 10
-                        }
-                    },
-                    {
-                        "name": "size",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "default": 10
+                            "format": "int32"
                         }
                     }
                 ],
@@ -666,7 +1127,10 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/PageResponseUserRoundPaymentResponse"
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserRoundPaymentResponse"
+                                    }
                                 }
                             }
                         }
@@ -813,6 +1277,91 @@
                 }
             }
         },
+        "/ekubs/public": {
+            "get": {
+                "tags": [
+                    "ekubs"
+                ],
+                "operationId": "getPublicEkubs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EkubResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ekubs/invited-ekubs": {
+            "get": {
+                "tags": [
+                    "ekubs"
+                ],
+                "operationId": "getInvitedEkubsYetToJoin",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EkubResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ekubs/ekub-status/{ekub-id}/{version}": {
+            "get": {
+                "tags": [
+                    "ekubs"
+                ],
+                "operationId": "getEkubStatus",
+                "parameters": [
+                    {
+                        "name": "ekub-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EkubStatusResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/ekubs/current-round/{ekub-id}": {
             "get": {
                 "tags": [
@@ -843,45 +1392,12 @@
                 }
             }
         },
-        "/ekub-users/winners/{ekub-id}": {
+        "/ekub-users/member-detail/{ekub-id}/{version}": {
             "get": {
                 "tags": [
                     "ekub-users"
                 ],
-                "operationId": "getEkubWinners",
-                "parameters": [
-                    {
-                        "name": "ekub-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ekub-users/winner/{ekub-id}": {
-            "get": {
-                "tags": [
-                    "ekub-users"
-                ],
-                "operationId": "getRoundWinner",
+                "operationId": "getMemberDetail",
                 "parameters": [
                     {
                         "name": "ekub-id",
@@ -892,8 +1408,8 @@
                         }
                     },
                     {
-                        "name": "round-no",
-                        "in": "query",
+                        "name": "version",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -907,39 +1423,9 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ekub-users/participants/{ekub-id}": {
-            "get": {
-                "tags": [
-                    "ekub-users"
-                ],
-                "operationId": "getDrawParticipants",
-                "parameters": [
-                    {
-                        "name": "ekub-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
+                                        "$ref": "#/components/schemas/MemberDetailResponse"
                                     }
                                 }
                             }
@@ -1010,6 +1496,45 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/user-guarantee/cancel-guarantee/{round-id}/{guarantor-id}/{guaranteed-id}": {
+            "delete": {
+                "tags": [
+                    "userGuarantees"
+                ],
+                "operationId": "cancelGuarantee",
+                "parameters": [
+                    {
+                        "name": "round-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "guarantor-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "guaranteed-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -1104,9 +1629,6 @@
                     "description": {
                         "type": "string"
                     },
-                    "totalAmount": {
-                        "type": "number"
-                    },
                     "amount": {
                         "type": "number"
                     },
@@ -1117,16 +1639,37 @@
                         "type": "integer",
                         "format": "int32"
                     },
+                    "totalAmount": {
+                        "type": "number"
+                    },
+                    "penaltyPercentPerDay": {
+                        "type": "number",
+                        "format": "double"
+                    },
                     "nextDrawDateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "startDateTime": {
                         "type": "string",
                         "format": "date-time"
                     },
                     "isActive": {
                         "type": "boolean"
                     },
-                    "startDateTime": {
-                        "type": "string",
-                        "format": "date-time"
+                    "isExclusive": {
+                        "type": "boolean"
+                    },
+                    "isArchived": {
+                        "type": "boolean"
+                    },
+                    "mpesaAccountNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "telebirrAccountNumber": {
+                        "type": "integer",
+                        "format": "int32"
                     }
                 },
                 "required": [
@@ -1134,12 +1677,20 @@
                     "description",
                     "frequencyInDays",
                     "name",
+                    "penaltyPercentPerDay",
                     "type"
                 ]
             },
             "PaymentRequest": {
                 "type": "object",
                 "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "MEMBER_PAYMENT",
+                            "WINNING_PAYOUT"
+                        ]
+                    },
                     "userId": {
                         "type": "string"
                     },
@@ -1148,11 +1699,20 @@
                     },
                     "amount": {
                         "type": "number"
+                    },
+                    "paymentMethod": {
+                        "type": "string"
+                    },
+                    "remark": {
+                        "type": "string"
                     }
                 },
                 "required": [
                     "amount",
+                    "paymentMethod",
+                    "remark",
                     "roundId",
+                    "type",
                     "userId"
                 ]
             },
@@ -1229,8 +1789,11 @@
                     "idCardImageUrl": {
                         "type": "string"
                     },
-                    "guarantor": {
-                        "type": "string"
+                    "guarantors": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     },
                     "enabled": {
                         "type": "boolean"
@@ -1252,6 +1815,14 @@
                     }
                 }
             },
+            "BooleanResponse": {
+                "type": "object",
+                "properties": {
+                    "result": {
+                        "type": "boolean"
+                    }
+                }
+            },
             "RoundResponse": {
                 "type": "object",
                 "properties": {
@@ -1260,6 +1831,10 @@
                     },
                     "ekubName": {
                         "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "roundNumber": {
                         "type": "integer",
@@ -1274,6 +1849,12 @@
                     "paid": {
                         "type": "boolean"
                     },
+                    "userGuarantees": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserGuaranteeResponse"
+                        }
+                    },
                     "createdDate": {
                         "type": "string",
                         "format": "date-time"
@@ -1284,11 +1865,32 @@
                     }
                 }
             },
+            "UserGuaranteeResponse": {
+                "type": "object",
+                "properties": {
+                    "guarantorId": {
+                        "type": "string"
+                    },
+                    "guarantor": {
+                        "type": "string"
+                    },
+                    "guaranteedId": {
+                        "type": "string"
+                    },
+                    "guaranteed": {
+                        "type": "string"
+                    }
+                }
+            },
             "UserPendingPaymentResponse": {
                 "type": "object",
                 "properties": {
                     "equbName": {
                         "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "roundId": {
                         "type": "string",
@@ -1304,40 +1906,22 @@
                     },
                     "amount": {
                         "type": "number"
-                    }
-                }
-            },
-            "PaymentResponse": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
                     },
-                    "user": {
-                        "$ref": "#/components/schemas/UserResponse"
-                    },
-                    "ekubName": {
-                        "type": "string"
-                    },
-                    "round": {
-                        "$ref": "#/components/schemas/RoundResponse"
-                    },
-                    "amount": {
+                    "penalty": {
                         "type": "number"
                     },
-                    "createdDate": {
-                        "type": "string",
-                        "format": "date-time"
+                    "totalAmount": {
+                        "type": "number"
                     }
                 }
             },
-            "PageResponseUserRoundPaymentResponse": {
+            "PageResponsePaymentResponse": {
                 "type": "object",
                 "properties": {
                     "content": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/UserRoundPaymentResponse"
+                            "$ref": "#/components/schemas/PaymentResponse"
                         }
                     },
                     "number": {
@@ -1371,6 +1955,39 @@
                     }
                 }
             },
+            "PaymentResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "ekubName": {
+                        "type": "string"
+                    },
+                    "round": {
+                        "$ref": "#/components/schemas/RoundResponse"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "paymentMethod": {
+                        "type": "string"
+                    },
+                    "remark": {
+                        "type": "string"
+                    },
+                    "createdDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
             "UserRoundPaymentResponse": {
                 "type": "object",
                 "properties": {
@@ -1391,7 +2008,17 @@
                     "name": {
                         "type": "string"
                     },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "isActive": {
+                        "type": "boolean"
+                    },
+                    "isExclusive": {
+                        "type": "boolean"
+                    },
+                    "isArchived": {
                         "type": "boolean"
                     },
                     "amount": {
@@ -1399,6 +2026,10 @@
                     },
                     "totalAmount": {
                         "type": "number"
+                    },
+                    "penaltyPercentPerDay": {
+                        "type": "number",
+                        "format": "double"
                     },
                     "frequencyInDays": {
                         "type": "integer",
@@ -1432,6 +2063,14 @@
                     "startDateTime": {
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "mpesaAccountNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "telebirrAccountNumber": {
+                        "type": "integer",
+                        "format": "int32"
                     }
                 }
             },
@@ -1472,6 +2111,55 @@
                     },
                     "empty": {
                         "type": "boolean"
+                    }
+                }
+            },
+            "EkubStatusResponse": {
+                "type": "object",
+                "properties": {
+                    "totalMembers": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "winnersCount": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "MemberDetailResponse": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "winRoundId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "roundNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "isPaid": {
+                        "type": "boolean"
+                    },
+                    "guarantor": {
+                        "type": "string"
                     }
                 }
             }

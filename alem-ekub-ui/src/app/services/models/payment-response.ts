@@ -9,6 +9,9 @@ export interface PaymentResponse {
   createdDate?: string;
   ekubName?: string;
   id?: string;
+  paymentMethod?: string;
+  remark?: string;
   round?: RoundResponse;
+  type?: string;
   user?: UserResponse;
 }

@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.setActiveComponent('Users');
+    this.setActiveComponent('Ekubs');
     this.profile = this.keycloakService.profile;
   }
 

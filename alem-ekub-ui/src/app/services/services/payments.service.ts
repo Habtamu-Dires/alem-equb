@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createPayment } from '../fn/payments/create-payment';
 import { CreatePayment$Params } from '../fn/payments/create-payment';
+import { getPageOfPayments } from '../fn/payments/get-page-of-payments';
+import { GetPageOfPayments$Params } from '../fn/payments/get-page-of-payments';
 import { getPaymentsOfCurrentRound } from '../fn/payments/get-payments-of-current-round';
 import { GetPaymentsOfCurrentRound$Params } from '../fn/payments/get-payments-of-current-round';
 import { getPaymentsOfEkubRound } from '../fn/payments/get-payments-of-ekub-round';
@@ -21,13 +23,39 @@ import { getUserPayments } from '../fn/payments/get-user-payments';
 import { GetUserPayments$Params } from '../fn/payments/get-user-payments';
 import { getUserRoundPayments } from '../fn/payments/get-user-round-payments';
 import { GetUserRoundPayments$Params } from '../fn/payments/get-user-round-payments';
-import { PageResponseUserRoundPaymentResponse } from '../models/page-response-user-round-payment-response';
+import { PageResponsePaymentResponse } from '../models/page-response-payment-response';
 import { PaymentResponse } from '../models/payment-response';
+import { UserRoundPaymentResponse } from '../models/user-round-payment-response';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `getPageOfPayments()` */
+  static readonly GetPageOfPaymentsPath = '/payments';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPageOfPayments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPageOfPayments$Response(params?: GetPageOfPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponsePaymentResponse>> {
+    return getPageOfPayments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getPageOfPayments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPageOfPayments(params?: GetPageOfPayments$Params, context?: HttpContext): Observable<PageResponsePaymentResponse> {
+    return this.getPageOfPayments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponsePaymentResponse>): PageResponsePaymentResponse => r.body)
+    );
   }
 
   /** Path part for operation `createPayment()` */
@@ -114,7 +142,7 @@ export class PaymentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getUserRoundPayments$Response(params: GetUserRoundPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserRoundPaymentResponse>> {
+  getUserRoundPayments$Response(params: GetUserRoundPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserRoundPaymentResponse>>> {
     return getUserRoundPayments(this.http, this.rootUrl, params, context);
   }
 
@@ -124,9 +152,9 @@ export class PaymentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getUserRoundPayments(params: GetUserRoundPayments$Params, context?: HttpContext): Observable<PageResponseUserRoundPaymentResponse> {
+  getUserRoundPayments(params: GetUserRoundPayments$Params, context?: HttpContext): Observable<Array<UserRoundPaymentResponse>> {
     return this.getUserRoundPayments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseUserRoundPaymentResponse>): PageResponseUserRoundPaymentResponse => r.body)
+      map((r: StrictHttpResponse<Array<UserRoundPaymentResponse>>): Array<UserRoundPaymentResponse> => r.body)
     );
   }
 

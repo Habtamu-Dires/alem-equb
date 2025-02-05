@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { EkubResponse, IdResponse, UserRequest, UserResponse } from '../../../../services/models';
-import { EkubsService, EkubUsersService, UsersService } from '../../../../services/services';
+import { EkubsService, EkubUsersService, RegistrationService, UsersService } from '../../../../services/services';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, throttleTime } from 'rxjs';
@@ -50,7 +50,8 @@ export class ManageUserComponent implements OnInit{
     private activatedRoute:ActivatedRoute,
     private router:Router,
     private toastrService:ToastrService,
-    private matDialog:MatDialog
+    private matDialog:MatDialog,
+    private registrationService:RegistrationService
   ){}
 
   ngOnInit(): void {
@@ -68,23 +69,20 @@ export class ManageUserComponent implements OnInit{
   // create user
   createUser(){
     this.usersService.createUser({
-      body: this.userRequest
+      body: {
+        request: this.userRequest,
+        profilePic: this.selectedProfilePic,
+        idCardImg: this.selectedIdCardImage
+      }
     }).subscribe({
       next:(res:IdResponse)=>{
-        //upload  profile picture
-        if(this.selectedProfilePic) {
-          this.uploadProfilePic(res.id as string);
-        } 
-        // upload id card image
-        if(this.selectedIdCardImage) {
-          this.uploadIdCardImg(res.id as string);
-        }
-
+      
         this.router.navigate(['admin','users']);
         this.toastrService.success('User saved successfully ', 'Done!')
         
       },
       error:(err:HttpErrorResponse)=>{
+        this.toastrService.error(err.error.error, 'Ooops');
         const errMsg = JSON.parse(err.error);
         if(errMsg.validationErrors){
           this.errMsgs = errMsg.validationErrors;
@@ -116,13 +114,48 @@ export class ManageUserComponent implements OnInit{
         this.toastrService.success('User updated successfully ', 'Done!')
       },
       error:(err:HttpErrorResponse)=>{
-        const errMsg = JSON.parse(err.error);
-        if(errMsg.validationErrors){
-          this.errMsgs = errMsg.validationErrors;
+        if(err.error.validationErrors){
+          this.errMsgs = err.error.validationErrors;
         } else{
           console.log(err);
           this.toastrService.error(err.error.error, 'Ooops');
         }
+      }
+    })
+  }
+
+  // upload profile picture
+  uploadProfilePic(id:string){
+    this.usersService.uploadProfilePicture({
+      'user-id' : id,
+      body : {
+        file: this.selectedProfilePic
+      }
+    }).subscribe({
+      next:() => {
+        
+      },
+      error:(err) => {
+        console.log(err);
+        this.toastrService.error("Couldn't upload profile picture", 'Ooops');            
+      }
+    })
+  }
+
+  // upload id card image
+  uploadIdCardImg(id:string){
+    this.usersService.uploadIdCardImage({
+      'user-id' : id,
+      body : {
+        file: this.selectedIdCardImage
+      }
+    }).subscribe({
+      next:() => {
+        
+      },
+      error:(err) => {
+        console.log(err);
+        this.toastrService.error("Couldnt upload id card image", 'Ooops');            
       }
     })
   }
@@ -288,7 +321,7 @@ export class ManageUserComponent implements OnInit{
   passwordFormControl(){
     this.passwordControl.valueChanges
     .pipe(
-      debounceTime(500)
+      debounceTime(1000)
     ).subscribe((value:any)=>{
       const password = value as string;
       if(password.length >= 4) {
@@ -315,7 +348,7 @@ export class ManageUserComponent implements OnInit{
   confirmPasswordControl(){
     this.confirmPassword.valueChanges
     .pipe(
-      debounceTime(500)
+      debounceTime(1000)
     ).subscribe((value:any)=>{
       const password = value as string;
       if(password.length >= 4){
@@ -369,39 +402,6 @@ export class ManageUserComponent implements OnInit{
     
   }
 
-  // upload profile picture
-  uploadProfilePic(id:string){
-    this.usersService.uploadProfilePicture({
-      'user-id' : id,
-      body : {
-        file: this.selectedProfilePic
-      }
-    }).subscribe({
-      next:() => {},
-      error:(err) => {
-        console.log(err);
-        this.toastrService.error("Couldn't upload profile picture", 'Ooops');            
-      }
-    })
-  }
-
-  // upload id card image
-  uploadIdCardImg(id:string){
-    this.usersService.uploadIdCardImage({
-      'user-id' : id,
-      body : {
-        file: this.selectedIdCardImage
-      }
-    }).subscribe({
-      next:() => {
-        
-      },
-      error:(err) => {
-        console.log(err);
-        this.toastrService.error("Couldnt upload id card image", 'Ooops');            
-      }
-    })
-  }
 
   openImageViewer(){
     const dialog = this.matDialog.open(ImageViewerComponent,{

@@ -17,10 +17,13 @@ public class PaymentMapper {
     public PaymentResponse toPaymentResponse(Payment payment){
         return PaymentResponse.builder()
                 .id(payment.getId().toString())
+                .type(payment.getType().toString())
                 .user(userMapper.toUserResponse(payment.getUser()))
                 .round(roundMapper.toRoundResponse(payment.getRound()))
                 .ekubName(payment.getRound().getEkub().getName())
                 .amount(payment.getAmount())
+                .paymentMethod(payment.getPaymentMethod())
+                .remark(payment.getRemark())
                 .createdDate(payment.getCreatedDate())
                 .build();
     }

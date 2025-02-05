@@ -12,12 +12,14 @@ import { RoundResponse } from '../../models/round-response';
 
 export interface GetEkubRounds$Params {
   'ekub-id': string;
+  version: number;
 }
 
 export function getEkubRounds(http: HttpClient, rootUrl: string, params: GetEkubRounds$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RoundResponse>>> {
   const rb = new RequestBuilder(rootUrl, getEkubRounds.PATH, 'get');
   if (params) {
     rb.path('ekub-id', params['ekub-id'], {});
+    rb.query('version', params.version, {});
   }
 
   return http.request(

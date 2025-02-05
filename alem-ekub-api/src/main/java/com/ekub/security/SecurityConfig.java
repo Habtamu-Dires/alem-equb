@@ -20,6 +20,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(
+                        "/registration/**",
                         "/files/get-file",
                         "/v2/api-docs",
                         "/v3/api-docs",

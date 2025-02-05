@@ -30,10 +30,12 @@ export class KeycloakService {
   constructor(private router:Router) { }
 
 
-  async init(){
+  async init(obj:any){
+    const value = obj.onLoad;
+    console.log("The val is + ", value);
     console.log('Authenticating the user .... ');
     const authenticated = await this.keycloak?.init({
-         onLoad:'login-required',
+         onLoad: value,
     });
 
     if(authenticated){

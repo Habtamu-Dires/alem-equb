@@ -9,7 +9,7 @@ export interface UserResponse {
   enabled?: boolean;
   firstname?: string;
   fullName?: string;
-  guarantor?: string;
+  guarantors?: Array<string>;
   id?: string;
   idCardImageUrl?: string;
   lastname?: string;

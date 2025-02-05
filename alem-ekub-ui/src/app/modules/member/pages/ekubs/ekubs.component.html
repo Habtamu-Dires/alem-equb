@@ -1,5 +1,5 @@
 <main class="max-container w-full h-full flex flex-col justify-center items-center">
-    <app-header *ngIf='onMobileView' class="w-full"  
+    <app-header *ngIf='onMobileView' class="w-full sticky top-0"  
         [onSubPage]="true"
         pageName="ዕቁብ"
         [onMobileView]="onMobileView">
@@ -12,7 +12,11 @@
         <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @for (ekub of ekubs; track $index) {
                <div class="flex justify-center items-center p-4">
-                    <app-ekub [ekub]="ekub"></app-ekub>
+                    <app-ekub 
+                        [ekub]="ekub"
+                        (onLeaveEkub)="onLeavingEkub($event)"
+                    >                        
+                    </app-ekub>
                </div>
             }
         </div>
