@@ -1,5 +1,6 @@
+
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EkubsService, EkubUsersService, RoundsService, UserGuaranteesService } from '../../../../services/services';
 import { BooleanResponse, EkubResponse, EkubStatusResponse, MemberDetailResponse, RoundResponse, UserResponse } from '../../../../services/models';
 import { HeaderComponent } from "../../components/header/header.component";
@@ -7,12 +8,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 import { MemberService } from '../../../../services/member-services/member.service';
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ekub-detail',
-  imports: [HeaderComponent,CommonModule],
+  imports: [HeaderComponent,CommonModule,FormsModule],
   providers:[DatePipe],
   templateUrl: './ekub-detail.component.html',
   styleUrl: './ekub-detail.component.scss'
@@ -40,7 +42,8 @@ export class EkubDetailComponent implements OnInit {
     private roundsService:RoundsService,
     private datePipe:DatePipe,
     private dialog:MatDialog,
-    private toastrService:ToastrService
+    private toastrService:ToastrService,
+    private router:Router
   ){}
 
   ngOnInit(): void {
@@ -59,15 +62,16 @@ export class EkubDetailComponent implements OnInit {
         this.lastRoundNo = ekub.roundNumber as number;
       }
       // fetch datas
-      if(ekub.id && ekub.version){
+      if(ekub.id && ekub.version !== undefined){
         this.currentVersion = ekub.version;
         this.fetchEkubStatus(ekub.id,ekub.version);
-        this.fetcLasthRound(ekub.id,ekub.version);
         this.fetchMembersDetail(ekub.id, ekub.version);
-        this.fetchIsAllowedToGuarantor(ekub.id,ekub.version );
+        if(ekub.version){
+          this.fetcLasthRound(ekub.id,ekub.version);
+          this.fetchIsAllowedToGuarantor(ekub.id,ekub.version );
+        }
       }
     })
-
   }
 
   //fetch ekub status information
@@ -93,7 +97,7 @@ export class EkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.membersDetailList = res;
-        console.log(version);
+        console.log("The version: ", version);
         console.log("memers detail" , res);
       },
       error:(err)=>{
@@ -163,6 +167,42 @@ export class EkubDetailComponent implements OnInit {
             this.toastrService.error("Something went wrong", 'Ooops');
           }
         })
+      }
+    })
+  }
+
+  // leaving ekub
+  onLeavingEkub(ekubId:any){
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      width: '400px',
+      data:{
+        message: 'leave this equb',
+        buttonName: 'Leave'
+      }
+    });
+    // dialog confirmation
+    dialogRef.afterClosed().subscribe((result)=>{
+      if(result){
+        console.log("leave the ekub");
+        this.leaveEkub(ekubId);
+      }
+    })
+  }
+
+  // leave ekub
+  leaveEkub(ekubId:any){
+    this.ekubUsersService.leaveEkub({
+      'ekub-id': ekubId
+    }).subscribe({
+      next:()=>{
+        this.router.navigate(['member','ekubs']);
+      },
+      error:(err)=>{
+        console.log(err);
+        if(err.error){
+          const errObj = JSON.parse(err.error);
+          this.toastrService.error(errObj.error, 'Ooops');
+        }
       }
     })
   }

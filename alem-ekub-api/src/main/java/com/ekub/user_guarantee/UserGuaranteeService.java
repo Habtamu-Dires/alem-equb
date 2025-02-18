@@ -85,24 +85,11 @@ public class UserGuaranteeService {
                 version
         );
 
-        if(!hasNotWonYet){
-            System.out.println("You already Win ");
-        } else {
-            System.out.println("you has not won yet on version " + version  );
-        }
-
         boolean isMember = ekubUserService.isMemberOfEkub(loggedUserId, UUID.fromString(ekubId));
-        if(!isMember){
-            System.out.println("you're not member");
-        }
         boolean isGuarantorOrGuaranteedBefore = isGuarantorOrGuaranteed(
                 loggedUserId,
                 UUID.fromString(ekubId),
                 version);
-        if(isGuarantorOrGuaranteedBefore){
-            System.out.println("you were guarantor or guaranteed in this ekub on version: " + version);
-        }
-
 
         boolean res = isMember && !isGuarantorOrGuaranteedBefore && hasNotWonYet;
         return new BooleanResponse(res);
@@ -143,27 +130,4 @@ public class UserGuaranteeService {
 
     }
 
-    // get guarantors for a round
-    public List<UserResponse> getGuarantors(String roundId, String userId){
-        User user = userService.findUserById(userId);
-        return repository.findGuarantors(userId,UUID.fromString(roundId))
-                .stream()
-                .map(userMapper::toUserResponse)
-                .toList();
-    }
-
-
-    // get guaranteed users for a round
-    public List<UserResponse> getGuaranteedUsers(String roundId, String userId){
-        User user = userService.findUserById(userId);
-        return repository.findGuaranteedUsers(userId, UUID.fromString(roundId))
-                .stream()
-                .map(userMapper::toUserResponse)
-                .toList();
-    }
-
-    // find UserGuarantee
-    public List<UserGuaranteeResponse> findUserGuaranteeByRound(UUID roundId){
-        return repository.findByRound(roundId);
-    }
 }

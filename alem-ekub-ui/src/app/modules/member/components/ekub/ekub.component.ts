@@ -18,8 +18,6 @@ export class EkubComponent {
   @Input() ekub:EkubResponse | undefined;
   @Input() isNewEkub:boolean = false;
   @Output() onJoinEkub = new EventEmitter<string>();
-  @Output() onLeaveEkub = new EventEmitter<string>();
-
 
   constructor(
     private datePipe:DatePipe,
@@ -40,11 +38,6 @@ export class EkubComponent {
   // join ekubs
   joinEkub(ekubId:any){
     this.onJoinEkub.emit(ekubId);
-  }
-
-  // unJoin ekub
-  leaveEkub(ekubId:any){
-    this.onLeaveEkub.emit(ekubId);
   }
 
   //transfrom date

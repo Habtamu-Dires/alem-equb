@@ -15,12 +15,16 @@ export class UxService {
   headersSelectedItem$ = this.headersSelectedItemSubject.asObservable();
 
   //home selected page in members during change of size
-  selectedPageSubject = new BehaviorSubject<string>('ekubs');
-  selectedPage$ = this.selectedPageSubject.asObservable();
+  selectedHomePageSubject = new BehaviorSubject<string>('ekubs');
+  selectedHomePage$ = this.selectedHomePageSubject.asObservable();
 
-  //page service
+  //pagination service
   paginationSizeSubject = new BehaviorSubject<number>(5);
   paginationSize$ = this.paginationSizeSubject.asObservable();
+
+  //new ekub selected item [public vs invited]
+  selectedNewEkubCategorySubject = new BehaviorSubject<string>('public');
+  selectedNewEkubCategory$ = this.selectedNewEkubCategorySubject.asObservable();
 
   constructor() { }
 
@@ -39,10 +43,13 @@ export class UxService {
     this.paginationSizeSubject.next(value);
   }
 
-  // update pagination size
-  updateSelectedPage(value:string){
-    this.selectedPageSubject.next(value);
+  // update home selected page size
+  updateSelectedHomePage(value:string){
+    this.selectedHomePageSubject.next(value);
   }
 
-
+  // update selected new ekub category
+  updateSelectedNewEkubCategory(value:string){
+    this.selectedNewEkubCategorySubject.next(value);
+  }
 }

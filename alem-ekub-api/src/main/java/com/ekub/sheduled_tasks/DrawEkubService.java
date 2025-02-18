@@ -51,15 +51,13 @@ public class DrawEkubService {
             ekub.setActive(false);
             ekub.setNextDrawDateTime(null);
         } else { // else continue creating new round
-            System.out.println("not over yet");
-            //      ekub.setNextDrawDateTime(LocalDateTime.now().plusDays(ekub.getFrequencyInDays()));
+            // ekub.setNextDrawDateTime(LocalDateTime.now().plusDays(ekub.getFrequencyInDays()));
             //TODO: To Be Changed to plusDays instead of plusMinutes
             ekub.setNextDrawDateTime(LocalDateTime.now().plusMinutes(ekub.getFrequencyInDays()));
             // new round
             Round newRound = roundService.createNewRound(ekub);
             ekub.setRoundNumber(newRound.getRoundNumber());
         }
-
         // save ekub
         ekubService.save(ekub);
     }

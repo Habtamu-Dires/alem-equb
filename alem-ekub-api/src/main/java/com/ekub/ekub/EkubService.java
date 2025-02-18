@@ -38,7 +38,7 @@ public class EkubService {
         if(repository.findByName(request.name()).isPresent()){
             throw new EntityExistsException("Ekub with name " + request.name() + " already exists");
         }
-        Ekub ekub = repository.save(
+        repository.save(
                 Ekub.builder()
                         .id(UUID.randomUUID())
                         .name(request.name())
@@ -65,7 +65,6 @@ public class EkubService {
     @Transactional
     public void updateEkubInfo(EkubRequest request){
         Ekub ekub = findEkubById(request.id());
-
         ekub.setName(request.name());
         ekub.setAmount(request.amount());
         ekub.setPenaltyPercentPerDay(request.penaltyPercentPerDay());
@@ -88,6 +87,7 @@ public class EkubService {
             resetEkub(savedEkub);
         } else if(!request.isActive() && savedEkub.isActive()) { // de-activate
             savedEkub.setActive(false);
+            savedEkub.setNextDrawDateTime(null);
             repository.save(savedEkub);
         }
     }
@@ -104,8 +104,6 @@ public class EkubService {
         Round newRound = roundService.createNewRound(ekub);
         ekub.setRoundNumber(newRound.getRoundNumber());
         //clear invitation list for ekub
-        repository.deleteInvitationsForEkub(ekub.getId());  //directly delete entries in the join table
-        ekub.getInvitedUsers().clear(); // optional: clear cached relationship in the entities
         repository.save(ekub);
     }
 
@@ -165,12 +163,6 @@ public class EkubService {
                 ekub.getRoundNumber());
     }
 
-    // get current RoundResponse of ekbu
-    public RoundResponse getCurrentRound (String ekubId){
-        Ekub ekub = findEkubById(ekubId);
-        return roundMapper.toRoundResponse(getCurrentRound(ekub));
-    }
-
     // save ekub
     public void save(Ekub ekub) {
         repository.save(ekub);
@@ -201,11 +193,6 @@ public class EkubService {
                  .toList();
     }
 
-    // find ekub with invitedUsers
-    public Ekub findEkubWithInvitedUsers(String ekubId){
-        return repository.findEkubWithInvitedUsers(UUID.fromString(ekubId))
-                .orElseThrow(() -> new EntityNotFoundException("Ekub not found"));
-    }
 
     // find InvitedEkubs not joined yet
     public List<EkubResponse> getInvitedEkubsYetToJoin(){

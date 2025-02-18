@@ -1,7 +1,10 @@
 <main class="flex flex-col h-screen w-full">
    <div class="sticky top-0 w-full z-10 bg-white">
       <app-header 
-        componentName="Payment"
+        componentName="payment"
+        (onSearch)="onSearch($event)"
+        (filter)="onFilterByEkub($event)"
+        (afterDateTime)="onDateTimeFilter($event)"
       >
       </app-header>
    </div>
@@ -9,8 +12,9 @@
         <table class="min-w-full border border-gray-300 bg-white overflow-auto">
             <thead class="bg-gray-200 sticky top-16">
               <tr>
-                <th class="table-head w-1/12">Name</th>
+                <th class="table-head w-1/12">Payer</th>
                 <th class="table-head w-1/12">Type</th>
+                <th class="table-head w-1/12">Payee</th>
                 <th class="table-head w-1/12">Amount</th>
                 <th class="table-head w-1/12">Equb</th>
                 <th class="table-head w-1/12">Version</th>
@@ -25,6 +29,7 @@
                 class="border-b border-gray-300 hover:bg-gray-100">              
                     <td class="table-data">{{payment.user?.username}}</td>
                     <td class="table-data">{{payment.type}}</td>
+                    <td class="table-data">{{payment.toUser?.username}}</td>
                     <td class="table-data">{{payment.amount}}</td>
                     <td class="table-data">{{payment.ekubName}}</td>
                     <td class="table-data">{{payment.round?.version}}</td>

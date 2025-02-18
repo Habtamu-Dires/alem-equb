@@ -15,16 +15,14 @@ import { createPayment } from '../fn/payments/create-payment';
 import { CreatePayment$Params } from '../fn/payments/create-payment';
 import { getPageOfPayments } from '../fn/payments/get-page-of-payments';
 import { GetPageOfPayments$Params } from '../fn/payments/get-page-of-payments';
-import { getPaymentsOfCurrentRound } from '../fn/payments/get-payments-of-current-round';
-import { GetPaymentsOfCurrentRound$Params } from '../fn/payments/get-payments-of-current-round';
-import { getPaymentsOfEkubRound } from '../fn/payments/get-payments-of-ekub-round';
-import { GetPaymentsOfEkubRound$Params } from '../fn/payments/get-payments-of-ekub-round';
 import { getUserPayments } from '../fn/payments/get-user-payments';
 import { GetUserPayments$Params } from '../fn/payments/get-user-payments';
 import { getUserRoundPayments } from '../fn/payments/get-user-round-payments';
 import { GetUserRoundPayments$Params } from '../fn/payments/get-user-round-payments';
 import { PageResponsePaymentResponse } from '../models/page-response-payment-response';
 import { PaymentResponse } from '../models/payment-response';
+import { searchPayment } from '../fn/payments/search-payment';
+import { SearchPayment$Params } from '../fn/payments/search-payment';
 import { UserRoundPaymentResponse } from '../models/user-round-payment-response';
 
 @Injectable({ providedIn: 'root' })
@@ -83,31 +81,6 @@ export class PaymentsService extends BaseService {
     );
   }
 
-  /** Path part for operation `getPaymentsOfEkubRound()` */
-  static readonly GetPaymentsOfEkubRoundPath = '/payments/{ekub-id}/{round-no}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPaymentsOfEkubRound()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPaymentsOfEkubRound$Response(params?: GetPaymentsOfEkubRound$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
-    return getPaymentsOfEkubRound(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getPaymentsOfEkubRound$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPaymentsOfEkubRound(params?: GetPaymentsOfEkubRound$Params, context?: HttpContext): Observable<Array<PaymentResponse>> {
-    return this.getPaymentsOfEkubRound$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<PaymentResponse>>): Array<PaymentResponse> => r.body)
-    );
-  }
-
   /** Path part for operation `getUserPayments()` */
   static readonly GetUserPaymentsPath = '/payments/user/{user-id}';
 
@@ -158,27 +131,27 @@ export class PaymentsService extends BaseService {
     );
   }
 
-  /** Path part for operation `getPaymentsOfCurrentRound()` */
-  static readonly GetPaymentsOfCurrentRoundPath = '/payments/current-round/{ekub-id}';
+  /** Path part for operation `searchPayment()` */
+  static readonly SearchPaymentPath = '/payments/search/{username}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPaymentsOfCurrentRound()` instead.
+   * To access only the response body, use `searchPayment()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPaymentsOfCurrentRound$Response(params?: GetPaymentsOfCurrentRound$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
-    return getPaymentsOfCurrentRound(this.http, this.rootUrl, params, context);
+  searchPayment$Response(params: SearchPayment$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
+    return searchPayment(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getPaymentsOfCurrentRound$Response()` instead.
+   * To access the full response (for headers, for example), `searchPayment$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPaymentsOfCurrentRound(params?: GetPaymentsOfCurrentRound$Params, context?: HttpContext): Observable<Array<PaymentResponse>> {
-    return this.getPaymentsOfCurrentRound$Response(params, context).pipe(
+  searchPayment(params: SearchPayment$Params, context?: HttpContext): Observable<Array<PaymentResponse>> {
+    return this.searchPayment$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<PaymentResponse>>): Array<PaymentResponse> => r.body)
     );
   }

@@ -10,7 +10,7 @@ import { PaymentRequest } from '../../../../services/models';
 import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmationDialogComponent } from '../../../member/components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-view-ekub-detail',
@@ -45,19 +45,20 @@ export class ViewEkubDetailComponent implements OnInit {
     private dialog:MatDialog,
     private toastrService:ToastrService,
     private userGuaranteeService:UserGuaranteesService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loggedUser = this.keycloakService.profile;
-    if (this.ekub?.id && this.ekub.version) {
-        this.fetchRoundsOfEkub(this.ekub.id, this.ekub.version);
-        this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
+    if (this.ekub?.id && this.ekub.version !== undefined) {
         this.fetchEkubStatus(this.ekub.id,this.ekub.version);
         this.fetchMembersDetail(this.ekub.id,this.ekub.version);
+        if(this.ekub.version){
+          this.fetchRoundsOfEkub(this.ekub.id, this.ekub.version);
+          this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
+        }
         //fill the versions
         this.currentVersion = this.ekub.version;
         this.ekubVesions =  Array.from({ length: this.currentVersion }, (_, i) => i + 1);
-        console.log("The ekub versions ", this.ekubVesions);
     }
 
     // update last round number
@@ -98,6 +99,8 @@ export class ViewEkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.memberDetails = res;
+        console.log("The current version is " + this.currentVersion);
+        console.log("the ekub version " + this.ekub?.version);
       },
       error:(err)=>{
         console.log(err);
@@ -198,8 +201,8 @@ export class ViewEkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res: UserRoundPaymentResponse[])=>{
         this.userRoundPayments = res as UserRoundPaymentResponse[];
-        console.log("Hello");
-        console.log(this.userRoundPayments);
+      
+        console.log("ts map:", this.userRoundPayments);
         
       if(this.userRoundPayments.length > 0){
           const firstRow = this.userRoundPayments[0].row;
@@ -273,6 +276,7 @@ export class ViewEkubDetailComponent implements OnInit {
            'amount': this.ekub?.winAmount as number,
            'roundId': round.id as string,
            'userId': this.loggedUser?.id as string,
+           'toUserId':round.winner?.id as string,
            'type':'WINNING_PAYOUT',
            'paymentMethod': result.paymentMethod,
            'remark': result.remark

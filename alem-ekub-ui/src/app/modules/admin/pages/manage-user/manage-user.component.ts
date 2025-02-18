@@ -7,9 +7,9 @@ import { debounceTime, throttleTime } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { ImageViewerComponent } from "../../components/image-viewer/image-viewer.component";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-manage-user',
@@ -174,7 +174,7 @@ export class ManageUserComponent implements OnInit{
           phoneNumber: res.phoneNumber as string,
           email: res.email as string,
           profession: res.profession as string,
-          ekubIds: res.ekubIds,
+          ekubIds: res.ekubIdList,
           enabled: res.enabled,
           remark:res.remark
         }
@@ -186,9 +186,9 @@ export class ManageUserComponent implements OnInit{
         if(res.idCardImageUrl != undefined && res.idCardImageUrl.length > 0){ 
           this.selectedIdCardImageString = res.idCardImageUrl;
         }
-        // map ekubId wiht ekubName
+        // map ekubId with ekubName
         const ekubIdList = this.userRequest.ekubIds;
-        const ekubNameList = res.ekubs;
+        const ekubNameList = res.ekubNameList;
         if(ekubIdList && ekubNameList){
           for (let i = 0; i < ekubIdList.length; i++) {
             this.ekubIdNameMap.set(ekubIdList[i],ekubNameList[i]);
@@ -277,7 +277,13 @@ export class ManageUserComponent implements OnInit{
   removeEkub(ekbuId:any){
      // if it is on update
      if(this.userRequest.id){
-       const dialog = this.matDialog.open(ConfirmDialogComponent);
+       const dialog = this.matDialog.open(ConfirmationDialogComponent,{
+        width: '400px',
+        data:{
+          message:'Are you sure you wants to exit user from ekub',
+          buttonName: 'exit'
+        }
+       });
            
            dialog.afterClosed().subscribe(result =>{
              if(result){

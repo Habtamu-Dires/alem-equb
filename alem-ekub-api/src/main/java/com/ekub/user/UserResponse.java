@@ -18,7 +18,7 @@ public record UserResponse(
         String idCardImageUrl,
         List<String> guarantors,
         boolean enabled,
-        List<String> ekubs,
-        List<String> ekubIds,
+        List<String> ekubNameList,
+        List<String> ekubIdList,
         String remark
 ) {}

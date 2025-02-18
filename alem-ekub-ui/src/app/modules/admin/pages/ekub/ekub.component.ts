@@ -5,12 +5,11 @@ import { EkubsService } from '../../../../services/services';
 import { EkubResponse, PageResponseEkubResponse } from '../../../../services/models';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import {ToastrService} from 'ngx-toastr';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
-import { EkubDetailComponent } from "../../../member/pages/ekub-detail/ekub-detail.component";
 import { ViewEkubDetailComponent } from "../view-ekub-detail/view-ekub-detail.component";
 import { InvitationDialogComponent } from '../../components/invitation-dialog/invitation-dialog.component';
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-ekub',
@@ -107,7 +106,13 @@ export class EkubComponent implements OnInit {
   }
 
   onDelete(ekubId:any){
-    const dialog = this.matDialog.open(ConfirmDialogComponent);
+    const dialog = this.matDialog.open(ConfirmationDialogComponent,{
+      width: '400px',
+      data:{
+        message:'Are you sure you wants to delete',
+        buttonName: 'delete'
+      }
+    });
 
     dialog.afterClosed().subscribe(result =>{
       if(result){
@@ -135,6 +140,30 @@ export class EkubComponent implements OnInit {
         ekubId: ekubId as string
       }
     });
+  }
+
+  // search ekub
+  onSearch(text:string){
+    if(text.length >= 3){
+      this.searchEkub(text);
+    } else if(text.length == 0) {
+      this.fetchPageOfEkubs();
+    }
+  }
+
+  // search ekbu by name
+  searchEkub(text:string){
+    this.ekubService.searchEkubByName({
+      'ekub-name': text
+    }).subscribe({
+      next:(res:EkubResponse[])=>{
+        this.ekubList = res;
+        this.isEmptyPage = true;
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
   }
 
   //pagination methods

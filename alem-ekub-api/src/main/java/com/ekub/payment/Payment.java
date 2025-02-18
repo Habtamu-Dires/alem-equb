@@ -36,4 +36,8 @@ public class Payment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
 }

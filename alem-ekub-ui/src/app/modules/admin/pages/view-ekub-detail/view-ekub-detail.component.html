@@ -1,6 +1,6 @@
 <main class="max-container w-full min-h-screen flex flex-col gap-4 justify-center items-center">
      <!--version-->
-     <section class="w-full mt-16 sticky top-5">
+     <section *ngIf="currentVersion" class="w-full mt-16 sticky top-5">
         <div class="flex gap-2">
             <label> Version: </label>
             <select class="ps-2 rounded-lg" [(ngModel)] = "currentVersion" (change)="setVersion()">
@@ -12,7 +12,10 @@
      </section>
     <section class="flex flex-col justify-center items-center overflow-auto">
         <!--last round winner-->
-        <article *ngIf="lastRound > 0"  
+        <article *ngIf="lastRound > 0 
+                    && rounds[lastRound -1 ]
+                    && rounds[lastRound -1].winner
+                    && ekub?.version === currentVersion"  
                 class="w-full flex flex-col gap-2 justify-center items-center text-lg font-semibold">
             <section *ngIf="rounds.length > 0"
                  class="w-full flex justify-evenly p-4">
@@ -56,13 +59,23 @@
             </div>
             <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የአባላት ብዛት: {{ekubStatus?.totalMembers}}</p>
+                    <span>የአባላት ብዛት:</span>
+                    @if (currentVersion === ekub?.version) {
+                        <span>{{ekubStatus?.totalMembers}}</span> 
+                    } @else {
+                        <span>{{ekubStatus?.winnersCount}}</span>
+                    }
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
                     <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubStatus?.winnersCount}}</p>
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</p>
+                    <span>ዕጣ ያልወጣላቸው የአባላት ብዛት: </span> 
+                    @if (currentVersion === ekub?.version) {
+                        <span> {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</span> 
+                    } @else {
+                        <span>0</span>
+                    }
                 </div>
                 <div class="p-5 shadow-lg font-semibold rounded-lg">
                     <p>የተጀመረበት ቀን: {{transformDateTime(ekubStatus?.startDate)}}</p>
@@ -163,7 +176,8 @@
             </section>
         </section>    
         <!--Member List-->
-        <section *ngIf="memberDetails.length > 0" class="w-full flex flex-col justify-center items-center">
+        <section *ngIf="memberDetails.length > 0 && currentVersion === ekub?.version" 
+            class="w-full flex flex-col justify-center items-center">
             <div class="p-2 text-xl font-semibold">
                 <p class="underline">Members List</p>
             </div>
@@ -181,16 +195,30 @@
                         <tr *ngFor="let member of memberDetails">
                             <td class="table-data">{{member.username}}</td>
                             <td class="table-data">{{member.fullName}}</td>
-                            <td class="table-data">{{member.roundNumber}}</td>
-                            <td class="table-data">{{member.guarantor}}</td>
-
+                            <td class="table-data">
+                                @if (member.roundNumber ||  ekub?.isActive) {
+                                    <span>{{member.roundNumber}}</span>
+                                } @else {
+                                    <span>x</span>
+                                }
+                            </td>
+                            <td class="table-data">
+                                @if (member.guarantor || ekub?.isActive){
+                                    <span>{{member.guarantor}}</span>
+                                } @else {
+                                    <span>x</span>
+                                }
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </section>
         </section>
         <!--invited users list-->
-        <section *ngIf="ekub?.isExclusive && !ekub?.isActive && invitedUsers.length > 0" 
+        <section *ngIf="ekub?.isExclusive 
+                        && !ekub?.isActive 
+                        && invitedUsers.length > 0
+                        && currentVersion === ekub?.version" 
             class="w-full flex flex-col justify-center items-center">
             <div class="p-2 text-xl font-semibold">
                 <p>Invited User List</p>

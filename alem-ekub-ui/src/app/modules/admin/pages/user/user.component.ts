@@ -6,9 +6,9 @@ import { CommonModule } from '@angular/common';
 import { UsersService } from '../../../../services/services';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { ViewUserDetailComponent } from "../view-user-detail/view-user-detail.component";
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-user',
@@ -93,10 +93,15 @@ export class UserComponent implements OnInit{
     this.showDetail = !this.showDetail;
   }
 
-
-
+  // on delete
   onDelete(userId:any){
-    const dialog = this.matDialog.open(ConfirmDialogComponent);
+    const dialog = this.matDialog.open(ConfirmationDialogComponent,{
+      width: '400px',
+      data:{
+        message:'Are you sure you wants to delete',
+        buttonName: 'Delete'
+      }
+    });
     
     dialog.afterClosed().subscribe(result =>{
       if(result){
@@ -114,6 +119,32 @@ export class UserComponent implements OnInit{
         })
       }
     })
+  }
+
+  // on search
+  onSearch(name:string){
+    if(name.length >= 3){
+      this.searchByName(name);
+      this.isEmptyPage = true;
+    } else if(name.length === 0 && this.isEmptyPage){
+      this.fetchPageOfUsers();
+    }
+  }
+
+  // search by name
+  searchByName(name:string){
+    this.usersService.searchByName({
+      'name':name
+    }).subscribe({
+      next:(res:UserResponse[])=>{
+        this.userList = res;
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    },
+   );
+  
   }
 
   // hide delete & edit btn onclick outside the btn

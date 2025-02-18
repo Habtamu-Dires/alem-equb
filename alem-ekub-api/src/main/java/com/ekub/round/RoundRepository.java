@@ -46,18 +46,19 @@ public interface RoundRepository extends JpaRepository<Round, UUID> {
     @Query("""
             SELECT CASE
             WHEN EXISTS (
-                SELECT 1 
+                SELECT 1
                 FROM Round r
                 JOIN r.ekub e
                 JOIN e.ekubUsers eu
                 LEFT JOIN Payment p ON p.round.id = r.id AND p.user.id = :userId
                 WHERE eu.user.id = :userId 
+                AND e.id = :ekubId
                 AND p.id IS NULL
             )
             THEN true
             ELSE false
             END
             """)
-    boolean hasPendingPayments(String userId);
+    boolean hasPendingPayments(String userId, UUID ekubId);
 
 }

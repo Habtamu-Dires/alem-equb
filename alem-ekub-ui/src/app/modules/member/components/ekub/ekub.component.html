@@ -20,11 +20,6 @@
                 (click)="joinEkub(ekub?.id)">
                 join
             </button>
-            <button *ngIf="!isNewEkub && !ekub?.isActive"
-                class="bg-red-300 text-white rounded-md px-4 py-2 hover:bg-red-200" 
-                (click)="leaveEkub(ekub?.id)">
-                leave
-            </button>
         </div>
     </div>
 </main>

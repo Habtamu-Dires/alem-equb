@@ -23,9 +23,10 @@ public class UserController {
 
     // create user
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<IdResponse> createUser(@RequestPart @Valid UserRequest request,
-                                                 @RequestPart MultipartFile profilePic,
-                                                 @RequestPart MultipartFile idCardImg
+    public ResponseEntity<IdResponse> createUser(
+            @RequestPart @Valid UserRequest request,
+            @RequestPart MultipartFile profilePic,
+            @RequestPart MultipartFile idCardImg
     ) {
         service.createUser(request,profilePic,idCardImg);
         return ResponseEntity.accepted().build();
@@ -137,5 +138,12 @@ public class UserController {
         return ResponseEntity.ok(service.searchUsersToInvite(ekubId,searchTerm));
     }
 
+    // search user by name
+    @GetMapping("/search-by-name/{name}")
+    public ResponseEntity<List<UserResponse>> searchByName(
+            @PathVariable("name") String name
+    ){
+        return ResponseEntity.ok(service.searchByName(name));
+    }
 
 }

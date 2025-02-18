@@ -13,6 +13,7 @@
             <thead class="bg-gray-200 sticky top-[66px]">
                 <tr>
                     <th class="table-head">የብር መጠን</th>
+                    <th class="table-head">Type</th>
                     <th class="table-head">የዕቁብ ስም</th>
                     <th class="table-head">የዕቁብ V</th>
                     <th class="table-head">ዙር</th>
@@ -22,6 +23,7 @@
             <tbody>
                 <tr *ngFor="let payment of paymentResponses">
                     <td class="table-data">{{payment.amount}}</td>
+                    <td class="table-data">{{payment.type}}</td>
                     <td class="table-data">{{payment.ekubName}}</td>
                     <td class="table-data">{{payment.round?.version}}</td>
                     <td class="table-data">{{payment.round?.roundNumber}}</td>

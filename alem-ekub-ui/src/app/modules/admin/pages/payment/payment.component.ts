@@ -5,6 +5,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { PaymentResponse } from '../../../../services/models';
 import { HeaderComponent } from "../../components/header/header.component";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-payment',
@@ -16,6 +17,8 @@ import { PaginationComponent } from "../../components/pagination/pagination.comp
 export class PaymentComponent implements OnInit{
 
   paymentList:PaymentResponse[] = [];
+  ekubFilter:string = '';
+  dateTimeFilter:string = '';
   // pagination
   page:number = 0;
   size:number = 5;
@@ -39,10 +42,13 @@ export class PaymentComponent implements OnInit{
   //fetch all payments
   fetchPageOfPayments(){
     this.paymentsService.getPageOfPayments({
+      'ekubId-filter':this.ekubFilter,
+      'dateTime-filter': this.dateTimeFilter,
       'page': this.page,
       'size': this.size
     }).subscribe({
       next:(res:PageResponsePaymentResponse) => {
+        console.log("hello");
         this.paymentList = res.content as PaymentResponse[];
         // pagination
         this.isEmptyPage = res.empty as boolean;
@@ -57,6 +63,44 @@ export class PaymentComponent implements OnInit{
     })
   }
 
+  // on search
+  onSearch(name:string){
+    if(name.length >= 3){
+      this.searchByName(name);
+      this.isEmptyPage = true;
+    } else if(name.length === 0 && this.isEmptyPage){
+      this.fetchPageOfPayments();
+    }
+  }
+
+  // search by name
+  searchByName(username:string){
+    this.paymentsService.searchPayment({
+      'username':username
+    }).subscribe({
+      next:(res:PaymentResponse[])=>{
+        this.paymentList = res;
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    },
+    );
+  }
+
+  // on filtered ekub
+  onFilterByEkub(ekubId:string){
+    this.ekubFilter = ekubId;
+    this.fetchPageOfPayments();
+  }
+
+  // on filtered by date
+  onDateTimeFilter(dateTime:string){
+    this.dateTimeFilter = dateTime;
+    this.fetchPageOfPayments();
+  }
+  
+     
   //formatted date time
   formattedDateTime(dateTime:any){
     if(dateTime){

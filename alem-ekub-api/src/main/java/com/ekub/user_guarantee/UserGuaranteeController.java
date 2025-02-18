@@ -47,21 +47,4 @@ public class UserGuaranteeController {
         return ResponseEntity.ok(service.isAllowedToBeGuarantor(ekubId,version));
     }
 
-    // get guarantors
-    @GetMapping("/guarantors/{round-id}/{user-id}")
-    public ResponseEntity<List<UserResponse>> getGuarantors(
-            @PathVariable("round-id") String roundId,
-            @PathVariable("user-id") String userId
-    ){
-        return ResponseEntity.ok(service.getGuarantors(roundId,userId));
-    }
-
-    // get guaranteed users
-    @GetMapping("/guaranteed-users/{round-id}/{user-id}")
-    public ResponseEntity<List<UserResponse>> getGuaranteedUsers(
-            @PathVariable("round-id") String roundId,
-            @PathVariable("user-id") String userId
-    ){
-        return ResponseEntity.ok(service.getGuaranteedUsers(roundId,userId));
-    }
 }

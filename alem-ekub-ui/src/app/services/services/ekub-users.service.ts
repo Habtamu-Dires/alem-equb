@@ -16,18 +16,15 @@ import { AddEkubUser$Params } from '../fn/ekub-users/add-ekub-user';
 import { EkubResponse } from '../models/ekub-response';
 import { getEkubsOfUser } from '../fn/ekub-users/get-ekubs-of-user';
 import { GetEkubsOfUser$Params } from '../fn/ekub-users/get-ekubs-of-user';
-import { getEkubUsers } from '../fn/ekub-users/get-ekub-users';
-import { GetEkubUsers$Params } from '../fn/ekub-users/get-ekub-users';
 import { getMemberDetail } from '../fn/ekub-users/get-member-detail';
 import { GetMemberDetail$Params } from '../fn/ekub-users/get-member-detail';
 import { joinEkub } from '../fn/ekub-users/join-ekub';
 import { JoinEkub$Params } from '../fn/ekub-users/join-ekub';
+import { leaveEkub } from '../fn/ekub-users/leave-ekub';
+import { LeaveEkub$Params } from '../fn/ekub-users/leave-ekub';
 import { MemberDetailResponse } from '../models/member-detail-response';
 import { removeUser } from '../fn/ekub-users/remove-user';
 import { RemoveUser$Params } from '../fn/ekub-users/remove-user';
-import { unJoinEkub } from '../fn/ekub-users/un-join-ekub';
-import { UnJoinEkub$Params } from '../fn/ekub-users/un-join-ekub';
-import { UserResponse } from '../models/user-response';
 
 @Injectable({ providedIn: 'root' })
 export class EkubUsersService extends BaseService {
@@ -110,27 +107,27 @@ export class EkubUsersService extends BaseService {
     );
   }
 
-  /** Path part for operation `unJoinEkub()` */
-  static readonly UnJoinEkubPath = '/ekub-users/{ekub-id}';
+  /** Path part for operation `leaveEkub()` */
+  static readonly LeaveEkubPath = '/ekub-users/{ekub-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `unJoinEkub()` instead.
+   * To access only the response body, use `leaveEkub()` instead.
    *
    * This method doesn't expect any request body.
    */
-  unJoinEkub$Response(params: UnJoinEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return unJoinEkub(this.http, this.rootUrl, params, context);
+  leaveEkub$Response(params: LeaveEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return leaveEkub(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `unJoinEkub$Response()` instead.
+   * To access the full response (for headers, for example), `leaveEkub$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  unJoinEkub(params: UnJoinEkub$Params, context?: HttpContext): Observable<void> {
-    return this.unJoinEkub$Response(params, context).pipe(
+  leaveEkub(params: LeaveEkub$Params, context?: HttpContext): Observable<void> {
+    return this.leaveEkub$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
@@ -182,31 +179,6 @@ export class EkubUsersService extends BaseService {
   getEkubsOfUser(params: GetEkubsOfUser$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
     return this.getEkubsOfUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
-    );
-  }
-
-  /** Path part for operation `getEkubUsers()` */
-  static readonly GetEkubUsersPath = '/ekub-users/ekub-users/{ekub-id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getEkubUsers()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getEkubUsers$Response(params: GetEkubUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-    return getEkubUsers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getEkubUsers$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getEkubUsers(params: GetEkubUsers$Params, context?: HttpContext): Observable<Array<UserResponse>> {
-    return this.getEkubUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
     );
   }
 

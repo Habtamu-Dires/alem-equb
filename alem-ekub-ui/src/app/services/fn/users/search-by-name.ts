@@ -10,14 +10,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { UserResponse } from '../../models/user-response';
 
-export interface GetEkubUsers$Params {
-  'ekub-id': string;
+export interface SearchByName$Params {
+  name: string;
 }
 
-export function getEkubUsers(http: HttpClient, rootUrl: string, params: GetEkubUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getEkubUsers.PATH, 'get');
+export function searchByName(http: HttpClient, rootUrl: string, params: SearchByName$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
+  const rb = new RequestBuilder(rootUrl, searchByName.PATH, 'get');
   if (params) {
-    rb.path('ekub-id', params['ekub-id'], {});
+    rb.path('name', params.name, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function getEkubUsers(http: HttpClient, rootUrl: string, params: GetEkubU
   );
 }
 
-getEkubUsers.PATH = '/ekub-users/ekub-users/{ekub-id}';
+searchByName.PATH = '/users/search-by-name/{name}';

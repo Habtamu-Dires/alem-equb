@@ -1,10 +1,13 @@
 <main>
+  <div class="sticky top-0 w-full z-10 bg-white">
     <app-header
       *ngIf="!showDetail"
       componentName="Ekub"
       (onCreateNewCliked)="onCreateNew()"
+      (onSearch)="onSearch($event)"
     >
     </app-header>
+  </div>
     <!--list of ekubs-->
     <section *ngIf="!showDetail">
         <table class="min-w-full border border-gray-300 bg-white">

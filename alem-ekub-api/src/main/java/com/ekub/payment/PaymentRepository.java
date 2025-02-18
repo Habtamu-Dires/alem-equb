@@ -1,18 +1,14 @@
 package com.ekub.payment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface PaymentRepository extends JpaRepository<Payment, UUID> {
+public interface PaymentRepository extends JpaRepository<Payment, UUID>, JpaSpecificationExecutor<Payment> {
 
-    @Query("SELECT p FROM Payment p WHERE p.round.id = :roundId")
-    List<Payment> findByRoundId(UUID roundId);
-
-    @Query("SELECT p FROM Payment p WHERE p.user.id = :userId")
-    List<Payment> findByUserId(String userId);
 
     @Query("""
             SELECT new com.ekub.payment.UserRoundPaymentsDTO(
@@ -30,4 +26,10 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
             """)
     List<UserRoundPaymentsDTO> findUserRoundPayments(UUID ekubId, int version);
 
+    @Query("""
+            SELECT p FROM Payment p 
+            WHERE p.user.id = :userId
+            OR p.toUser.id = :userId
+            """)
+    List<Payment> findUserPayments(String userId);
 }

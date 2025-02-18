@@ -27,6 +27,8 @@ import { IdResponse } from '../models/id-response';
 import { inviteUserToEkub } from '../fn/users/invite-user-to-ekub';
 import { InviteUserToEkub$Params } from '../fn/users/invite-user-to-ekub';
 import { PageResponseUserResponse } from '../models/page-response-user-response';
+import { searchByName } from '../fn/users/search-by-name';
+import { SearchByName$Params } from '../fn/users/search-by-name';
 import { searchUsersToInvite } from '../fn/users/search-users-to-invite';
 import { SearchUsersToInvite$Params } from '../fn/users/search-users-to-invite';
 import { updatePassword } from '../fn/users/update-password';
@@ -343,6 +345,31 @@ export class UsersService extends BaseService {
    */
   searchUsersToInvite(params: SearchUsersToInvite$Params, context?: HttpContext): Observable<Array<UserResponse>> {
     return this.searchUsersToInvite$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `searchByName()` */
+  static readonly SearchByNamePath = '/users/search-by-name/{name}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `searchByName()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchByName$Response(params: SearchByName$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
+    return searchByName(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `searchByName$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  searchByName(params: SearchByName$Params, context?: HttpContext): Observable<Array<UserResponse>> {
+    return this.searchByName$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
     );
   }

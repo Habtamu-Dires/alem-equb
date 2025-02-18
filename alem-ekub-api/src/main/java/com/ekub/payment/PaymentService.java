@@ -1,9 +1,7 @@
 package com.ekub.payment;
 
 import com.ekub.common.PageResponse;
-import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubService;
-import com.ekub.ekub_users.EkubUserService;
 import com.ekub.round.Round;
 import com.ekub.round.RoundService;
 import com.ekub.user.User;
@@ -12,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +27,15 @@ public class PaymentService {
     private final UserService userService;
     private final RoundService roundService;
     private final EkubService ekubService;
-    private final EkubUserService ekubUserService;
 
     // create payments
     @Transactional
     public void createPayment(PaymentRequest request){
         User user = userService.findUserById(request.userId());
+        User toUser = null;
+        if(request.toUserId() != null && !request.toUserId().isEmpty()){
+            toUser = userService.findUserById(request.toUserId());
+        }
         Round round = roundService.findRoundById(request.roundId());
 
         paymentRepository.save(
@@ -41,6 +43,7 @@ public class PaymentService {
                 .id(UUID.randomUUID())
                 .type(request.type())
                 .user(user)
+                .toUser(toUser)
                 .round(round)
                 .amount(request.amount())
                 .paymentMethod(request.paymentMethod())
@@ -48,7 +51,6 @@ public class PaymentService {
                 .remark(request.remark())
                 .build()
         );
-
         BigDecimal newAmount = request.amount();
         if(request.type().equals(PaymentType.WINNING_PAYOUT)){
             //update total amount
@@ -61,11 +63,16 @@ public class PaymentService {
 
     }
 
-    //get all payments
-    public PageResponse<PaymentResponse> getPageOfPayments(int page, int size) {
+    //get pages of payments
+    public PageResponse<PaymentResponse> getPageOfPayments(
+            String ekubId,
+            LocalDateTime dateTime,
+            int page,
+            int size
+    ) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<Payment> res = paymentRepository.findAll(pageable);
-
+        Specification<Payment> spec = PaymentSpecification.findPayments(ekubId,dateTime);
+        Page<Payment> res = paymentRepository.findAll(spec, pageable);
         List<PaymentResponse> paymentResponseList = res.map(mapper::toPaymentResponse).toList();
 
         return PageResponse.<PaymentResponse>builder()
@@ -81,81 +88,22 @@ public class PaymentService {
                 .build();
     }
 
-    // get payments of round
-    public List<PaymentResponse> getRoundPayments(UUID roundId){
-      return paymentRepository.findByRoundId(roundId)
-              .stream()
-              .map(mapper::toPaymentResponse)
-              .toList();
-    }
-
-    //get payment of a round
-    public List<PaymentResponse> getLstOfPayment(String ekubId, int roundNumber){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        Round round = roundService.findRoundByEkubAndRoundNo(ekub.getId(),ekub.getVersion(), roundNumber);
-        return getRoundPayments(round.getId());
-    }
-
-    // get payment of current round
-    public List<PaymentResponse> getCurrentRoundPayments(String ekubId){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        Round round = ekubService.getCurrentRound(ekub);
-        return getRoundPayments(round.getId());
-    }
-
-    // pay to a winner
-//    public void payToAWinner(String ekubId, String userId){
-//        Ekub ekub = ekubService.findEkubById(ekubId);
-//        User winner = userService.findUserById(userId);
-//        // is the user a winner of previous round
-//        Round round = roundService
-//                .getRoundByEkubAndRoundNo(ekub.getId(),ekub.getVersion(),ekub.getRoundNumber() - 1);
-//        if(round.isPaid() || !round.getWinner().getId().equals(winner.getId())){
-//            throw new AccessDeniedException("The user is not a winner");
-//        }
-//
-//        List<User> members = ekubUserService.getEkubUsers(ekub.getId());
-//        List<User> winners = ekubUserService.getEKubWinners(ekub.getId(), ekub.getVersion());
-//
-//        //check if user has a guarantor
-//        User guarantor = winner.getGuarantor();
-//        if(guarantor != null){
-//            throw new AccessDeniedException("The user doesn't hava a guarantor");
-//        }
-//        if(!members.contains(guarantor)){
-//            throw new AccessDeniedException("The guarantor is not member of "+ ekub.getName());
-//        }
-//
-//        if(winners.contains(guarantor)){
-//            throw new AccessDeniedException("The guarantor has already won");
-//        }
-
-////        System.out.println("pay with paymentAmount " + ekub.getWinAmount());
-//
-//        //upate round status to paid
-//        round.setPaid(true);
-//        roundService.save(round);
-//    }
-
-
     //get User payments
     public List<PaymentResponse> getUserPayments(String userId) {
-        User user = userService.findUserById(userId);
-        List<Payment> userPayments = paymentRepository.findByUserId(user.getId());
+        List<Payment> userPayments = paymentRepository.findUserPayments(userId);
         return userPayments.stream()
+                .sorted(Comparator.comparing(Payment::getCreatedDate).reversed())
                 .map(mapper::toPaymentResponse)
                 .toList();
     }
 
     //get user round payments
     public List<UserRoundPaymentResponse> getUserRoundPayments(
-            String ekubId, int version)
-    {
-        Ekub ekub = ekubService.findEkubById(ekubId);
-
-
+            String ekubId,
+            int version
+    ) {
         List<UserRoundPaymentsDTO> res = paymentRepository
-                .findUserRoundPayments(ekub.getId(), version);
+                .findUserRoundPayments(UUID.fromString(ekubId), version);
 
         //group by username and round
         Map<String, Map<Integer, BigDecimal>> groupedData = new HashMap<>();
@@ -178,8 +126,15 @@ public class PaymentService {
                 .map(UserRoundPaymentResponse::new)
                 .toList();
         return table;
-
     }
 
+    // search payment
+    public List<PaymentResponse> search(String username){
+        Specification<Payment> spec = PaymentSpecification.search(username);
+        return paymentRepository.findAll(spec)
+                .stream()
+                .map(mapper::toPaymentResponse)
+                .toList();
+    }
 
 }

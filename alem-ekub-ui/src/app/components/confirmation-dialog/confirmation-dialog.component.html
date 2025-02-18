@@ -6,7 +6,10 @@
         </div>
         <div class="w-full flex justify-evenly">
             <p class="text-blue-400 cursor-pointer" (click)="onCancel()">Cancel</p>
-            <p class="text-green-400 cursor-pointer" (click)="onConfirm()">{{buttonName}}</p>
+            <p  (click)="onConfirm()"
+                [ngClass]="{'text-green-400': !isWarning, 'text-red-400': isWarning}">
+                {{buttonName}}
+            </p>
         </div>
     </section>
 </main>

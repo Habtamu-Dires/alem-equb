@@ -25,5 +25,6 @@ public record PaymentRequest(
         String paymentMethod,
         @NotEmpty(message = "Remark is mandatory")
         @NotNull(message = "Remark is mandatory")
-        String remark
+        String remark,
+        String toUserId
 ) {}

@@ -10,12 +10,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PaymentResponse } from '../../models/payment-response';
 
-export interface GetPaymentsOfCurrentRound$Params {
+export interface SearchPayment$Params {
+  username: string;
 }
 
-export function getPaymentsOfCurrentRound(http: HttpClient, rootUrl: string, params?: GetPaymentsOfCurrentRound$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getPaymentsOfCurrentRound.PATH, 'get');
+export function searchPayment(http: HttpClient, rootUrl: string, params: SearchPayment$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PaymentResponse>>> {
+  const rb = new RequestBuilder(rootUrl, searchPayment.PATH, 'get');
   if (params) {
+    rb.path('username', params.username, {});
   }
 
   return http.request(
@@ -28,4 +30,4 @@ export function getPaymentsOfCurrentRound(http: HttpClient, rootUrl: string, par
   );
 }
 
-getPaymentsOfCurrentRound.PATH = '/payments/current-round/{ekub-id}';
+searchPayment.PATH = '/payments/search/{username}';

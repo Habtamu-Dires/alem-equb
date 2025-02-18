@@ -4,10 +4,11 @@ import { EkubsService, EkubUsersService, UsersService } from '../../../../servic
 import { EkubResponse } from '../../../../services/models';
 import { EkubComponent } from "../../components/ekub/ekub.component";
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { HeaderComponent } from '../../components/header/header.component';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
+import { UxService } from '../../../../services/ux-service/ux.service';
 
 
 @Component({
@@ -27,12 +28,21 @@ export class NewEkubsComponent implements OnInit{
     private ekubsService: EkubsService,
     private ekubUsersService:EkubUsersService,
     private dialog: MatDialog,
-    private router:Router
+    private router:Router,
+    private uxService:UxService
   ){}
 
   ngOnInit(): void {
    this.checkScreenSzie(window.innerWidth);
-   this.fetchPublicEkubs();
+   //get selected category
+   this.uxService.selectedNewEkubCategory$.subscribe((value:string)=>{
+      this.selectedCategory = value;
+      if(value === 'public'){
+        this.fetchPublicEkubs();
+      } else if(value === 'invited'){
+        this.fetchInvitedEkubs();
+      }
+    })
   }
 
   //fetch public ekubs
@@ -67,7 +77,11 @@ export class NewEkubsComponent implements OnInit{
       'ekub-id': ekubId
     }).subscribe({
       next:()=>{
-        this.fetchPublicEkubs();
+        if(this.selectedCategory === 'public'){
+          this.fetchPublicEkubs();
+        } else if(this.selectedCategory === 'invited'){
+          this.fetchInvitedEkubs();
+        }
       },
       error:(err)=>{
         console.log(err);
@@ -75,9 +89,10 @@ export class NewEkubsComponent implements OnInit{
     })
   }
 
-  // select category
+  // selected category
   selectCategory(category:string){
     this.selectedCategory = category;
+    this.uxService.updateSelectedNewEkubCategory(category);
     if(category === 'public'){
       this.fetchPublicEkubs();
     } else if(category === 'invited'){
@@ -98,7 +113,6 @@ export class NewEkubsComponent implements OnInit{
     // dialog result
     dialogRef.afterClosed().subscribe(result =>{
       if(result){
-        console.log("Join the ekub");
         this.joinEkub(ekubId);
       }
     })

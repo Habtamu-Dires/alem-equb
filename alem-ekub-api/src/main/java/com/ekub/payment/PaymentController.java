@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,13 +27,15 @@ public class PaymentController {
         return ResponseEntity.accepted().build();
     }
 
-    //get all payments
+    //get pages of payments
     @GetMapping
     public ResponseEntity<PageResponse<PaymentResponse>> getPageOfPayments(
+            @RequestParam(value = "ekubId-filter",required = false) String ekubId,
+            @RequestParam(value = "dateTime-filter", required = false) LocalDateTime dateTime,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "10", required = false) int size
     ){
-        return ResponseEntity.ok(service.getPageOfPayments(page,size));
+        return ResponseEntity.ok(service.getPageOfPayments(ekubId,dateTime,page,size));
     }
 
     //get payments of a user
@@ -52,21 +55,12 @@ public class PaymentController {
         return ResponseEntity.ok(service.getUserRoundPayments(ekubId,version));
     }
 
-    // get payments of current round
-    @GetMapping("/current-round/{ekub-id}")
-    public ResponseEntity<List<PaymentResponse>> getPaymentsOfCurrentRound(
-            @PathVariable("ekub_id") String ekubId
+    // search payment
+    @GetMapping("/search/{username}")
+    public ResponseEntity<List<PaymentResponse>> searchPayment(
+            @PathVariable("username") String username
     ){
-        return ResponseEntity.ok(service.getCurrentRoundPayments(ekubId));
-    }
-
-    // get payment of given round of ekub
-    @GetMapping("/{ekub-id}/{round-no}")
-    public ResponseEntity<List<PaymentResponse>> getPaymentsOfEkubRound(
-            @PathVariable("ekub_id") String ekubId,
-            @PathVariable("round_no") int roundNo
-    ){
-        return ResponseEntity.ok(service.getLstOfPayment(ekubId,roundNo));
+        return ResponseEntity.ok(service.search(username));
     }
 
 }

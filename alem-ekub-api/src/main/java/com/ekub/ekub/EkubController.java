@@ -36,7 +36,7 @@ public class EkubController {
         return ResponseEntity.accepted().build();
     }
 
-    // get page of ekbu
+    // get page of ekub
     @GetMapping
     public ResponseEntity<PageResponse<EkubResponse>> getPageOfEkubs(
             @RequestParam(value = "page",defaultValue = "0", required = false) int page,
@@ -57,14 +57,6 @@ public class EkubController {
             @PathVariable("ekub-id") String ekubId
     ){
         return ResponseEntity.ok(service.getEkubById(ekubId));
-    }
-
-    // get current round of ekub
-    @GetMapping("/current-round/{ekub-id}")
-    public ResponseEntity<RoundResponse> getCurrentRound(
-            @PathVariable("ekub-id") String ekubId
-    ){
-        return ResponseEntity.ok(service.getCurrentRound(ekubId));
     }
 
 

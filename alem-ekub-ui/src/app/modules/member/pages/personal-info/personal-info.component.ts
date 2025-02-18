@@ -66,7 +66,7 @@ export class PersonalInfoComponent implements OnInit {
           phoneNumber: res.phoneNumber as string,
           email: res.email as string,
           profession: res.profession as string,
-          ekubIds: res.ekubIds,
+          ekubIds: res.ekubIdList,
           enabled: res.enabled,
           remark:res.remark
         }

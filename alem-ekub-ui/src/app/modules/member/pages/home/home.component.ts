@@ -77,7 +77,7 @@ export class HomeComponent {
 
   //selected Page during page size change
   getSelectedPage(){
-    this.uxService.selectedPage$.subscribe((value:string)=>{
+    this.uxService.selectedHomePage$.subscribe((value:string)=>{
       this.selectedPage = value;
     })
   }
@@ -113,7 +113,7 @@ export class HomeComponent {
 
   // navigate to
   selectPage(page:string){
-    this.uxService.updateSelectedPage(page);
+    this.uxService.updateSelectedHomePage(page);
     if(this.onMobileView){
       this.router.navigate(['member', page]);
     } else {

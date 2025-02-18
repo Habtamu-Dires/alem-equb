@@ -12,6 +12,7 @@ export interface PaymentResponse {
   paymentMethod?: string;
   remark?: string;
   round?: RoundResponse;
+  toUser?: UserResponse;
   type?: string;
   user?: UserResponse;
 }

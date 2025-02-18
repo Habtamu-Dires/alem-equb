@@ -23,17 +23,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let payment of pendingPayments">
-                    <td class="table-data">{{payment.equbName}}</td>
-                    <td class="table-data">{{payment.version}}</td>
-                    <td class="table-data">{{payment.roundNumber}}</td>
-                    <td class="table-data">{{payment.amount | number}}</td>
-                    <td class="table-data">{{payment.penalty | number }}</td>
-                    <td class="table-data">{{transfromDuration(payment.endDateTime)}}</td>
-                    <td class="table-data">{{transformDateTime(payment.endDateTime)}}</td>
+                <tr *ngFor="let pendingPayment of pendingPayments">
+                    <td class="table-data">{{pendingPayment.equbName}}</td>
+                    <td class="table-data">{{pendingPayment.version}}</td>
+                    <td class="table-data">{{pendingPayment.roundNumber}}</td>
+                    <td class="table-data">{{pendingPayment.amount | number}}</td>
+                    <td class="table-data">{{pendingPayment.penalty | number }}</td>
+                    <td class="table-data">{{transfromDuration(pendingPayment.endDateTime)}}</td>
+                    <td class="table-data">{{transformDateTime(pendingPayment.endDateTime)}}</td>
                     <td class="table-data">
                         <button class="bg-grn text-white px-4 py-2 rounded-lg hover:bg-green-300"
-                            (click)="onPayment(payment)">
+                            (click)="onPayment(pendingPayment)">
                             Pay
                         </button>
                     </td>

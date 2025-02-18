@@ -17,8 +17,6 @@ import { deleteEkub } from '../fn/ekubs/delete-ekub';
 import { DeleteEkub$Params } from '../fn/ekubs/delete-ekub';
 import { EkubResponse } from '../models/ekub-response';
 import { EkubStatusResponse } from '../models/ekub-status-response';
-import { getCurrentRound } from '../fn/ekubs/get-current-round';
-import { GetCurrentRound$Params } from '../fn/ekubs/get-current-round';
 import { getEkubById } from '../fn/ekubs/get-ekub-by-id';
 import { GetEkubById$Params } from '../fn/ekubs/get-ekub-by-id';
 import { getEkubStatus } from '../fn/ekubs/get-ekub-status';
@@ -30,7 +28,6 @@ import { GetPageOfEkubs$Params } from '../fn/ekubs/get-page-of-ekubs';
 import { getPublicEkubs } from '../fn/ekubs/get-public-ekubs';
 import { GetPublicEkubs$Params } from '../fn/ekubs/get-public-ekubs';
 import { PageResponseEkubResponse } from '../models/page-response-ekub-response';
-import { RoundResponse } from '../models/round-response';
 import { searchEkubByName } from '../fn/ekubs/search-ekub-by-name';
 import { SearchEkubByName$Params } from '../fn/ekubs/search-ekub-by-name';
 import { updateEkub } from '../fn/ekubs/update-ekub';
@@ -264,31 +261,6 @@ export class EkubsService extends BaseService {
   getEkubStatus(params: GetEkubStatus$Params, context?: HttpContext): Observable<EkubStatusResponse> {
     return this.getEkubStatus$Response(params, context).pipe(
       map((r: StrictHttpResponse<EkubStatusResponse>): EkubStatusResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `getCurrentRound()` */
-  static readonly GetCurrentRoundPath = '/ekubs/current-round/{ekub-id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCurrentRound()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCurrentRound$Response(params: GetCurrentRound$Params, context?: HttpContext): Observable<StrictHttpResponse<RoundResponse>> {
-    return getCurrentRound(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getCurrentRound$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCurrentRound(params: GetCurrentRound$Params, context?: HttpContext): Observable<RoundResponse> {
-    return this.getCurrentRound$Response(params, context).pipe(
-      map((r: StrictHttpResponse<RoundResponse>): RoundResponse => r.body)
     );
   }
 

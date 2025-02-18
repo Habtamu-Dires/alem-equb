@@ -14,15 +14,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { BooleanResponse } from '../models/boolean-response';
 import { cancelGuarantee } from '../fn/user-guarantees/cancel-guarantee';
 import { CancelGuarantee$Params } from '../fn/user-guarantees/cancel-guarantee';
-import { getGuaranteedUsers } from '../fn/user-guarantees/get-guaranteed-users';
-import { GetGuaranteedUsers$Params } from '../fn/user-guarantees/get-guaranteed-users';
-import { getGuarantors } from '../fn/user-guarantees/get-guarantors';
-import { GetGuarantors$Params } from '../fn/user-guarantees/get-guarantors';
 import { guaranteeUser } from '../fn/user-guarantees/guarantee-user';
 import { GuaranteeUser$Params } from '../fn/user-guarantees/guarantee-user';
 import { isAllowedToBeGuarantor } from '../fn/user-guarantees/is-allowed-to-be-guarantor';
 import { IsAllowedToBeGuarantor$Params } from '../fn/user-guarantees/is-allowed-to-be-guarantor';
-import { UserResponse } from '../models/user-response';
 
 @Injectable({ providedIn: 'root' })
 export class UserGuaranteesService extends BaseService {
@@ -52,56 +47,6 @@ export class UserGuaranteesService extends BaseService {
   guaranteeUser(params: GuaranteeUser$Params, context?: HttpContext): Observable<void> {
     return this.guaranteeUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getGuarantors()` */
-  static readonly GetGuarantorsPath = '/user-guarantee/guarantors/{round-id}/{user-id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGuarantors()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGuarantors$Response(params: GetGuarantors$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-    return getGuarantors(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGuarantors$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGuarantors(params: GetGuarantors$Params, context?: HttpContext): Observable<Array<UserResponse>> {
-    return this.getGuarantors$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
-    );
-  }
-
-  /** Path part for operation `getGuaranteedUsers()` */
-  static readonly GetGuaranteedUsersPath = '/user-guarantee/guaranteed-users/{round-id}/{user-id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGuaranteedUsers()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGuaranteedUsers$Response(params: GetGuaranteedUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserResponse>>> {
-    return getGuaranteedUsers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGuaranteedUsers$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getGuaranteedUsers(params: GetGuaranteedUsers$Params, context?: HttpContext): Observable<Array<UserResponse>> {
-    return this.getGuaranteedUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UserResponse>>): Array<UserResponse> => r.body)
     );
   }
 

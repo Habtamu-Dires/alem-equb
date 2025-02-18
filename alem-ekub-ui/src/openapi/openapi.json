@@ -571,6 +571,23 @@
                 "operationId": "getPageOfPayments",
                 "parameters": [
                     {
+                        "name": "ekubId-filter",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dateTime-filter",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
                         "name": "page",
                         "in": "query",
                         "required": false,
@@ -652,7 +669,7 @@
                 "tags": [
                     "ekub-users"
                 ],
-                "operationId": "unJoinEkub",
+                "operationId": "leaveEkub",
                 "parameters": [
                     {
                         "name": "ekub-id",
@@ -762,6 +779,39 @@
                 }
             }
         },
+        "/users/search-by-name/{name}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "searchByName",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/invited-users/{ekub-id}": {
             "get": {
                 "tags": [
@@ -771,88 +821,6 @@
                 "parameters": [
                     {
                         "name": "ekub-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user-guarantee/guarantors/{round-id}/{user-id}": {
-            "get": {
-                "tags": [
-                    "userGuarantees"
-                ],
-                "operationId": "getGuarantors",
-                "parameters": [
-                    {
-                        "name": "round-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "user-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user-guarantee/guaranteed-users/{round-id}/{user-id}": {
-            "get": {
-                "tags": [
-                    "userGuarantees"
-                ],
-                "operationId": "getGuaranteedUsers",
-                "parameters": [
-                    {
-                        "name": "round-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "user-id",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -1039,30 +1007,6 @@
                 }
             }
         },
-        "/payments/{ekub-id}/{round-no}": {
-            "get": {
-                "tags": [
-                    "payments"
-                ],
-                "operationId": "getPaymentsOfEkubRound",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/PaymentResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/payments/user/{user-id}": {
             "get": {
                 "tags": [
@@ -1138,13 +1082,22 @@
                 }
             }
         },
-        "/payments/current-round/{ekub-id}": {
+        "/payments/search/{username}": {
             "get": {
                 "tags": [
                     "payments"
                 ],
-                "operationId": "getPaymentsOfCurrentRound",
-                "parameters": [],
+                "operationId": "searchPayment",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1362,36 +1315,6 @@
                 }
             }
         },
-        "/ekubs/current-round/{ekub-id}": {
-            "get": {
-                "tags": [
-                    "ekubs"
-                ],
-                "operationId": "getCurrentRound",
-                "parameters": [
-                    {
-                        "name": "ekub-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RoundResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/ekub-users/member-detail/{ekub-id}/{version}": {
             "get": {
                 "tags": [
@@ -1459,39 +1382,6 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/EkubResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ekub-users/ekub-users/{ekub-id}": {
-            "get": {
-                "tags": [
-                    "ekub-users"
-                ],
-                "operationId": "getEkubUsers",
-                "parameters": [
-                    {
-                        "name": "ekub-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
                                     }
                                 }
                             }
@@ -1705,6 +1595,9 @@
                     },
                     "remark": {
                         "type": "string"
+                    },
+                    "toUserId": {
+                        "type": "string"
                     }
                 },
                 "required": [
@@ -1798,13 +1691,13 @@
                     "enabled": {
                         "type": "boolean"
                     },
-                    "ekubs": {
+                    "ekubNameList": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
-                    "ekubIds": {
+                    "ekubIdList": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -1965,6 +1858,9 @@
                         "type": "string"
                     },
                     "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "toUser": {
                         "$ref": "#/components/schemas/UserResponse"
                     },
                     "ekubName": {

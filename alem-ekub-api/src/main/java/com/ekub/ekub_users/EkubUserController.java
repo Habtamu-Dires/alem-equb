@@ -36,7 +36,7 @@ public class EkubUserController {
 
     // leave ekub
     @DeleteMapping("/{ekub-id}")
-    public ResponseEntity<Void> unJoinEkub(@PathVariable("ekub-id") String ekubId){
+    public ResponseEntity<Void> leaveEkub(@PathVariable("ekub-id") String ekubId){
         service.leaveEkub(ekubId);
         return ResponseEntity.accepted().build();
     }
@@ -51,15 +51,6 @@ public class EkubUserController {
         return ResponseEntity.accepted().build();
     }
 
-    // get ekub users
-    @GetMapping("/ekub-users/{ekub-id}")
-    public ResponseEntity<List<UserResponse>> getEkubUsers(
-            @PathVariable("ekub-id") String ekubId
-    ){
-        return  ResponseEntity.ok(service.getEkubUsers(ekubId));
-    }
-
-
     // get list of equbs of a user
     @GetMapping("/equbs/{user-id}")
     public ResponseEntity<List<EkubResponse>> getEkubsOfUser(
@@ -68,14 +59,13 @@ public class EkubUserController {
         return ResponseEntity.ok(service.getEkubsOfUser(userId));
     }
 
-
-    // get member detail response
+    // get member details
     @GetMapping("/member-detail/{ekub-id}/{version}")
     public ResponseEntity<List<MemberDetailResponse>> getMemberDetail(
             @PathVariable("ekub-id") String ekubId,
             @PathVariable("version") int version
     ){
-        return ResponseEntity.ok(service.findMemberDetail(ekubId,version));
+        return ResponseEntity.ok(service.getMemberDetail(ekubId,version));
     }
 
 }

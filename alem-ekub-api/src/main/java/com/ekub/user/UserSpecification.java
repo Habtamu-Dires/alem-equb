@@ -2,16 +2,39 @@ package com.ekub.user;
 
 import com.ekub.ekub.Ekub;
 import com.ekub.ekub_users.EkubUser;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class UserSpecification {
 
+    // search user by name
+    public static Specification<User> searchUserByName(String  name){
+        return ((root, query, criteriaBuilder)->{
+             if(name == null || name.isEmpty()){
+                 return criteriaBuilder.conjunction();
+             }
+            List<Predicate> predicates = new ArrayList<>();
+             //username
+              Predicate usernamePredicate = criteriaBuilder.like(
+                     criteriaBuilder.lower(root.get("username")),"%"+name.toLowerCase()+"%"
+              );
+              // firstname
+               Predicate firstnamePredicate = criteriaBuilder.like(
+                       criteriaBuilder.lower(root.get("firstName")),"%"+name.toLowerCase()+"%"
+               );
+               Predicate namePredicate = criteriaBuilder.or(usernamePredicate,firstnamePredicate);
+               predicates.add(namePredicate);
+
+               return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+
+        });
+    }
+
+    // search user not in ekub or invited
     public static Specification<User> searchUsersNotInEkubOrInvited(
             String text, UUID ekubId)
     {
@@ -31,9 +54,15 @@ public class UserSpecification {
 
             //Main query conditon
             return criteriaBuilder.and(
-                    criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("firstName")),
-                            "%" + text.toLowerCase() + "%"
+                    criteriaBuilder.or(
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("firstName")),
+                                    "%" + text.toLowerCase() + "%"
+                            ),
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("username")),
+                                    "%" + text.toLowerCase() + "%"
+                            )
                     ),
                     criteriaBuilder.not(criteriaBuilder.in(root).value(invitedSubquery)),
                     criteriaBuilder.not(criteriaBuilder.in(root).value(memberSubquery))

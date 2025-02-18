@@ -11,6 +11,8 @@ import { RequestBuilder } from '../../request-builder';
 import { PageResponsePaymentResponse } from '../../models/page-response-payment-response';
 
 export interface GetPageOfPayments$Params {
+  'ekubId-filter'?: string;
+  'dateTime-filter'?: string;
   page?: number;
   size?: number;
 }
@@ -18,6 +20,8 @@ export interface GetPageOfPayments$Params {
 export function getPageOfPayments(http: HttpClient, rootUrl: string, params?: GetPageOfPayments$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponsePaymentResponse>> {
   const rb = new RequestBuilder(rootUrl, getPageOfPayments.PATH, 'get');
   if (params) {
+    rb.query('ekubId-filter', params['ekubId-filter'], {});
+    rb.query('dateTime-filter', params['dateTime-filter'], {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
   }

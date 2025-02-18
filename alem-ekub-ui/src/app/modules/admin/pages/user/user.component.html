@@ -1,10 +1,13 @@
 <main>
-    <app-header
-      *ngIf="!showDetail"
-      componentName="User"
-      (onCreateNewCliked)="onCreateNew()"
-    >
-    </app-header>
+    <div class="sticky top-0 w-full z-10 bg-white">
+      <app-header
+        *ngIf="!showDetail"
+        componentName="User"
+        (onCreateNewCliked)="onCreateNew()"
+        (onSearch)="onSearch($event)"
+      >
+      </app-header>
+    </div>
     <section *ngIf="!showDetail">
         <table class="min-w-full border border-gray-300 bg-white">
             <thead class="bg-gray-200 sticky top-16">
@@ -31,7 +34,7 @@
                   <span *ngIf="user.enabled">YES</span>
                   <span *ngIf="!user.enabled">NO</span>
                 </td>
-                <td class="table-data">{{ user.ekubs }}</td>
+                <td class="table-data">{{ user.ekubNameList }}</td>
                 <td class="table-data">{{ user.phoneNumber }}</td>
                 <td class="table-data ">{{ user.email}}</td>
                 <td class="table-data ">{{ user.profession}}</td>

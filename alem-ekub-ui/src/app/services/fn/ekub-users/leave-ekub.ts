@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface UnJoinEkub$Params {
+export interface LeaveEkub$Params {
   'ekub-id': string;
 }
 
-export function unJoinEkub(http: HttpClient, rootUrl: string, params: UnJoinEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, unJoinEkub.PATH, 'delete');
+export function leaveEkub(http: HttpClient, rootUrl: string, params: LeaveEkub$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, leaveEkub.PATH, 'delete');
   if (params) {
     rb.path('ekub-id', params['ekub-id'], {});
   }
@@ -29,4 +29,4 @@ export function unJoinEkub(http: HttpClient, rootUrl: string, params: UnJoinEkub
   );
 }
 
-unJoinEkub.PATH = '/ekub-users/{ekub-id}';
+leaveEkub.PATH = '/ekub-users/{ekub-id}';

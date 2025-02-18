@@ -7,20 +7,27 @@
     <!--body-->
     <section class="flex flex-col justify-center items-center mt-[68px]">
         <!--last round winner-->
-        <section *ngIf="lastRound?.winner"  
-            class="w-full flex justify-evenly p-4 text-lg font-semibold">
-            <div>
-                የዙር <span>{{lastRound?.roundNumber}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                <span>{{lastRound?.winner?.username}}</span>
+        <section  class="w-full flex p-4 text-lg font-semibold"
+                [ngClass]="{'justify-evenly':lastRound?.winner, 'justify-end': !lastRound?.winner}">
+            <div *ngIf="lastRound?.winner" class="flex flex-col gap-3">
+                <div>
+                    የዙር <span>{{lastRound?.roundNumber}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
+                    <span>{{lastRound?.winner?.username}}</span>
+                </div>
+                <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
+                    <button (click)="guarantWinner(
+                                    lastRound?.id ?? '',
+                                    lastRound?.winner?.id ?? '')" 
+                        class="text-blue-400 hover:text-blue-600">
+                            guarantee 
+                    </button>
+                </div>
             </div>
-            
-            <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
-                <button (click)="guarantWinner(
-                                lastRound?.id ?? '',
-                                lastRound?.winner?.id ?? '')" 
-                    class="text-blue-400 hover:text-blue-600">
-                        guarantee 
-                </button>
+            <div *ngIf="!ekub?.isActive && ekubType === 'joined'">
+                <p class="cursor-pointer text-red-300 hover:text-red-500" 
+                    (click)="onLeavingEkub(ekub?.id)">
+                    leave
+                </p>
             </div>
         </section>
         <!--general information section-->

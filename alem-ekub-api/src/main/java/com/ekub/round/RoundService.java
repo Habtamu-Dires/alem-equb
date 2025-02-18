@@ -91,7 +91,10 @@ public class RoundService {
         LocalDateTime now = LocalDateTime.now();
 
         List<UserPendingPaymentDTO> unPaidPayments = roundRepository
-                .findUserPendingPayments(loggedUserId);
+                .findUserPendingPayments(loggedUserId)
+                .stream()
+                .sorted(Comparator.comparing(UserPendingPaymentDTO::endDateTime))
+                .toList();
 
         List<UserPendingPaymentResponse> responses = new ArrayList<>();
 
@@ -107,16 +110,16 @@ public class RoundService {
 
                 BigDecimal totalAmount = payment.amount().add(penalty);
                 responses.add(
-                        UserPendingPaymentResponse.builder()
-                                .equbName(payment.equbName())
-                                .version(payment.version())
-                                .roundId(payment.roundId())
-                                .roundNumber(payment.roundNumber())
-                                .amount(payment.amount())
-                                .penalty(penalty)
-                                .totalAmount(totalAmount)
-                                .endDateTime(payment.endDateTime())
-                                .build()
+                    UserPendingPaymentResponse.builder()
+                        .equbName(payment.equbName())
+                        .version(payment.version())
+                        .roundId(payment.roundId())
+                        .roundNumber(payment.roundNumber())
+                        .amount(payment.amount())
+                        .penalty(penalty)
+                        .totalAmount(totalAmount)
+                        .endDateTime(payment.endDateTime())
+                        .build()
                 );
 
             } else {

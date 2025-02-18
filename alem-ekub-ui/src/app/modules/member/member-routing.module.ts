@@ -6,7 +6,6 @@ import { PersonalInfoComponent } from './pages/personal-info/personal-info.compo
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { AboutComponent } from './pages/about/about.component';
 import { EkubsComponent } from './pages/ekubs/ekubs.component';
-import { EkubComponent } from './components/ekub/ekub.component';
 import { EkubDetailComponent } from './pages/ekub-detail/ekub-detail.component';
 import { PaymentHistoryComponent } from './pages/payment-history/payment-history.component';
 import { PaymentComponent } from './pages/payment/payment.component';

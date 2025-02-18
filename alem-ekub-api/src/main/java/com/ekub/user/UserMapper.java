@@ -19,13 +19,12 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .profession(user.getProfession())
-//                .s(user.getGuarantor() != null? user.getGuarantor().getUsername() : null)
                 .profilePicUrl(user.getProfilePicUrl())
                 .idCardImageUrl(user.getIdCardImageUrl())
                 .enabled(user.isEnabled())
                 .remark(user.getRemark())
-                .ekubIds((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubIds(user) : List.of())
-                .ekubs((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubNames(user) : List.of())
+                .ekubIdList((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubIds(user) : List.of())
+                .ekubNameList((user.getEkubUsers() != null && !user.getEkubUsers().isEmpty()) ? getEkubNames(user) : List.of())
                 .build();
     }
 

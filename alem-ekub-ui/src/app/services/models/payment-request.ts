@@ -7,6 +7,7 @@ export interface PaymentRequest {
   paymentMethod: string;
   remark: string;
   roundId: string;
+  toUserId?: string;
   type: 'MEMBER_PAYMENT' | 'WINNING_PAYOUT';
   userId: string;
 }

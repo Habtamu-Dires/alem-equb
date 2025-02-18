@@ -12,10 +12,7 @@
         <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @for (ekub of ekubs; track $index) {
                <div class="flex justify-center items-center p-4">
-                    <app-ekub 
-                        [ekub]="ekub"
-                        (onLeaveEkub)="onLeavingEkub($event)"
-                    >                        
+                    <app-ekub [ekub]="ekub">                        
                     </app-ekub>
                </div>
             }

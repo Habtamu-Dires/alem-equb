@@ -4,7 +4,6 @@ import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubMapper;
 import com.ekub.ekub.EkubResponse;
 import com.ekub.ekub.EkubService;
-import com.ekub.round.Round;
 import com.ekub.round.RoundRepository;
 import com.ekub.round.RoundService;
 import com.ekub.user.User;
@@ -30,8 +29,6 @@ public class EkubUserService {
     private final EkubUserRepository repository;
     private final UserService userService;
     private final EkubService ekubService;
-    private final UserMapper userMapper;
-    private final RoundService roundService;
     private final EkubMapper ekubMapper;
     private final RoundRepository roundRepository;
 
@@ -52,23 +49,9 @@ public class EkubUserService {
     // remove user
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void removeUser(String ekubId, String userId){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        User user = userService.findUserById(userId);
-        this.deleteEkubUser(ekub.getId(),user.getId());
+        this.deleteEkubUser(UUID.fromString(ekubId),userId);
     }
 
-    // get list of ekub users
-    public List<UserResponse> getEkubUsers(String ekubId){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        return this.findEkubUsers(ekub.getId())
-                .stream()
-                .map(userMapper::toUserResponse)
-                .toList();
-    }
-    // ekub users
-    public List<User> findEkubUsers(UUID ekubId) {
-        return repository.findEkubUsers(ekubId);
-    }
 
     // delete ekub user
     public void deleteEkubUser(UUID ekubId, String userId) {
@@ -83,12 +66,6 @@ public class EkubUserService {
     }
 
 
-    // winners of the ekub.
-    public List<User> getEKubWinners(UUID ekubId, int version){
-        return repository.findEkubWinners(ekubId, version);
-    }
-
-
     // get ekub draw participants
     public List<User> findDrawParticipants(UUID ekubId, int version){
         return repository.findDrawParticipants(ekubId,version);
@@ -96,19 +73,12 @@ public class EkubUserService {
 
     // get list of ekubs for a user
     public List<EkubResponse> getEkubsOfUser(String userId){
-        User user = userService.findUserById(userId);
         return repository.findEkubsByUserId(userId)
                 .stream()
                 .map(ekubMapper::toEkubResponse)
                 .toList();
     }
 
-    //get round winner
-    public UserResponse getRoundWinner(String ekubId, int roundNumber) {
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        Round round = roundService.findRoundByEkubAndRoundNo(ekub.getId(),ekub.getVersion(), roundNumber);
-        return userMapper.toUserResponse(round.getWinner());
-    }
 
     // join ekub
     public void joinEkub(String ekubId) {
@@ -140,8 +110,7 @@ public class EkubUserService {
             throw new AccessDeniedException("You Can't leave active equb");
         }
         // pending payments
-        if(roundRepository.hasPendingPayments(loggedInUserId)){
-
+        if(roundRepository.hasPendingPayments(loggedInUserId, ekub.getId())){
             throw new AccessDeniedException("You have pending payments please pay them");
         }
 
@@ -159,7 +128,7 @@ public class EkubUserService {
     }
 
     // finding member detail
-    public List<MemberDetailResponse> findMemberDetail(String ekubId, int version){
+    public List<MemberDetailResponse> getMemberDetail(String ekubId, int version){
         List<MemberDetailResponse> responseList = new ArrayList<>();
         repository.findMemberDetailDTO(UUID.fromString(ekubId), version)
             .forEach(dto -> {

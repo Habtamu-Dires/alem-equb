@@ -1,6 +1,5 @@
 package com.ekub.user_guarantee;
 
-import com.ekub.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,22 +18,6 @@ public interface UserGuaranteeRepository extends JpaRepository<UserGuarantee, UU
                 OR ug.guaranteed.id = :userId ) 
             """)
     boolean isGuarantorOrGuaranteed(String userId, UUID ekubId, int version);
-
-    @Query("""
-            SELECT ug.guarantor 
-            FROM UserGuarantee ug
-            WHERE ug.guaranteed.id = :guaranteedId
-            AND ug.round.id = :roundId
-            """)
-    List<User> findGuarantors(String guaranteedId, UUID roundId);
-
-    @Query("""
-            SELECT ug.guaranteed 
-            FROM UserGuarantee ug
-            WHERE ug.guarantor.id = :guarantorId
-            AND ug.round.id = :roundId
-            """)
-    List<User> findGuaranteedUsers(String guarantorId, UUID roundId);
 
     @Transactional
     @Modifying

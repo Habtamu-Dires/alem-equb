@@ -3,8 +3,6 @@ package com.ekub.user;
 import com.ekub.common.IdResponse;
 import com.ekub.common.PageResponse;
 import com.ekub.ekub.Ekub;
-import com.ekub.ekub.EkubMapper;
-import com.ekub.ekub.EkubResponse;
 import com.ekub.ekub.EkubService;
 import com.ekub.ekub_users.EkubUser;
 import com.ekub.file.FileStorageService;
@@ -37,7 +35,6 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final EkubService ekubService;
-    private final EkubMapper ekubMapper;
     private final FileStorageService fileStorageService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -352,12 +349,6 @@ public class UserService {
         return mapper.toUserResponse(findUserById(userId));
     }
 
-    //find user by username
-    public User findByUsername(String username){
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "User not with username: "+ username + "found"));
-    }
 
     // upload profile picture
     public void uploadProfilePicture(String userId, MultipartFile file) {
@@ -405,24 +396,20 @@ public class UserService {
         // the transaction commit automatically thanks to Transactional
     }
 
-    // get invited ekubs
-    @Transactional  //note: Required to keep the session open.
-    public List<EkubResponse> getInvitedEkubs() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loggedUserId = authentication.getName();
-        User user = findUserById(loggedUserId);
-
-        //access the collection inside a transaction to trigger lazy loading
-        return user.getInvitedEkubs()
-                .stream()
-                .map(ekubMapper::toEkubResponse)
-                .toList();
-    }
-
     // get users invited in ekub but not joined
     public List<UserResponse> getUsersInvitedInEkubsAndNotJoined(String ekubId){
         return  repository
                 .findUsersInvitedInEkubAndNotJoined(UUID.fromString(ekubId))
+                .stream()
+                .map(mapper::toUserResponse)
+                .toList();
+    }
+
+    //search user by username or firstName
+    public List<UserResponse> searchByName(String name){
+        Specification<User> spec = UserSpecification.searchUserByName(name);
+
+        return repository.findAll(spec)
                 .stream()
                 .map(mapper::toUserResponse)
                 .toList();

@@ -1,6 +1,5 @@
 package com.ekub.round;
 
-import com.ekub.user.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

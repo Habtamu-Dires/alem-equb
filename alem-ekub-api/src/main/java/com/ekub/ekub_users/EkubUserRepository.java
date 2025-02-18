@@ -10,8 +10,6 @@ import java.util.UUID;
 
 public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
 
-    @Query("SELECT eu FROM EkubUser eu WHERE eu.ekub.id =:ekubId")
-    List<EkubUser> findByEkubId(UUID ekubId);
 
     @Query("""
             SELECT eu FROM EkubUser eu WHERE eu.ekub.id = :ekubId
@@ -25,25 +23,6 @@ public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
             """)
     List<Ekub> findEkubsByUserId(String userId);
 
-    @Query("""
-            SELECT eu.user FROM EkubUser eu
-            WHERE eu.ekub.id = :ekubId
-            """)
-    List<User> findEkubUsers(UUID ekubId);
-
-
-    @Query("""
-            SELECT eu.user 
-            FROM EkubUser eu
-            WHERE eu.ekub.id = :ekubId 
-            AND EXISTS (
-                SELECT 1 FROM Round r
-                WHERE r.ekub.id = :ekubId
-                AND r.version = :version
-                AND r.winner = eu.user
-            )
-            """)
-    List<User> findEkubWinners(UUID ekubId, int version);
 
     @Query("""
             SELECT eu.user

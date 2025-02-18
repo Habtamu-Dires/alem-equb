@@ -1,6 +1,5 @@
 package com.ekub.ekub;
 
-import com.ekub.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,9 +34,6 @@ public interface EkubRepository extends JpaRepository<Ekub, UUID>, JpaSpecificat
     @Query(value = "DELETE FROM invitation WHERE ekub_id = :ekubId",nativeQuery = true)
     void deleteInvitationsForEkub(@Param("ekubId") UUID ekubId);
 
-    @Query("SELECT e FROM Ekub e LEFT JOIN FETCH e.invitedUsers WHERE e.id =:ekubId")
-    Optional<Ekub> findEkubWithInvitedUsers(@Param("ekubId") UUID ekubId);
-
     @Query(value = """
             SELECT e FROM Ekub e
             WHERE e IN (
@@ -60,4 +56,5 @@ public interface EkubRepository extends JpaRepository<Ekub, UUID>, JpaSpecificat
             WHERE e.id = :ekubId
             """)
     EkubStatusResponse findEkubStatus(UUID ekubId, int version);
+
 }
