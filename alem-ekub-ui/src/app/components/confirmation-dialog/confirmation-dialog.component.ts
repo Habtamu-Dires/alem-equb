@@ -19,11 +19,14 @@ export class ConfirmationDialogComponent {
     public dialogRef:MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
       message:string,
-      buttonName:string
+      buttonName:string,
+      isWarning:boolean
     }
   ){
     this.message = data.message
-    this.buttonName = data.buttonName
+    this.buttonName = data.buttonName,
+    this.isWarning = data.isWarning
+
   }
 
   onConfirm(){

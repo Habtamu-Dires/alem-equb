@@ -6,7 +6,6 @@ import com.ekub.round.Round;
 import com.ekub.round.RoundService;
 import com.ekub.user.User;
 import com.ekub.user.UserMapper;
-import com.ekub.user.UserResponse;
 import com.ekub.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,9 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,21 +27,21 @@ public class UserGuaranteeService {
     private final UserGuaranteeRepository repository;
     private final UserService userService;
     private final RoundService roundService;
-    private final UserMapper userMapper;
     private final EkubUserService ekubUserService;
 
     // guarantee a user
+    @Transactional
     public void guaranteeUser(String roundId, String userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedUserId = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        User guarantor = userService.findUserById(loggedUserId);
-        User guaranteed = userService.findUserById(userId);
-        Round round = roundService.findRoundById(roundId);
+        User guarantor = userService.findUserByExId(loggedUserId);
+        User guaranteed = userService.findUserByExId(userId);
+        Round round = roundService.findRoundByExId(roundId);
 
         // can't guarantee one self
-        if(loggedUserId.equalsIgnoreCase(guaranteed.getId())){
+        if(loggedUserId.equalsIgnoreCase(guaranteed.getExternalId())){
             throw new AccessDeniedException("You can't guarantee your self");
         }
 
@@ -53,12 +52,12 @@ public class UserGuaranteeService {
             return;
         }
         // is user member of ekub
-        boolean isMember = ekubUserService.isMemberOfEkub( guarantor.getId(), round.getEkub().getId());
+        boolean isMember = ekubUserService.isMemberOfEkub( guarantor.getExternalId(), round.getEkub().getExternalId());
 
         //if user  guarantor or guaranteed before
         boolean isGrantorOrGuaranteed = isGuarantorOrGuaranteed(
-                guarantor.getId(),
-                round.getEkub().getId(),
+                guarantor.getExternalId(),
+                round.getEkub().getExternalId(),
                 round.getVersion()
         );
 
@@ -75,6 +74,7 @@ public class UserGuaranteeService {
     }
 
     // is allowed to be guarantor in this version
+    @Transactional
     public BooleanResponse isAllowedToBeGuarantor(String ekubId, int version){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedUserId = authentication.getName();
@@ -85,13 +85,13 @@ public class UserGuaranteeService {
                 version
         );
 
-        boolean isMember = ekubUserService.isMemberOfEkub(loggedUserId, UUID.fromString(ekubId));
         boolean isGuarantorOrGuaranteedBefore = isGuarantorOrGuaranteed(
                 loggedUserId,
                 UUID.fromString(ekubId),
-                version);
+                version
+        );
 
-        boolean res = isMember && !isGuarantorOrGuaranteedBefore && hasNotWonYet;
+        boolean res = !isGuarantorOrGuaranteedBefore && hasNotWonYet;
         return new BooleanResponse(res);
     }
 
@@ -103,7 +103,6 @@ public class UserGuaranteeService {
     ) {
         repository.save(
             UserGuarantee.builder()
-                    .id(UUID.randomUUID())
                     .guarantor(guarantor)
                     .guaranteed(guaranteed)
                     .round(round)
@@ -112,14 +111,14 @@ public class UserGuaranteeService {
     }
 
     // delete a guarantee
-    public void deleteGuarantee(UUID roundId,String guarantorId, String guaranteedId){
+    public void deleteGuarantee(int roundId,String guarantorId, String guaranteedId){
         repository.deleteUserGuarantee(roundId,guarantorId,guaranteedId);
     }
 
     // cancel guarantee
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void cancelGuarantee(String roundId,String guarantorId, String guaranteedId){
-        Round round = roundService.findRoundById(roundId);
+        Round round = roundService.findRoundByExId(roundId);
 
         if(round.isPaid()){
             throw new AccessDeniedException("You're not allowed");

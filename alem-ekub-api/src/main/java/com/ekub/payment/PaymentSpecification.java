@@ -38,7 +38,7 @@ public class PaymentSpecification {
         }));
     }
 
-    //search payment by name  username
+    //search payment by  username
     public static Specification<Payment> search(String name){
         return ((root, query, criteriaBuilder) -> {
             if(name == null || name.isEmpty()){

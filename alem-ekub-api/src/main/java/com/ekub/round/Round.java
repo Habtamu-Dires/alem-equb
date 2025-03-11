@@ -21,7 +21,13 @@ import java.util.UUID;
 public class Round {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(unique = true,updatable = false, nullable = false)
+    @Builder.Default
+    private UUID externalId = UUID.randomUUID();
+
     private Integer roundNumber;
     private Integer version;
     private BigDecimal totalAmount;

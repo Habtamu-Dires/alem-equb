@@ -11,12 +11,12 @@
         <p *ngIf="!isNewEkub">የሚወጣበት ቀን እና ሰዓት: {{transformDateTime(ekub?.nextDrawDateTime)}}</p>
         <p *ngIf="isNewEkub">የሚጀምርበት ቀን እና ሰዓት: {{transformDateTime(ekub?.nextDrawDateTime)}}</p>
         <div class="flex justify-evenly gap-4 p-2">
-            <button class="bg-grn text-white rounded-md px-4 py-2 hover:bg-green-400" 
+            <button class="bg-grn text-white rounded-md px-4 py-2 hover:bg-green-600" 
                 (click)="ekub && showDetails(ekub)">
                 details
             </button>
             <button *ngIf="isNewEkub"
-                class="bg-grn text-white rounded-md px-4 py-2 hover:bg-green-300" 
+                class="bg-grn text-white rounded-md px-4 py-2 hover:bg-green-600" 
                 (click)="joinEkub(ekub?.id)">
                 join
             </button>

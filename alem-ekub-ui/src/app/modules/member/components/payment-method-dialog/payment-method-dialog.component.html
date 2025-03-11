@@ -1,5 +1,5 @@
 <main class="flex flex-col justify-center items-center p-4 gap-3 shadow-xl 
-      font-mono bg-grn/40 rounded-lg">
+      font-mono bg-white rounded-lg">
   <h2 class="text-lg font-semibold">Payment Confirmation</h2>
   <div class="flex flex-col gap-2">
     <div class="grid grid-cols-6 text-md space-x-6">
@@ -12,11 +12,11 @@
     </div>
   </div>
   <section class="w-full flex flex-col">
-    <input [(ngModel)]="phoneNumber" class="form-input" type="text" placeholder="PhoneNumber"/>
+    <input [(ngModel)]="phoneNumber" class="form-input border-2" type="text" placeholder="PhoneNumber"/>
     <p *ngIf="showPNErr" class="text-sm text-red-400">invalid PhoneNumber</p>
   </section>
   <div class="w-full">
-    <input [(ngModel)]="remark" class="form-input" type="text" placeholder="remark"/>
+    <input [(ngModel)]="remark" class="form-input border-2" type="text" placeholder="remark"/>
     <p *ngIf="showRemarkrErr" class="text-sm text-red-400">enter remark</p>
   </div>
   <section class="flex flex-col gap-2 w-full">
@@ -40,7 +40,7 @@
   
   <div class="flex justify-evenly w-full">
     <button 
-      class="px-4 py-2 rounded-lg bg-green-200 hover:bg-green-700"
+      class="px-4 py-2 rounded-lg text-white bg-grn hover:bg-green-700"
       (click)="submit()">
       Pay
     </button>

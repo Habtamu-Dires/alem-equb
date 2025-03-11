@@ -26,7 +26,12 @@ import java.util.List;
 public class User  {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false,updatable = false,unique = true)
+    private String externalId;
+
     @Column(unique = true)
     private String username;
     private Integer nationalId;

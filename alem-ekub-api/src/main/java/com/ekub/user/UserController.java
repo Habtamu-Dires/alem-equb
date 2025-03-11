@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok( service.updateUser(request));
     }
 
-    // list page of users
+    // get page of users
     @GetMapping
     public ResponseEntity<PageResponse<UserResponse>> getPageOfUsers(
             @RequestParam(value = "page",defaultValue = "0", required = false) int page,
@@ -53,7 +53,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(
             @PathVariable("user-id") String userId
     ){
-        return ResponseEntity.ok(service.getUserById(userId));
+        return ResponseEntity.ok(service.getUserByExId(userId));
     }
 
     // delete user

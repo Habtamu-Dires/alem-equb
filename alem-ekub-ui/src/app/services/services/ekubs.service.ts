@@ -19,6 +19,8 @@ import { EkubResponse } from '../models/ekub-response';
 import { EkubStatusResponse } from '../models/ekub-status-response';
 import { getEkubById } from '../fn/ekubs/get-ekub-by-id';
 import { GetEkubById$Params } from '../fn/ekubs/get-ekub-by-id';
+import { getEkubsOfUser } from '../fn/ekubs/get-ekubs-of-user';
+import { GetEkubsOfUser$Params } from '../fn/ekubs/get-ekubs-of-user';
 import { getEkubStatus } from '../fn/ekubs/get-ekub-status';
 import { GetEkubStatus$Params } from '../fn/ekubs/get-ekub-status';
 import { getInvitedEkubsYetToJoin } from '../fn/ekubs/get-invited-ekubs-yet-to-join';
@@ -235,6 +237,31 @@ export class EkubsService extends BaseService {
    */
   getInvitedEkubsYetToJoin(params?: GetInvitedEkubsYetToJoin$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
     return this.getInvitedEkubsYetToJoin$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getEkubsOfUser()` */
+  static readonly GetEkubsOfUserPath = '/ekubs/equbs/{user-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getEkubsOfUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEkubsOfUser$Response(params: GetEkubsOfUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EkubResponse>>> {
+    return getEkubsOfUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getEkubsOfUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEkubsOfUser(params: GetEkubsOfUser$Params, context?: HttpContext): Observable<Array<EkubResponse>> {
+    return this.getEkubsOfUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<EkubResponse>>): Array<EkubResponse> => r.body)
     );
   }

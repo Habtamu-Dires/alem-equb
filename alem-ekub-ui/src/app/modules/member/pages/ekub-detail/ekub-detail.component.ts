@@ -2,7 +2,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EkubsService, EkubUsersService, RoundsService, UserGuaranteesService } from '../../../../services/services';
-import { BooleanResponse, EkubResponse, EkubStatusResponse, MemberDetailResponse, RoundResponse, UserResponse } from '../../../../services/models';
+import { BooleanResponse, EkubResponse, EkubStatusResponse, LastRoundResponse, MemberDetailResponse, RoundResponse, UserResponse } from '../../../../services/models';
 import { HeaderComponent } from "../../components/header/header.component";
 import { CommonModule, DatePipe } from '@angular/common';
 import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
@@ -24,7 +24,7 @@ export class EkubDetailComponent implements OnInit {
   onMobileView:boolean = true;
   ekub:EkubResponse | undefined;
   lastRoundNo:number = 0;
-  lastRound:RoundResponse | undefined;
+  lastRound:LastRoundResponse | undefined;
   loggedUserId:string | undefined;
   isAllowedToBeGuarantor:boolean = false;
   ekubStatus:EkubStatusResponse | undefined;
@@ -67,7 +67,7 @@ export class EkubDetailComponent implements OnInit {
         this.fetchEkubStatus(ekub.id,ekub.version);
         this.fetchMembersDetail(ekub.id, ekub.version);
         if(ekub.version){
-          this.fetcLasthRound(ekub.id,ekub.version);
+          this.fetchLastRound(ekub.id,ekub.version);
           this.fetchIsAllowedToGuarantor(ekub.id,ekub.version );
         }
       }
@@ -97,8 +97,6 @@ export class EkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.membersDetailList = res;
-        console.log("The version: ", version);
-        console.log("memers detail" , res);
       },
       error:(err)=>{
         console.log(err);
@@ -107,8 +105,8 @@ export class EkubDetailComponent implements OnInit {
   }
 
   //fetch round by ekubId and round no
-  fetcLasthRound(ekubId:string,version:number){
-    this.roundsService.getRoundByEkubAndRoundNo({
+  fetchLastRound(ekubId:string,version:number){
+    this.roundsService.getLastRound({
       'ekub-id': ekubId,
       'version': version,
       'round-no': this.lastRoundNo
@@ -130,7 +128,6 @@ export class EkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:BooleanResponse)=>{
         this.isAllowedToBeGuarantor = res.result as boolean;
-        console.log(this.isAllowedToBeGuarantor , " allowed to be guarantor ")
       },
       error:(err)=>{
         console.log(err);
@@ -143,8 +140,9 @@ export class EkubDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
           width: '400px',
           data:{
-            message:'Are you sure you wants to guarantee user',
-            buttonName: 'guarantee'
+            message:'you wants to guarantee user',
+            buttonName: 'guarantee',
+            isWarning: false
           }
     });
     dialogRef.afterClosed().subscribe(result =>{
@@ -176,7 +174,7 @@ export class EkubDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message: 'leave this equb',
+        message: 'You want toleave this equb',
         buttonName: 'Leave'
       }
     });

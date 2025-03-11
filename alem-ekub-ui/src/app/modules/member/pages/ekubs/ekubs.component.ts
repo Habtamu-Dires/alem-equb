@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from '../../../../services/keycloak/keycloak.service';
 import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { EkubComponent } from "../../components/ekub/ekub.component";
-import { EkubUsersService } from '../../../../services/services';
+import { EkubsService, EkubUsersService } from '../../../../services/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -23,7 +23,7 @@ export class EkubsComponent implements OnInit{
   loggedUser:UserProfile | undefined;
 
   constructor(
-    private ekubUserService:EkubUsersService,
+    private ekubsService:EkubsService,
     private toastrService: ToastrService,
     private keycloakService:KeycloakService,
     private router:Router,
@@ -40,7 +40,7 @@ export class EkubsComponent implements OnInit{
 
   // fetch users ekbu
   fetchUserEkubs(userId:string){
-    this.ekubUserService.getEkubsOfUser({
+    this.ekubsService.getEkubsOfUser({
       'user-id': userId
     }).subscribe({
       next:(res:EkubResponse[])=>{

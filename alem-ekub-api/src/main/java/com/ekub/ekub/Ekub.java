@@ -5,11 +5,9 @@ import com.ekub.ekub_users.EkubUser;
 import com.ekub.round.Round;
 import com.ekub.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,7 +25,11 @@ import java.util.UUID;
 public class Ekub extends BaseEntity {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(nullable = false,updatable = false,unique = true)
+    @Builder.Default
+    private UUID externalId = UUID.randomUUID();
     @Column(unique = true)
     private String name;
     private Integer version;
@@ -44,8 +46,6 @@ public class Ekub extends BaseEntity {
     private boolean archived = false;
     @Column(insertable = false)
     private LocalDateTime lastDrawDateTime;
-    private Integer mpesaAccountNumber;
-    private Integer telebirrAccountNumber;
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -55,7 +55,6 @@ public class Ekub extends BaseEntity {
     @OneToMany(mappedBy = "ekub", cascade = {CascadeType.REMOVE,CascadeType.DETACH})
     private List<EkubUser> ekubUsers;
 
-
     @ManyToMany(mappedBy = "invitedEkubs")
     private List<User> invitedUsers = new ArrayList<>();
 
@@ -63,5 +62,11 @@ public class Ekub extends BaseEntity {
     public void addInvitedUser(User user){
         this.invitedUsers.add(user);
         user.getInvitedEkubs().add(this);
+    }
+
+    // remove invited ekub
+    public void removeInvitedUser(User user){
+        this.invitedUsers.remove(user);
+        user.removeInvitedEkub(this);
     }
 }

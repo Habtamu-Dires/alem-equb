@@ -280,8 +280,9 @@ export class ManageUserComponent implements OnInit{
        const dialog = this.matDialog.open(ConfirmationDialogComponent,{
         width: '400px',
         data:{
-          message:'Are you sure you wants to exit user from ekub',
-          buttonName: 'exit'
+          message:'Are you sure you wants to withdraw user from ekub',
+          buttonName: 'remove',
+          isWarning: true
         }
        });
            

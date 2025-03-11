@@ -59,6 +59,14 @@ public class EkubController {
         return ResponseEntity.ok(service.getEkubById(ekubId));
     }
 
+    // get list of equbs of a user
+    @GetMapping("/equbs/{user-id}")
+    public ResponseEntity<List<EkubResponse>> getEkubsOfUser(
+            @PathVariable("user-id") String userId
+    ){
+        return ResponseEntity.ok(service.getEkubsOfUser(userId));
+    }
+
 
     // delete ekub id
     @DeleteMapping("/{ekub-id}")

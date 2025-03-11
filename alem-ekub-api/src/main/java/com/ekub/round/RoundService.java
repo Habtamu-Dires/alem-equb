@@ -27,7 +27,6 @@ public class RoundService {
         LocalDateTime endDateTime = ekub.getNextDrawDateTime();
         return roundRepository.save(
                 Round.builder()
-                    .id(UUID.randomUUID())
                     .ekub(ekub)
                     .version(ekub.getVersion())
                     .roundNumber(ekub.getRoundNumber()+1)
@@ -40,21 +39,20 @@ public class RoundService {
         );
     }
 
-    // get round by id
-    public Round findRoundById(String roundId){
-        return roundRepository.findById(UUID.fromString(roundId))
+    // find round by id
+    public Round findRoundByExId(String roundId){
+        return roundRepository.findByExternalId(UUID.fromString(roundId))
                 .orElseThrow(() -> new EntityNotFoundException("Round not Found"));
     }
 
-    // get round list by ekbu
-    public List<Round> getRoundsByEkub(UUID ekubId, int version){
-        return roundRepository.findByEkub(ekubId,version);
+    public Round findRoundById(int roundId){
+        return roundRepository.findById(roundId)
+                .orElseThrow(() -> new EntityNotFoundException("Round not Found"));
     }
-
 
     // get round response by ekub
     public List<RoundResponse> getRoundResByEkub(String ekubId, int version) {
-        return this.getRoundsByEkub(UUID.fromString(ekubId),version)
+        return roundRepository.findByEkub(UUID.fromString(ekubId),version)
                 .stream()
                 .sorted(Comparator.comparing(Round::getRoundNumber))
                 .map(mapper::toRoundResponse)
@@ -62,20 +60,28 @@ public class RoundService {
     }
 
     // get round by ekub id and round number
-    public Round findRoundByEkubAndRoundNo(UUID ekubId, int version, int roundNumber) {
+    public Round findRoundByEkubAndRoundNo(int ekubId, int version, int roundNumber) {
         return roundRepository.findByEkubAndRoundNo(ekubId,version,roundNumber)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Round with Ekub id %s and round number %s not found",ekubId,roundNumber
-                        ))
+                .orElseThrow(() -> new EntityNotFoundException(
+                    String.format(
+                     "Round with Ekub id %s and round number %s not found",ekubId,roundNumber
+                    ))
                 );
     }
 
     // get round response by ekubId, version and round-no
-    public RoundResponse getRoundByEkubAndRoundNo(String ekubId, int version, int roundNo) {
-            return mapper.toRoundResponse(
-                    findRoundByEkubAndRoundNo(UUID.fromString(ekubId),version,roundNo)
-            );
+    public LastRoundResponse getLastRound(String ekubId, int version, int roundNo) {
+        return roundRepository.findLastRound(UUID.fromString(ekubId),version,roundNo)
+                .orElse(null);
+    }
 
+    //get current round of ekub
+    public Round getEkubCurrentRound(Ekub ekub){
+        return findRoundByEkubAndRoundNo(
+                ekub.getId(),
+                ekub.getVersion(),
+                ekub.getRoundNumber()
+        );
     }
 
     // save round

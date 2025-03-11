@@ -36,21 +36,23 @@ public class UserSpecification {
 
     // search user not in ekub or invited
     public static Specification<User> searchUsersNotInEkubOrInvited(
-            String text, UUID ekubId)
-    {
+            String text,
+            UUID ekubId
+    ) {
         return ((root, query, criteriaBuilder) -> {
+
             // subquery1 : user already invited (invited_ekubs)
             Subquery<User> invitedSubquery = query.subquery(User.class);
             Root<User> invitedRoot = invitedSubquery.from(User.class);
             Join<User, Ekub> invitedEkubsJoin = invitedRoot.join("invitedEkubs");
             invitedSubquery.select(invitedRoot)
-                    .where(criteriaBuilder.equal(invitedEkubsJoin.get("id"),ekubId));
+                    .where(criteriaBuilder.equal(invitedEkubsJoin.get("externalId"),ekubId));
 
             // subquery2: user already member
             Subquery<User> memberSubquery = query.subquery(User.class);
             Root<EkubUser> memberRoot = memberSubquery.from(EkubUser.class);
             memberSubquery.select(memberRoot.get("user"))
-                    .where(criteriaBuilder.equal(memberRoot.get("ekub").get("id"),ekubId));
+                    .where(criteriaBuilder.equal(memberRoot.get("ekub").get("externalId"),ekubId));
 
             //Main query conditon
             return criteriaBuilder.and(

@@ -5,12 +5,14 @@
         [onMobileView]="onMobileView">
     </app-header>
     <section class="flex justify-evenly gap-8">
-        <p class="px-4 py-2 rounded-lg cursor-pointer" (click)="selectCategory('public')"
-           [ngClass]="{'bg-grn': selectedCategory === 'public'}">
+        <p class="px-4 py-2 rounded-lg cursor-pointer text-white" (click)="selectCategory('public')"
+           [ngClass]="{'bg-grn': selectedCategory === 'public' ,
+              'bg-gray-400': selectedCategory !== 'public'}">
             Public
         </p>
-        <p class="px-4 py-2 rounded-lg cursor-pointer" (click)="selectCategory('invited')"
-           [ngClass]="{'bg-grn': selectedCategory === 'invited'}">
+        <p class="px-4 py-2 rounded-lg cursor-pointer text-white" (click)="selectCategory('invited')"
+           [ngClass]="{'bg-grn': selectedCategory === 'invited',
+             'bg-gray-400': selectedCategory !== 'invited'}">
             Invited
         </p>
     </section>

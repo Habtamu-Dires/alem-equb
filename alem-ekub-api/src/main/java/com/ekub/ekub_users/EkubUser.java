@@ -4,10 +4,7 @@ import com.ekub.common.BaseEntity;
 import com.ekub.ekub.Ekub;
 import com.ekub.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
@@ -22,7 +19,12 @@ import java.util.UUID;
 public class EkubUser extends BaseEntity {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(unique = true, updatable = false, nullable = false)
+    @Builder.Default
+    private UUID externalId = UUID.randomUUID();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

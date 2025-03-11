@@ -6,16 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface UserGuaranteeRepository extends JpaRepository<UserGuarantee, UUID> {
+public interface UserGuaranteeRepository extends JpaRepository<UserGuarantee, Integer> {
+
+
+    @Query("SELECT ug FROM UserGuarantee ug WHERE ug.externalId = :externalId")
+    Optional<UserGuarantee> findByExternalId(UUID externalId);
 
     @Query("""       
             SELECT COUNT(*) > 0 FROM UserGuarantee ug
-            WHERE ug.round.ekub.id = :ekubId
+            WHERE ug.round.ekub.externalId = :ekubId
             AND ug.round.version = :version
-            AND (ug.guarantor.id = :userId 
-                OR ug.guaranteed.id = :userId ) 
+            AND (ug.guarantor.externalId = :userId
+                OR ug.guaranteed.externalId = :userId)
             """)
     boolean isGuarantorOrGuaranteed(String userId, UUID ekubId, int version);
 
@@ -24,20 +29,22 @@ public interface UserGuaranteeRepository extends JpaRepository<UserGuarantee, UU
     @Query("""
             DELETE FROM UserGuarantee ug
             WHERE ug.round.id = :roundId
-            AND ug.guarantor.id = :guarantorId
-            AND ug.guaranteed.id = :guaranteedId
+            AND ug.guarantor.externalId = :guarantorId
+            AND ug.guaranteed.externalId = :guaranteedId
             """)
-    void deleteUserGuarantee(UUID roundId, String guarantorId, String guaranteedId);
+    void deleteUserGuarantee(int roundId, String guarantorId, String guaranteedId);
 
     @Query("""
             SELECT new com.ekub.user_guarantee.UserGuaranteeResponse(
-                ug.guarantor.id,
-                ug.guarantor.username,
-                ug.guaranteed.id,
-                ug.guaranteed.username
+                guarantor.externalId,
+                guarantor.username,
+                guaranteed.externalId,
+                guaranteed.username
             ) 
             FROM UserGuarantee ug
-            WHERE ug.round.id = :roundId
+            JOIN ug.guarantor guarantor
+            JOIN ug.guaranteed guaranteed
+            WHERE ug.round.externalId = :roundId
             """)
     List<UserGuaranteeResponse> findByRound(UUID roundId);
 }

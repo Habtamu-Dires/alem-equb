@@ -26,7 +26,6 @@ export class PaymentComponent {
   onMobileView:boolean= true;
   loggedUser:UserProfile | undefined;
   pendingPayments:UserPendingPaymentResponse[] = [];
-  user:UserResponse | undefined;
 
   constructor(
     private keycloakService:KeycloakService,
@@ -35,16 +34,15 @@ export class PaymentComponent {
     private router:Router,
     private datePipe:DatePipe,
     private dialog:MatDialog,
-    private usersService:UsersService,
     private toastrService:ToastrService
   ) {}
 
   ngOnInit(): void {
     this.checkScreenSzie(window.innerWidth);
     this.loggedUser = this.keycloakService.profile;
+    console.log("phone number ", this.loggedUser?.phoneNumber);
     if(this.loggedUser?.id){
       this.fetchUserPendingPayments(this.loggedUser.id);
-      this.fetchUserById(this.loggedUser.id);
     }
   }
 
@@ -57,20 +55,6 @@ export class PaymentComponent {
         this.pendingPayments = res as UserPendingPaymentResponse[];
       },
       error:(err:HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
-  }
-
-  // fetch user  ---> this could be optimized / removed
-  fetchUserById(userId:string){
-    this.usersService.getUserById({
-      'user-id':userId
-    }).subscribe({
-      next:(res)=>{
-        this.user = res;
-      },
-      error:(err)=>{
         console.log(err);
       }
     })
@@ -101,7 +85,7 @@ export class PaymentComponent {
     const dialogRef = this.dialog.open(PaymentMethodDialogComponent,{
       width: '400px',
       data: {
-        phoneNumber:this.user?.phoneNumber,
+        phoneNumber:this.loggedUser?.phoneNumber,
         username: username,
         totalAmount: pendingPayment.totalAmount
       }

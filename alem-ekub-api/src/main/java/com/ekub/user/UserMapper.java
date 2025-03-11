@@ -11,7 +11,7 @@ public class UserMapper {
 
     public  UserResponse toUserResponse(User user){
         return UserResponse.builder()
-                .id(user.getId())
+                .id(user.getExternalId())
                 .username(user.getUsername())
                 .firstname(user.getFirstName())
                 .lastname(user.getLastName())
@@ -38,7 +38,7 @@ public class UserMapper {
     public List<String> getEkubIds(User user){
         return user.getEkubUsers().stream()
                 .sorted(Comparator.comparing(EkubUser::getCreatedDate))
-                .map(ekubUser -> ekubUser.getEkub().getId().toString())
+                .map(ekubUser -> ekubUser.getEkub().getExternalId().toString())
                 .toList();
     }
 }

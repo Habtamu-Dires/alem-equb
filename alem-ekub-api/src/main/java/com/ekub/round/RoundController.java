@@ -26,12 +26,12 @@ public class RoundController {
 
     //get round by ekubId, version and number
     @GetMapping("/{ekub-id}/{version}/{round-no}")
-    public ResponseEntity<RoundResponse> getRoundByEkubAndRoundNo(
+    public ResponseEntity<LastRoundResponse> getLastRound(
             @PathVariable("ekub-id") String ekubId,
             @PathVariable("version") int version,
             @PathVariable("round-no") int roundNo
     ){
-        return ResponseEntity.ok(service.getRoundByEkubAndRoundNo(ekubId,version,roundNo));
+        return ResponseEntity.ok(service.getLastRound(ekubId,version,roundNo));
     }
 
     // get user pending payments

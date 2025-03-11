@@ -7,15 +7,17 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 public record PaymentResponse(
-        String id,
-        String type,
-        UserResponse user,
-        UserResponse toUser,
+        UUID id,
+        PaymentType type,
+        String username,
+        String toUsername,
         String ekubName,
-        RoundResponse round,
+        Integer roundNumber,
+        Integer roundVersion,
         BigDecimal amount,
         String paymentMethod,
         String remark,

@@ -109,8 +109,9 @@ export class EkubComponent implements OnInit {
     const dialog = this.matDialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message:'Are you sure you wants to delete',
-        buttonName: 'delete'
+        message:'you wants to delete this ekub',
+        buttonName: 'delete',
+        isWarning: true
       }
     });
 
@@ -157,6 +158,7 @@ export class EkubComponent implements OnInit {
       'ekub-name': text
     }).subscribe({
       next:(res:EkubResponse[])=>{
+        
         this.ekubList = res;
         this.isEmptyPage = true;
       },

@@ -2,28 +2,25 @@ package com.ekub.ekub_users;
 
 import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubMapper;
-import com.ekub.ekub.EkubResponse;
 import com.ekub.ekub.EkubService;
 import com.ekub.round.RoundRepository;
-import com.ekub.round.RoundService;
 import com.ekub.user.User;
-import com.ekub.user.UserMapper;
-import com.ekub.user.UserResponse;
 import com.ekub.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EkubUserService {
 
     private final EkubUserRepository repository;
@@ -35,11 +32,10 @@ public class EkubUserService {
     // create ekub user
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void createEkubUser(String ekubId, String userId){
-        Ekub ekub = ekubService.findEkubById(ekubId);
-        User user = userService.findUserById(userId);
+        Ekub ekub = ekubService.findEkubByExternalId(ekubId);
+        User user = userService.findUserByExId(userId);
         repository.save(
                 EkubUser.builder()
-                        .id(UUID.randomUUID())
                         .ekub(ekub)
                         .user(user)
                         .build()
@@ -67,16 +63,8 @@ public class EkubUserService {
 
 
     // get ekub draw participants
-    public List<User> findDrawParticipants(UUID ekubId, int version){
+    public List<User> findDrawParticipants(int ekubId, int version){
         return repository.findDrawParticipants(ekubId,version);
-    }
-
-    // get list of ekubs for a user
-    public List<EkubResponse> getEkubsOfUser(String userId){
-        return repository.findEkubsByUserId(userId)
-                .stream()
-                .map(ekubMapper::toEkubResponse)
-                .toList();
     }
 
 
@@ -84,8 +72,8 @@ public class EkubUserService {
     public void joinEkub(String ekubId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUserId = authentication.getName();
-        User user = userService.findUserById(loggedInUserId);
-        Ekub ekub = ekubService.findEkubById(ekubId);
+        User user = userService.findUserByExId(loggedInUserId);
+        Ekub ekub = ekubService.findEkubByExternalId(ekubId);
 
         if(ekub.isActive()){
             throw new AccessDeniedException("You Can't Join this Equb");
@@ -93,7 +81,6 @@ public class EkubUserService {
 
         repository.save(
                 EkubUser.builder()
-                        .id(UUID.randomUUID())
                         .ekub(ekub)
                         .user(user)
                         .build()
@@ -104,7 +91,7 @@ public class EkubUserService {
     public void leaveEkub(String ekubId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUserId = authentication.getName();
-        Ekub ekub = ekubService.findEkubById(ekubId);
+        Ekub ekub = ekubService.findEkubByExternalId(ekubId);
 
         if(ekub.isActive()){
             throw new AccessDeniedException("You Can't leave active equb");
@@ -114,7 +101,7 @@ public class EkubUserService {
             throw new AccessDeniedException("You have pending payments please pay them");
         }
 
-        deleteEkubUser(ekub.getId(),loggedInUserId);
+        deleteEkubUser(ekub.getExternalId(),loggedInUserId);
     }
 
     // is member of ekub
@@ -129,24 +116,6 @@ public class EkubUserService {
 
     // finding member detail
     public List<MemberDetailResponse> getMemberDetail(String ekubId, int version){
-        List<MemberDetailResponse> responseList = new ArrayList<>();
-        repository.findMemberDetailDTO(UUID.fromString(ekubId), version)
-            .forEach(dto -> {
-                responseList.add(
-                     MemberDetailResponse.builder()
-                         .userId(dto.userId())
-                         .username(dto.username())
-                         .fullName(dto.firstName() + " " + dto.lastName())
-                         .winRoundId(dto.roundId())
-                         .version(dto.version())
-                         .roundNumber(dto.roundNumber())
-                         .isPaid(dto.isPaid())
-                         .guarantor(dto.userGuarantee() != null
-                                 ? dto.userGuarantee().getGuarantor().getUsername()
-                                 : null)
-                         .build()
-                );
-            });
-        return responseList;
+        return repository.findMemberDetail(UUID.fromString(ekubId), version);
     }
 }

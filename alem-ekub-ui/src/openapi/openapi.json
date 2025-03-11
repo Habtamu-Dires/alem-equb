@@ -931,7 +931,7 @@
                 "tags": [
                     "rounds"
                 ],
-                "operationId": "getRoundByEkubAndRoundNo",
+                "operationId": "getLastRound",
                 "parameters": [
                     {
                         "name": "ekub-id",
@@ -966,7 +966,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/RoundResponse"
+                                    "$ref": "#/components/schemas/LastRoundResponse"
                                 }
                             }
                         }
@@ -1276,6 +1276,39 @@
                 }
             }
         },
+        "/ekubs/equbs/{user-id}": {
+            "get": {
+                "tags": [
+                    "ekubs"
+                ],
+                "operationId": "getEkubsOfUser",
+                "parameters": [
+                    {
+                        "name": "user-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EkubResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/ekubs/ekub-status/{ekub-id}/{version}": {
             "get": {
                 "tags": [
@@ -1349,39 +1382,6 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/MemberDetailResponse"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ekub-users/equbs/{user-id}": {
-            "get": {
-                "tags": [
-                    "ekub-users"
-                ],
-                "operationId": "getEkubsOfUser",
-                "parameters": [
-                    {
-                        "name": "user-id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/EkubResponse"
                                     }
                                 }
                             }
@@ -1552,14 +1552,6 @@
                     },
                     "isArchived": {
                         "type": "boolean"
-                    },
-                    "mpesaAccountNumber": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "telebirrAccountNumber": {
-                        "type": "integer",
-                        "format": "int32"
                     }
                 },
                 "required": [
@@ -1775,6 +1767,32 @@
                     }
                 }
             },
+            "LastRoundResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "roundNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "winnerId": {
+                        "type": "string"
+                    },
+                    "winnerUsername": {
+                        "type": "string"
+                    },
+                    "paid": {
+                        "type": "boolean"
+                    }
+                }
+            },
             "UserPendingPaymentResponse": {
                 "type": "object",
                 "properties": {
@@ -1852,22 +1870,32 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "uuid"
                     },
                     "type": {
+                        "type": "string",
+                        "enum": [
+                            "MEMBER_PAYMENT",
+                            "WINNING_PAYOUT"
+                        ]
+                    },
+                    "username": {
                         "type": "string"
                     },
-                    "user": {
-                        "$ref": "#/components/schemas/UserResponse"
-                    },
-                    "toUser": {
-                        "$ref": "#/components/schemas/UserResponse"
+                    "toUsername": {
+                        "type": "string"
                     },
                     "ekubName": {
                         "type": "string"
                     },
-                    "round": {
-                        "$ref": "#/components/schemas/RoundResponse"
+                    "roundNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "roundVersion": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "amount": {
                         "type": "number"
@@ -1959,14 +1987,6 @@
                     "startDateTime": {
                         "type": "string",
                         "format": "date-time"
-                    },
-                    "mpesaAccountNumber": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "telebirrAccountNumber": {
-                        "type": "integer",
-                        "format": "int32"
                     }
                 }
             },

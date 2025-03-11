@@ -38,8 +38,5 @@ public record EkubRequest(
         LocalDateTime startDateTime,
         boolean isActive,
         boolean isExclusive,
-        boolean isArchived,
-
-        Integer mpesaAccountNumber,
-        Integer telebirrAccountNumber
+        boolean isArchived
 ) {}

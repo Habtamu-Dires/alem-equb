@@ -1,16 +1,31 @@
 server:
   port: 8088
+  tomcat:
+    max-connections: 10000
+    accept-count: 10000
+#    threads:
+#      max: 10
 spring:
   application:
     name: alem-ekub-api
+  threads:
+    virtual:
+      enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/alem_ekub_db
     username: hab
     password: password
     driver-class-name: org.postgresql.Driver
+#    hikari:
+#      maximum-pool-size: 5
+#      minimum-idle: 2
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   security:

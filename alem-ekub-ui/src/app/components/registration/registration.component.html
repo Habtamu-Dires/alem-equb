@@ -62,9 +62,9 @@
             <label class="form-label">
                 <p>Profile Picture</p>
             </label>
-            <div class="w-full flex items-center col-span-12 md:col-span-10 ">
+            <div class="flex items-center col-span-12 md:col-span-10 ">
                 <input 
-                    class="w-full p-2 rounded-lg text-lg outline-none"
+                    class="p-2 rounded-lg text-lg outline-none cursor-pointer"
                     type="file" 
                     (change)="onFileSelected($event,'profilePic')"
                     accept="image/*"
@@ -77,9 +77,9 @@
             <label class="form-label">
                 <p>Id Card Image</p>
             </label>
-            <div class="w-full flex items-center col-span-12 md:col-span-10 ">
+            <div class="flex items-center col-span-12 md:col-span-10 ">
                 <input 
-                    class="w-full p-2 rounded-lg text-lg outline-none"
+                    class="p-2 rounded-lg text-lg outline-none cursor-pointer"
                     type="file" 
                     (change)="onFileSelected($event,'idCardImg')"
                     accept="image/*"

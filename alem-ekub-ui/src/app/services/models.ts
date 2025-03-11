@@ -7,6 +7,7 @@ export type { EkubRequest } from './models/ekub-request';
 export type { EkubResponse } from './models/ekub-response';
 export type { EkubStatusResponse } from './models/ekub-status-response';
 export type { IdResponse } from './models/id-response';
+export type { LastRoundResponse } from './models/last-round-response';
 export type { MemberDetailResponse } from './models/member-detail-response';
 export type { PageResponseEkubResponse } from './models/page-response-ekub-response';
 export type { PageResponsePaymentResponse } from './models/page-response-payment-response';

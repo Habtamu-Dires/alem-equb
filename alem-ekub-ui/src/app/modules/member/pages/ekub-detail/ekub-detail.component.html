@@ -8,16 +8,16 @@
     <section class="flex flex-col justify-center items-center mt-[68px]">
         <!--last round winner-->
         <section  class="w-full flex p-4 text-lg font-semibold"
-                [ngClass]="{'justify-evenly':lastRound?.winner, 'justify-end': !lastRound?.winner}">
-            <div *ngIf="lastRound?.winner" class="flex flex-col gap-3">
+                [ngClass]="{'justify-evenly':lastRound?.winnerId, 'justify-end': !lastRound?.winnerId}">
+            <div *ngIf="lastRound?.winnerId" class="flex flex-col gap-3">
                 <div>
                     የዙር <span>{{lastRound?.roundNumber}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                    <span>{{lastRound?.winner?.username}}</span>
+                    <span>{{lastRound?.winnerUsername}}</span>
                 </div>
                 <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
                     <button (click)="guarantWinner(
                                     lastRound?.id ?? '',
-                                    lastRound?.winner?.id ?? '')" 
+                                    lastRound?.winnerId ?? '')" 
                         class="text-blue-400 hover:text-blue-600">
                             guarantee 
                     </button>

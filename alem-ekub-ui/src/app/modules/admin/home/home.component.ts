@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit{
 
   profile:UserProfile | undefined;
   isSideBarHidden:boolean = false;
-  activeComponent:string = 'Dashboard';
+  activeComponent:string = 'Ekubs';
 
   constructor(private keycloakService:KeycloakService,
     private router:Router

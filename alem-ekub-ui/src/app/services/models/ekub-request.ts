@@ -10,12 +10,10 @@ export interface EkubRequest {
   isActive?: boolean;
   isArchived?: boolean;
   isExclusive?: boolean;
-  mpesaAccountNumber?: number;
   name: string;
   nextDrawDateTime?: string;
   penaltyPercentPerDay: number;
   startDateTime?: string;
-  telebirrAccountNumber?: number;
   totalAmount?: number;
   type: string;
 }

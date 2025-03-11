@@ -24,7 +24,5 @@ public record EkubResponse(
         String description,
         LocalDateTime nextDrawDateTime,
         LocalDateTime lastDrawDateTime,
-        LocalDateTime startDateTime,
-        Integer mpesaAccountNumber,
-        Integer telebirrAccountNumber
+        LocalDateTime startDateTime
 ) {}

@@ -7,6 +7,7 @@ import com.ekub.round.Round;
 import com.ekub.round.RoundService;
 import com.ekub.user.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DrawEkubService {
 
     private final EkubService ekubService;
@@ -29,16 +31,16 @@ public class DrawEkubService {
         if(drawParticipants.isEmpty()){
             // no participant
             ekub.setActive(false);
-            System.out.println("no participant");
+            log.info("no participant");
             ekubService.save(ekub);
             return;
         }
 
         //select random winner from participants
-        int randVal = getRandomValue(drawParticipants.size());
-        User winner = drawParticipants.get(randVal);
+        int randIndex = getRandomValue(drawParticipants.size());
+        User winner = drawParticipants.get(randIndex);
         // update the current round
-        Round currentRound = ekubService.getCurrentRound(ekub);
+        Round currentRound = roundService.getEkubCurrentRound(ekub);
         currentRound.setWinner(winner);
         roundService.save(currentRound);
         //update last draw date
@@ -47,7 +49,7 @@ public class DrawEkubService {
         // if is last round
         if(drawParticipants.size() == 1) {
             // last round
-            System.out.println("The last round make ekub set to be inactive");
+            log.info("The last round , ekub deactivated");
             ekub.setActive(false);
             ekub.setNextDrawDateTime(null);
         } else { // else continue creating new round

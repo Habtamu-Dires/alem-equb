@@ -106,8 +106,9 @@ export class NewEkubsComponent implements OnInit{
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message: 'join ekub',
-        buttonName: 'Join'
+        message: 'You want to join this ekub',
+        buttonName: 'Join',
+        isWarning: false
       }
     });
     // dialog result

@@ -79,6 +79,12 @@ export class InvitationDialogComponent implements OnInit{
     })
   }
 
+  // clear ekub search
+  clearEkubSearch(){
+    this.userControl.setValue('');
+    this.users = [];
+  }
+
   // cancel
   cancel(){
     this.dialogRef.close();

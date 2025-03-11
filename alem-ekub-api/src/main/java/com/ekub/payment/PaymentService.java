@@ -31,16 +31,15 @@ public class PaymentService {
     // create payments
     @Transactional
     public void createPayment(PaymentRequest request){
-        User user = userService.findUserById(request.userId());
+        User user = userService.findUserByExId(request.userId());
         User toUser = null;
         if(request.toUserId() != null && !request.toUserId().isEmpty()){
-            toUser = userService.findUserById(request.toUserId());
+            toUser = userService.findUserByExId(request.toUserId());
         }
-        Round round = roundService.findRoundById(request.roundId());
+        Round round = roundService.findRoundByExId(request.roundId());
 
         paymentRepository.save(
             Payment.builder()
-                .id(UUID.randomUUID())
                 .type(request.type())
                 .user(user)
                 .toUser(toUser)
@@ -89,12 +88,9 @@ public class PaymentService {
     }
 
     //get User payments
-    public List<PaymentResponse> getUserPayments(String userId) {
-        List<Payment> userPayments = paymentRepository.findUserPayments(userId);
-        return userPayments.stream()
-                .sorted(Comparator.comparing(Payment::getCreatedDate).reversed())
-                .map(mapper::toPaymentResponse)
-                .toList();
+    public List<PaymentResponse> getUserPayments(String exId) {
+        User user = userService.findUserByExId(exId);
+        return  paymentRepository.findUserPayments(exId,user.getId());
     }
 
     //get user round payments

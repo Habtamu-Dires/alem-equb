@@ -98,8 +98,9 @@ export class UserComponent implements OnInit{
     const dialog = this.matDialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message:'Are you sure you wants to delete',
-        buttonName: 'Delete'
+        message:'you wants to delete this user',
+        buttonName: 'Delete',
+        isWarning: true
       }
     });
     

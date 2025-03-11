@@ -3,5 +3,6 @@ export interface UserProfile {
     username?:string,
     email?:string,
     firstName?:string,
-    lastName?:string
+    lastName?:string,
+    phoneNumber?:string,
 }

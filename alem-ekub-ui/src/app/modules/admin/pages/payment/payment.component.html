@@ -27,13 +27,13 @@
             <tbody>
               <tr *ngFor="let payment of paymentList"
                 class="border-b border-gray-300 hover:bg-gray-100">              
-                    <td class="table-data">{{payment.user?.username}}</td>
+                    <td class="table-data">{{payment.username}}</td>
                     <td class="table-data">{{payment.type}}</td>
-                    <td class="table-data">{{payment.toUser?.username}}</td>
+                    <td class="table-data">{{payment.toUsername}}</td>
                     <td class="table-data">{{payment.amount}}</td>
                     <td class="table-data">{{payment.ekubName}}</td>
-                    <td class="table-data">{{payment.round?.version}}</td>
-                    <td class="table-data">{{payment.round?.roundNumber}}</td>
+                    <td class="table-data">{{payment.roundVersion}}</td>
+                    <td class="table-data">{{payment.roundNumber}}</td>
                     <td class="table-data">{{formattedDateTime(payment.createdDate)}}</td>
                     <td class="table-data">{{payment.remark}}</td>
                     <td class="table-data">{{payment.paymentMethod}}</td>

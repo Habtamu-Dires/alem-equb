@@ -13,10 +13,11 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getEkubRounds } from '../fn/rounds/get-ekub-rounds';
 import { GetEkubRounds$Params } from '../fn/rounds/get-ekub-rounds';
-import { getRoundByEkubAndRoundNo } from '../fn/rounds/get-round-by-ekub-and-round-no';
-import { GetRoundByEkubAndRoundNo$Params } from '../fn/rounds/get-round-by-ekub-and-round-no';
+import { getLastRound } from '../fn/rounds/get-last-round';
+import { GetLastRound$Params } from '../fn/rounds/get-last-round';
 import { getUserPendingPayments } from '../fn/rounds/get-user-pending-payments';
 import { GetUserPendingPayments$Params } from '../fn/rounds/get-user-pending-payments';
+import { LastRoundResponse } from '../models/last-round-response';
 import { RoundResponse } from '../models/round-response';
 import { UserPendingPaymentResponse } from '../models/user-pending-payment-response';
 
@@ -51,28 +52,28 @@ export class RoundsService extends BaseService {
     );
   }
 
-  /** Path part for operation `getRoundByEkubAndRoundNo()` */
-  static readonly GetRoundByEkubAndRoundNoPath = '/rounds/{ekub-id}/{version}/{round-no}';
+  /** Path part for operation `getLastRound()` */
+  static readonly GetLastRoundPath = '/rounds/{ekub-id}/{version}/{round-no}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getRoundByEkubAndRoundNo()` instead.
+   * To access only the response body, use `getLastRound()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getRoundByEkubAndRoundNo$Response(params: GetRoundByEkubAndRoundNo$Params, context?: HttpContext): Observable<StrictHttpResponse<RoundResponse>> {
-    return getRoundByEkubAndRoundNo(this.http, this.rootUrl, params, context);
+  getLastRound$Response(params: GetLastRound$Params, context?: HttpContext): Observable<StrictHttpResponse<LastRoundResponse>> {
+    return getLastRound(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getRoundByEkubAndRoundNo$Response()` instead.
+   * To access the full response (for headers, for example), `getLastRound$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getRoundByEkubAndRoundNo(params: GetRoundByEkubAndRoundNo$Params, context?: HttpContext): Observable<RoundResponse> {
-    return this.getRoundByEkubAndRoundNo$Response(params, context).pipe(
-      map((r: StrictHttpResponse<RoundResponse>): RoundResponse => r.body)
+  getLastRound(params: GetLastRound$Params, context?: HttpContext): Observable<LastRoundResponse> {
+    return this.getLastRound$Response(params, context).pipe(
+      map((r: StrictHttpResponse<LastRoundResponse>): LastRoundResponse => r.body)
     );
   }
 

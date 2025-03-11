@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface EkubRepository extends JpaRepository<Ekub, UUID>, JpaSpecificationExecutor<Ekub> {
+public interface EkubRepository extends JpaRepository<Ekub, Integer>, JpaSpecificationExecutor<Ekub> {
+
+    @Query("SELECT e FROM Ekub e WHERE e.externalId = :externalId")
+    Optional<Ekub> findByExternalId(UUID externalId);
 
     @Query("SELECT e FROM Ekub e WHERE e.name =:name")
     Optional<Ekub> findByName(String name);
@@ -25,23 +28,19 @@ public interface EkubRepository extends JpaRepository<Ekub, UUID>, JpaSpecificat
             AND NOT EXISTS (
                 SELECT 1 FROM EkubUser eu
                 WHERE eu.ekub = e
-                AND eu.user.id = :userId
+                AND eu.user.externalId = :userId
             )
             """)
-    List<Ekub> findPublicEkub(String userId);
-
-    @Modifying
-    @Query(value = "DELETE FROM invitation WHERE ekub_id = :ekubId",nativeQuery = true)
-    void deleteInvitationsForEkub(@Param("ekubId") UUID ekubId);
+    List<Ekub> findPublicEkubsToJoin(String userId);
 
     @Query(value = """
             SELECT e FROM Ekub e
             WHERE e IN (
                 SELECT ie FROM User u JOIN u.invitedEkubs ie
-                WHERE u.id = :userId 
+                WHERE u.externalId = :userId 
             ) AND e NOT IN (
                 SELECT eu.ekub  FROM EkubUser eu 
-                WHERE eu.user.id = :userId
+                WHERE eu.user.externalId = :userId
             )
             """)
     List<Ekub> findInvitedEkubsYetToJoin(String userId);
@@ -53,8 +52,16 @@ public interface EkubRepository extends JpaRepository<Ekub, UUID>, JpaSpecificat
                 e.startDateTime
             )
             FROM Ekub e
-            WHERE e.id = :ekubId
+            WHERE e.externalId = :ekubId
             """)
     EkubStatusResponse findEkubStatus(UUID ekubId, int version);
+
+    @Query("""
+            SELECT e FROM Ekub e
+            JOIN FETCH e.ekubUsers eu
+            JOIN FETCH eu.user u  
+            WHERE u.externalId = :userId
+            """)
+    List<Ekub> findEkubsByUserId(String userId);
 
 }

@@ -50,11 +50,11 @@ export class ViewEkubDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loggedUser = this.keycloakService.profile;
     if (this.ekub?.id && this.ekub.version !== undefined) {
-        this.fetchEkubStatus(this.ekub.id,this.ekub.version);
-        this.fetchMembersDetail(this.ekub.id,this.ekub.version);
+        // this.fetchEkubStatus(this.ekub.id,this.ekub.version);
+        // this.fetchMembersDetail(this.ekub.id,this.ekub.version);
         if(this.ekub.version){
           this.fetchRoundsOfEkub(this.ekub.id, this.ekub.version);
-          this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
+          // this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
         }
         //fill the versions
         this.currentVersion = this.ekub.version;
@@ -99,6 +99,7 @@ export class ViewEkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.memberDetails = res;
+        console.log("the member detail length", res.length);
         console.log("The current version is " + this.currentVersion);
         console.log("the ekub version " + this.ekub?.version);
       },
@@ -113,7 +114,7 @@ export class ViewEkubDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message:'Are you sure you wants to guarantee user',
+        message:'you wants to guarantee user',
         buttonName: 'guarantee'
       }
     });
@@ -151,8 +152,9 @@ export class ViewEkubDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
-        message:'Are you sure to remove guarant from ' + round.winner?.username,
-        buttonName: 'continue'
+        message:'You want to remove guarant from ' + round.winner?.username,
+        buttonName: 'continue',
+        isWarning: true
       }
     });
     dialogRef.afterClosed().subscribe(result =>{
@@ -288,16 +290,30 @@ export class ViewEkubDetailComponent implements OnInit {
   }
 
   //cancel user invitation
-  cancelInvitation(userId:any){
-    this.usersService.cancelInvitation({
-      'ekub-id': this.ekub?.id as string,
-      'user-id': userId 
-    }).subscribe({
-      next:()=>{
-        this.fetchInvitedUsers(this.ekub?.id as string);
-      },
-      error:(err)=>{
-        console.log(err);
+  cancelInvitation(user:UserResponse){
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      width: '400px',
+      data:{
+        message:'You want to delete invitation ' + user?.username,
+        buttonName: 'yes',
+        isWarning: true
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result =>{
+      if(result && user.id){
+        this.usersService.cancelInvitation({
+          'ekub-id': this.ekub?.id as string,
+          'user-id': user.id 
+        }).subscribe({
+          next:()=>{
+            this.fetchInvitedUsers(this.ekub?.id as string);
+          },
+          error:(err)=>{
+            console.log(err);
+          }
+        })
       }
     })
   }

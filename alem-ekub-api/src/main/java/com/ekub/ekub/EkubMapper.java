@@ -9,7 +9,7 @@ public class EkubMapper {
 
     public EkubResponse toEkubResponse(Ekub ekub){
         return EkubResponse.builder()
-                .id(ekub.getId().toString())
+                .id(ekub.getExternalId().toString())
                 .isActive(ekub.isActive())
                 .isExclusive(ekub.isExclusive())
                 .name(ekub.getName())

@@ -30,4 +30,4 @@ export function getEkubsOfUser(http: HttpClient, rootUrl: string, params: GetEku
   );
 }
 
-getEkubsOfUser.PATH = '/ekub-users/equbs/{user-id}';
+getEkubsOfUser.PATH = '/ekubs/equbs/{user-id}';

@@ -24,7 +24,7 @@ import { NewEkubsComponent } from '../new-ekubs/new-ekubs.component';
 export class HomeComponent {
 
   loggedUser: UserProfile | undefined;
-  user:UserResponse | undefined;
+  // user:UserResponse | undefined;
   ekubs:EkubResponse[] = [];
   onMobileView:boolean = false;
   showDrawer:boolean = false;
@@ -43,7 +43,7 @@ export class HomeComponent {
     this.checkScreenSzie(window.innerWidth);
     this.loggedUser = this.keycloakService.profile;
     if(this.loggedUser?.id){
-      this.fetchUserById(this.loggedUser.id);
+      // this.fetchUserById(this.loggedUser.id);
     }
 
     //drawer status
@@ -53,19 +53,19 @@ export class HomeComponent {
   }
 
   //fetch users by id
-  fetchUserById(userId:string){
-    this.usersService.getUserById({
-      'user-id': userId
-    }).subscribe({
-      next:(res:UserResponse) => {
-        this.user = res;
-      },
-      error:(err) => {
-        console.log(err);
-        this.toastrService.error('Failed to fetch user info', 'Ooops');
-      }
-    })
-  }
+  // fetchUserById(userId:string){
+  //   this.usersService.getUserById({
+  //     'user-id': userId
+  //   }).subscribe({
+  //     next:(res:UserResponse) => {
+  //       this.user = res;
+  //     },
+  //     error:(err) => {
+  //       console.log(err);
+  //       this.toastrService.error('Failed to fetch user info', 'Ooops');
+  //     }
+  //   })
+  // }
 
 
   //show drawer service

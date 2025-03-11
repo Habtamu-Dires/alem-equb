@@ -62,7 +62,8 @@ export class ChangePasswordComponent implements OnInit {
           this.errMsgs = errMsg.validationErrors;
         } else{
           console.log(err);
-          this.toastrService.error(err.error.error, 'Ooops');
+          const msg = JSON.parse(err.error);
+          this.toastrService.error(msg.error, 'Ooops');
         }
       }
     })
@@ -78,7 +79,7 @@ export class ChangePasswordComponent implements OnInit {
     passwordFormControl(){
       this.passwordControl.valueChanges
       .pipe(
-        debounceTime(500)
+        debounceTime(1500)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4) {
@@ -103,7 +104,7 @@ export class ChangePasswordComponent implements OnInit {
     confirmPasswordControl(){
       this.confirmPassword.valueChanges
       .pipe(
-        debounceTime(500)
+        debounceTime(1500)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4){

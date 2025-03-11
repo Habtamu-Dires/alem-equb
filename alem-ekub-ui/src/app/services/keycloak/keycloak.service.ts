@@ -41,6 +41,12 @@ export class KeycloakService {
     if(authenticated){
       console.log('user authenticated');
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
+      const attributes = (((await this.keycloak.loadUserProfile()).attributes));
+      if(attributes){
+        const arr:string[] = attributes['phoneNumber'] as unknown as string[];
+        this._profile.phoneNumber = arr[0];
+      }
+  
       if(this.isAdminUser){
         this.router.navigate(['admin'])
       } else {

@@ -14,12 +14,13 @@ public class PaymentMapper {
 
     public PaymentResponse toPaymentResponse(Payment payment){
         return PaymentResponse.builder()
-                .id(payment.getId().toString())
-                .type(payment.getType().toString())
-                .user(userMapper.toUserResponse(payment.getUser()))
-                .toUser(payment.getToUser() != null ?
-                        userMapper.toUserResponse(payment.getToUser()) : null)
-                .round(roundMapper.toRoundResponse(payment.getRound()))
+                .id(payment.getExternalId())
+                .type(payment.getType())
+                .username(payment.getUser().getUsername())
+                .toUsername(payment.getToUser() != null ?
+                        payment.getToUser().getUsername() : null)
+                .roundNumber(payment.getRound().getRoundNumber())
+                .roundVersion(payment.getRound().getVersion())
                 .ekubName(payment.getRound().getEkub().getName())
                 .amount(payment.getAmount())
                 .paymentMethod(payment.getPaymentMethod())

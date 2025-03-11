@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { IdResponse, UserRequest } from '../../services/models';
+import { UserRequest } from '../../services/models';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -47,8 +47,8 @@ export class RegistrationComponent implements OnInit{
   
     ngOnInit(): void {
       // password form control
-      this.confirmPasswordControl();
       this.passwordFormControl();
+      this.confirmPasswordControl();
     }
   
     // create user
@@ -62,15 +62,6 @@ export class RegistrationComponent implements OnInit{
         }
       }).subscribe({
         next:()=>{
-          // //upload  profile picture
-          // if(this.selectedProfilePic) {
-          //   this.uploadProfilePic(res.id as string);
-          // } 
-          // // upload id card image
-          // if(this.selectedIdCardImage) {
-          //   this.uploadIdCardImg(res.id as string);
-          // }
-  
           this.toastrService.success('Successfull Registration ', 'Done!')
           setTimeout(()=>{
             this.keycloakService.login();
@@ -95,7 +86,7 @@ export class RegistrationComponent implements OnInit{
     passwordFormControl(){
       this.passwordControl.valueChanges
       .pipe(
-        debounceTime(1000)
+        debounceTime(1500)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4) {
@@ -122,7 +113,7 @@ export class RegistrationComponent implements OnInit{
     confirmPasswordControl(){
       this.confirmPassword.valueChanges
       .pipe(
-        debounceTime(1200)
+        debounceTime(1500)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4){
@@ -131,7 +122,7 @@ export class RegistrationComponent implements OnInit{
           } else{
             this.showPassConfError = false;
           }
-        }
+        } 
       })
     }
   

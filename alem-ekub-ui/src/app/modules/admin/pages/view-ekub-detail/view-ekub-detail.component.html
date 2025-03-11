@@ -13,7 +13,7 @@
     <section class="flex flex-col justify-center items-center overflow-auto">
         <!--last round winner-->
         <article *ngIf="lastRound > 0 
-                    && rounds[lastRound -1 ]
+                    && rounds[lastRound -1]
                     && rounds[lastRound -1].winner
                     && ekub?.version === currentVersion"  
                 class="w-full flex flex-col gap-2 justify-center items-center text-lg font-semibold">
@@ -176,7 +176,7 @@
             </section>
         </section>    
         <!--Member List-->
-        <section *ngIf="memberDetails.length > 0 && currentVersion === ekub?.version" 
+        <section *ngIf="memberDetails.length > 0 && currentVersion == ekub?.version" 
             class="w-full flex flex-col justify-center items-center">
             <div class="p-2 text-xl font-semibold">
                 <p class="underline">Members List</p>
@@ -237,8 +237,8 @@
                             <td class="table-data">{{user.username}}</td>
                             <td class="table-data">{{user.fullName}}</td>
                             <td class="table-data">
-                                <p (click)="cancelInvitation(user.id)" class="cursor-pointer">
-                                    X
+                                <p (click)="cancelInvitation(user)" class="cursor-pointer">
+                                    cancel
                                 </p>
                             </td>
                         </tr>

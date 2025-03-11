@@ -21,5 +21,4 @@ public record RoundResponse(
         List<UserGuaranteeResponse> userGuarantees ,
         LocalDateTime createdDate,
         LocalDateTime endDate
-) {
-}
+) {}

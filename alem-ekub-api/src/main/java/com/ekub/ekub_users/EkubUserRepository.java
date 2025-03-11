@@ -1,6 +1,5 @@
 package com.ekub.ekub_users;
 
-import com.ekub.ekub.Ekub;
 import com.ekub.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,21 +7,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
+public interface EkubUserRepository extends JpaRepository<EkubUser, Integer> {
 
 
     @Query("""
-            SELECT eu FROM EkubUser eu WHERE eu.ekub.id = :ekubId
-            AND eu.user.id = :userId
+            SELECT eu FROM EkubUser eu WHERE eu.ekub.externalId = :ekubId
+            AND eu.user.externalId = :userId
             """)
     Optional<EkubUser> findByEkubIdAndUserId(UUID ekubId, String userId);
-
-    @Query("""
-            SELECT eu.ekub FROM EkubUser eu 
-            WHERE eu.user.id = :userId
-            """)
-    List<Ekub> findEkubsByUserId(String userId);
-
 
     @Query("""
             SELECT eu.user
@@ -30,19 +22,19 @@ public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
             WHERE eu.ekub.id = :ekubId
             AND NOT EXISTS (
                 SELECT 1 FROM Round r
-                WHERE r.ekub.id = :ekubId 
+                WHERE r.ekub.id = :ekubId
                 AND r.version = :version
                 AND r.winner = eu.user
             )
             """)
-    List<User> findDrawParticipants(UUID ekubId, int version);
+    List<User> findDrawParticipants(int ekubId, int version);
 
     @Query(value = """
             SELECT CASE 
             WHEN ( EXISTS ( 
                 SELECT 1 FROM EkubUser eu
-                WHERE eu.user.id = :userId
-                AND eu.ekub.id = :ekubId
+                WHERE eu.user.externalId = :userId
+                AND eu.ekub.externalId = :ekubId
             )) THEN true
             ELSE false
             END  
@@ -53,13 +45,13 @@ public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
             SELECT CASE
                 WHEN (EXISTS (
                     SELECT 1 FROM EkubUser eu
-                    WHERE eu.user.id = :userId
-                    AND eu.ekub.id = :ekubId
+                    WHERE eu.user.externalId = :userId
+                    AND eu.ekub.externalId = :ekubId
                 ) AND NOT EXISTS (
                     SELECT 1 FROM Round r
-                    WHERE r.ekub.id = :ekubId
+                    WHERE r.ekub.externalId = :ekubId
                     AND r.version = :version
-                    AND r.winner.id = :userId
+                    AND r.winner.externalId = :userId
                 )) THEN true
                 ELSE false
                 END
@@ -67,16 +59,15 @@ public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
     boolean hasNotWonYet(String userId, UUID ekubId, int version);
 
     @Query("""
-            SELECT new com.ekub.ekub_users.MemberDetailDTO(
-                u.id,
+            SELECT new com.ekub.ekub_users.MemberDetailResponse(
+                u.externalId,
                 u.username,
-                u.firstName,
-                u.lastName,
-                r.id,
+                CONCAT(u.firstName,' ',u.lastName),
+                r.externalId,
                 r.version,
                 r.roundNumber,
                 r.paid,
-                ug
+                g.username
             )
             FROM EkubUser eu
             JOIN eu.user u
@@ -87,10 +78,10 @@ public interface EkubUserRepository extends JpaRepository<EkubUser, UUID> {
             LEFT JOIN UserGuarantee ug 
                 ON ug.round = r
                 AND ug.guaranteed = u  
-            WHERE eu.ekub.id = :ekubId
+            LEFT JOIN ug.guarantor g
+            WHERE eu.ekub.externalId = :ekubId
             ORDER BY u.firstName
             """)
-    List<MemberDetailDTO> findMemberDetailDTO(UUID ekubId, int version);
-
+    List<MemberDetailResponse> findMemberDetail(UUID ekubId, int version);
 
 }
