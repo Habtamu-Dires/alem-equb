@@ -1,5 +1,6 @@
 package com.ekub.keycloak;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,8 @@ public class KeycloakClient {
 
     public String getClientAccessToken() {
         String url = keycloakAuthUrl + "/realms/" +realm + "/protocol/openid-connect/token";
+
+        System.out.println(" +++++++++++++ " + keycloakAuthUrl + "=============");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

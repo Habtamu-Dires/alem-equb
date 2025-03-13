@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, Injector, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, inject, Injector, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import {provideToastr} from 'ngx-toastr';
 import { routes } from './app.routes';
@@ -7,7 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './services/interceptor/http.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { ApiUrlService } from './services/api-url/api-url.service';
 
 
 export const appConfig: ApplicationConfig = {
@@ -17,6 +17,12 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([httpInterceptor])
     ),
     provideRouter(routes),
+    provideAppInitializer(() => {
+      const injector = inject(Injector);
+      const apiConfigService = injector.get(ApiUrlService);
+
+      return apiConfigService.initialize();
+    }),
     provideAppInitializer(() => {
       const injector = inject(Injector);
       const kcService = injector.get(KeycloakService);

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.ekub</groupId>
 	<artifactId>alem-ekub-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>alem-ekub-api</name>
 	<description>Spring Boot project for Alem Equb</description>
 	<url/>

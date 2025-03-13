@@ -32,13 +32,13 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://localhost:9090/realms/alem-ekub"
+         issuer-uri: ${OAUTH2_JWT_ISSUER_URL:http://localhost:9090/realms/alem-ekub}
 
 keycloak:
-  auth-server-url: http://localhost:9090
-  realm: alem-ekub
-  client-id: backend-service
-  client-secret: Ot54gUJCZcGKo3wm4z2xBu6OvMFoX63G
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:9090}
+  realm: ${KEYCLOAK_REALM:alem-ekub}
+  client-id: ${KEYCLOAK_CLIENT_ID:backend-service}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:Ot54gUJCZcGKo3wm4z2xBu6OvMFoX63G}
 
 application:
   server:
@@ -47,4 +47,10 @@ application:
     origins: ${ALLOWED_ORIGINS:http://localhost:4200}
   file:
     path: ${FILE_PATH:./photo}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 

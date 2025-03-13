@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import  Keycloak  from 'keycloak-js';
 import { UserProfile } from './user-profile';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,11 @@ export class KeycloakService {
 
   get keycloak(){
     if(!this._KeyCloak){
+      console.log("The keycloak url is ..................", environment.keycloakUrl);
       this._KeyCloak = new Keycloak({
-        url:'http://localhost:9090',
-        realm:'alem-ekub',
-        clientId:'ekub-user-login'
+        url: environment.keycloakUrl ,//|| 'http://localhost:9090',
+        realm: environment.realm, // || 'alem-ekub',
+        clientId: environment.clientId, // || 'ekub-user-login'
       })
     }
     return this._KeyCloak;
@@ -32,16 +34,18 @@ export class KeycloakService {
 
   async init(obj:any){
     const value = obj.onLoad;
-    console.log("The val is + ", value);
     console.log('Authenticating the user .... ');
     const authenticated = await this.keycloak?.init({
          onLoad: value,
+         checkLoginIframe: false,
+        //  enableCookie: true
     });
 
     if(authenticated){
       console.log('user authenticated');
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
       const attributes = (((await this.keycloak.loadUserProfile()).attributes));
+      console.log(this._KeyCloak?.token);
       if(attributes){
         const arr:string[] = attributes['phoneNumber'] as unknown as string[];
         this._profile.phoneNumber = arr[0];
@@ -61,7 +65,7 @@ export class KeycloakService {
 
   logout(){
     return this.keycloak?.logout({
-      redirectUri: 'http://localhost:4200'
+      redirectUri: environment.redirectUrl || 'http://localhost:4200'
     });
   }
 
