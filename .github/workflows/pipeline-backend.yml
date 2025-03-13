@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 23
-          distribution: 'eclipse-temurin'
+          distribution: 'corretto'
 
       - name: compile project
         run: |
@@ -44,7 +44,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 23
-          distribution: 'eclipse-temurin'
+          distribution: 'corretto'
 
       - name: build project
         run: |
@@ -65,7 +65,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 23
-          distribution: 'eclipse-temurin'
+          distribution: 'corretto'
 
       - name: build project
         run: |
