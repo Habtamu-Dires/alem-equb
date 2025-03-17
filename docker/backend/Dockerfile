@@ -23,10 +23,9 @@ COPY --from=build /build/target/alem-ekub-api-*.jar /app/
 
 EXPOSE 8088
 
-ENV DB_URL=jdbc:postgresql://postgres-ekub:5432/alem_ekub_db
 ENV JAR_VERSION=${APP_VERSION}
 ENV ACTIVE_PROFILE=${PROFILE}
 
-CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL} alem-ekub-api-${JAR_VERSION}.jar
+CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} alem-ekub-api-${JAR_VERSION}.jar
 
 

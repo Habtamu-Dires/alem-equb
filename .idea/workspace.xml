@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/AlemEQubApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/AlemEQubApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/AllowedOriginsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/AllowedOriginsConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/keycloak/KeycloakClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/keycloak/KeycloakClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-configuration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-configuration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker/backend/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +55,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pipeline&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml&quot;
   }

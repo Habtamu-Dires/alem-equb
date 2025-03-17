@@ -24,7 +24,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: habt
       KC_BOOTSTRAP_ADMIN_PASSWORD: password
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres-ekub:5432/keycloak_db
+      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak_db"
       KC_DB_USERNAME: hab
       KC_DB_PASSWORD: password
       KEYCLOAK_THEME: my-custom-theme
@@ -43,12 +43,15 @@ services:
 
   backend:
     container_name: ekub-api
-    image: ekub-api:v6
+    image: equb-api:v-1
     ports:
       - "8088:8088"
     environment:
       FILE_PATH: /file/photos
       ALLOWED_ORIGINS: http://localhost:4200 # Browser
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/alem_ekub_db
+      SPRING_DATASOURCE_USERNAME: hab
+      SPRING_DATASOURCE_PASSWORD: password
       OAUTH2_JWT_ISSUER_URL:  http://host.docker.internal:9090/realms/alem-ekub
       KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080
       KEYCLOAK_CLIENT_ID: api-service
@@ -57,6 +60,7 @@ services:
       - "host.docker.internal:host-gateway"  # Maps to the host's IP
     depends_on:
       - postgres
+      - keycloak
     volumes:
       - ./photo:/file/photos
     networks:
@@ -64,7 +68,7 @@ services:
 
   front-end:
     container_name: ekub-ui
-    image: ekub-ui:v12
+    image: habtamudires/alem-ekub-ui
     ports:
       - "4200:80"
     environment:

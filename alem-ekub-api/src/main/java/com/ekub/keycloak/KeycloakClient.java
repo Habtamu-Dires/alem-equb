@@ -32,8 +32,6 @@ public class KeycloakClient {
     public String getClientAccessToken() {
         String url = keycloakAuthUrl + "/realms/" +realm + "/protocol/openid-connect/token";
 
-        System.out.println(" +++++++++++++ " + keycloakAuthUrl + "=============");
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

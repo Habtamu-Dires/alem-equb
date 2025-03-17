@@ -12,9 +12,9 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/alem_ekub_db
-    username: hab
-    password: password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/alem_ekub_db}
+    username: ${SPRING_DATASOURCE_USERNAME:hab}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
 #    hikari:
 #      maximum-pool-size: 5
