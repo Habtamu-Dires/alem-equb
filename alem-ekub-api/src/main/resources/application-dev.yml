@@ -16,9 +16,10 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:hab}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 5
-#      minimum-idle: 2
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      leak-detection-threshold: 5000
   jpa:
     hibernate:
       ddl-auto: none
@@ -53,4 +54,12 @@ logging:
     org:
       springframework:
         security: DEBUG
+        jdbc.core: DEBUG
+      hibernate.SQL: DEBUG
+    com:
+      zaxxer.hikari: DEBUG
+
+
+
+
 

@@ -43,7 +43,7 @@ services:
 
   backend:
     container_name: ekub-api
-    image: equb-api:v-1
+    image: habtamudires/alem-ekub-api
     ports:
       - "8088:8088"
     environment:

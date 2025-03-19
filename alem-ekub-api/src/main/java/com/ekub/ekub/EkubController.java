@@ -18,6 +18,11 @@ public class EkubController {
 
     private final EkubService service;
 
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("hello test");
+    }
+
     // create new ekub
     @PostMapping
     public ResponseEntity<Void> createEkub(
