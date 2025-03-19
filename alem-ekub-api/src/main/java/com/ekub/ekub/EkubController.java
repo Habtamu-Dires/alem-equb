@@ -23,6 +23,11 @@ public class EkubController {
         return ResponseEntity.ok("hello test");
     }
 
+    @GetMapping("/test-sec")
+    private ResponseEntity<List<EkubResponse>> testSec(){
+        return ResponseEntity.ok(service.getEkubs());
+    }
+
     // create new ekub
     @PostMapping
     public ResponseEntity<Void> createEkub(

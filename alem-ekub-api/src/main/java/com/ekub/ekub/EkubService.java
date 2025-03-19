@@ -197,4 +197,10 @@ public class EkubService {
         return repository.findEkubStatus(UUID.fromString(ekubId),version);
     }
 
+    // get ekubs
+    public List<EkubResponse> getEkubs() {
+          return repository.findAll().stream()
+                .map(mapper::toEkubResponse)
+                .toList();
+    }
 }
