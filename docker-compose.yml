@@ -43,26 +43,26 @@ services:
 
   backend:
     container_name: ekub-api
-    image: ekub-api:v5
+    image: habtamudires/alem-ekub-api
     ports:
       - "8088:8088"
     environment:
-      FILE_PATH: /file/photos
+      #FILE_PATH: /file/photos
       ALLOWED_ORIGINS: http://localhost:4200 # Browser
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/alem_ekub_db
       SPRING_DATASOURCE_USERNAME: hab
       SPRING_DATASOURCE_PASSWORD: password
-      OAUTH2_JWT_ISSUER_URL:  http://host.docker.internal:9090/realms/alem-ekub
-      KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080
-      KEYCLOAK_CLIENT_ID: api-service
-      KEYCLOAK_CLIENT_SECRET: mztotjdj2zSvizLBaJw1MWSztEKKRVh7
-    extra_hosts:
-      - "host.docker.internal:host-gateway"  # Maps to the host's IP
+      OAUTH2_JWT_ISSUER_URL: https://alem-equb.duckdns.org/keycloak/realms/alem-ekub #http://host.docker.internal:9090/realms/alem-ekub
+      KEYCLOAK_AUTH_SERVER_URL: https://alem-equb.duckdns.org/keycloak #http://keycloak:8080
+      KEYCLOAK_CLIENT_ID: api-client #api-service
+      KEYCLOAK_CLIENT_SECRET: kwJ81Vi67cXc2v88mN6mlky6a3yrbi8b #mztotjdj2zSvizLBaJw1MWSztEKKRVh7
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"  # Maps to the host's IP
     depends_on:
       - postgres
       - keycloak
-    volumes:
-      - ./photo:/file/photos
+#    volumes:
+#      - ./photo:/file/photos
     networks:
       - alem-ekub
 
@@ -73,7 +73,7 @@ services:
       - "4200:80"
     environment:
       API_URL: http://localhost:8088/api/v1
-      KEYCLOAK_URL: http://host.docker.internal:9090
+      KEYCLOAK_URL: https://alem-equb.duckdns.org/keycloak #http://host.docker.internal:9090
       REALM: alem-ekub
       CLIENT_ID: ekub-user-login
       REDIRECT_URL: http://localhost:4200
