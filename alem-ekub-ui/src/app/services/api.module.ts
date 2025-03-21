@@ -13,7 +13,6 @@ import { UserGuaranteesService } from './services/user-guarantees.service';
 import { RegistrationService } from './services/registration.service';
 import { PaymentsService } from './services/payments.service';
 import { RoundsService } from './services/rounds.service';
-import { FilesService } from './services/files.service';
 
 /**
  * Module that provides all services and configuration.
@@ -30,7 +29,6 @@ import { FilesService } from './services/files.service';
     RegistrationService,
     PaymentsService,
     RoundsService,
-    FilesService,
     ApiConfiguration
   ],
 })

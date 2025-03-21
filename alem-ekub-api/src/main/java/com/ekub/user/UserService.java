@@ -23,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +37,6 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final EkubService ekubService;
-    private final FileStorageService fileStorageService;
     private final S3Service s3Service;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -94,11 +95,11 @@ public class UserService {
                 try{
                     //delete profile pic
                     if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
+                        s3Service.deleteFile(savedUser.getProfilePicUrl());
                     }
                     //delete id card image
                     if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
+                        s3Service.deleteFile(savedUser.getIdCardImageUrl());
                     }
                     //delete user
                     repository.deleteById(savedUser.getId());
@@ -179,11 +180,11 @@ public class UserService {
                 try{
                     //delete profile pic
                     if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
+                        s3Service.deleteFile(savedUser.getProfilePicUrl());
                     }
                     //delete id card image
                     if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
+                        s3Service.deleteFile(savedUser.getIdCardImageUrl());
                     }
                     //delete user
                     repository.deleteById(savedUser.getId());
@@ -359,24 +360,32 @@ public class UserService {
     public void uploadProfilePicture(String userId, MultipartFile file) {
         User user = this.findUserByExId(userId);
         if(user.getProfilePicUrl() != null && !user.getProfilePicUrl().isBlank()){
-            fileStorageService.deleteFile(user.getProfilePicUrl());
+            s3Service.deleteFile(user.getProfilePicUrl());
         }
-        String url = fileStorageService.saveFile(file, userId, "profile");
-
-        user.setProfilePicUrl(url);
-        repository.save(user);
+        try {
+            String url = s3Service.uploadFile(file);
+            user.setProfilePicUrl(url);
+            repository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // upload id card
     public void uploadIdCardImage(String userId, MultipartFile file) {
         User user = this.findUserByExId(userId);
         if(user.getIdCardImageUrl() != null && !user.getIdCardImageUrl().isBlank()){
-            fileStorageService.deleteFile(user.getIdCardImageUrl());
+//            fileStorageService.deleteFile(user.getIdCardImageUrl());
+            s3Service.deleteFile(user.getProfilePicUrl());
         }
-        String url = fileStorageService.saveFile(file, userId, "id-card");
-
-        user.setIdCardImageUrl(url);
-        repository.save(user);
+//        String url = fileStorageService.saveFile(file, userId, "id-card");
+        try {
+            String url = s3Service.uploadFile(file);
+            user.setIdCardImageUrl(url);
+            repository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -432,19 +441,20 @@ public class UserService {
                 .toList();
     }
 
-    // upload s3 file
-    public void uploadS3File(MultipartFile file) {
-        try {
-            String url = s3Service.uploadFile(file);
-            System.out.println("The url is " + url);
-        } catch (Exception e){
-            throw new RuntimeException("file failed to upload : " + e.getMessage());
+//    // upload s3 file
+//    public void uploadS3File(MultipartFile file) {
+//        try {
+//            String url = s3Service.uploadFile(file);
+//            System.out.println("The url is " + url);
+//        } catch (Exception e){
+//            throw new RuntimeException("file failed to upload : " + e.getMessage());
+//        }
+//    }
+//
+//    // delete s3 file
+//    public void deleteS3File(String url) {
+//        s3Service.deleteFile(url);
+//    }
 
-        }
-    }
 
-    // delete s3 file
-    public void deleteS3File(String url) {
-        s3Service.deleteFile(url);
-    }
 }

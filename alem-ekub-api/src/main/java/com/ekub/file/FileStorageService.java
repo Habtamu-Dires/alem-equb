@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import static java.io.File.separator;
 import static java.lang.System.currentTimeMillis;
 
-@Service
+//@Service
 @Slf4j
 public class FileStorageService {
 

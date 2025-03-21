@@ -1115,37 +1115,6 @@
                 }
             }
         },
-        "/files/get-file": {
-            "get": {
-                "tags": [
-                    "files"
-                ],
-                "operationId": "getFile",
-                "parameters": [
-                    {
-                        "name": "file-path",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "binary"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/ekubs/{ekub-id}": {
             "get": {
                 "tags": [

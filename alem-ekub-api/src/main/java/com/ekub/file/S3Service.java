@@ -64,7 +64,7 @@ public class S3Service {
         }
 
         // Validate the URL belongs to the correct bucket
-        if (!uri.getHost().equals(expectedHost)) {
+        if (!uri.getHost().equalsIgnoreCase(expectedHost)) {
             throw new IllegalArgumentException("URL does not belong to the configured bucket: " + url);
         }
 

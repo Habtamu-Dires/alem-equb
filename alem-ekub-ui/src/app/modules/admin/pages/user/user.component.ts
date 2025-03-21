@@ -50,7 +50,6 @@ export class UserComponent implements OnInit{
     }).subscribe({
       next:(res:PageResponseUserResponse)=>{
         this.userList = res.content as UserResponse[];
-        // hello
         
         // pagination
         this.isEmptyPage = res.empty as boolean;
