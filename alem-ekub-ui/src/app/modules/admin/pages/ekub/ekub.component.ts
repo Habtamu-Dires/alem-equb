@@ -63,7 +63,6 @@ export class EkubComponent implements OnInit {
         this.numberOfElements = res.numberOfElements;
         this.page = res.number as number;
         this.size = res.size as number;
-        // console.log(this.ekubList);
       },
       error:(err) => {
         this.toastrService.error('Something went wrong', 'oops');
@@ -184,7 +183,6 @@ export class EkubComponent implements OnInit {
   hideDeleteBtn(event: MouseEvent){
     const target = event.target as HTMLElement;
     if(!target.classList.contains('donthide') && this.showActions === true){
-      console.log("hiding")
       this.showActions = false;
     }
   }

@@ -17,7 +17,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     .pipe( 
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          console.log('401 Unauthorized. Logging out...');
           keycloakService.logout();
         }
         return throwError(() => error); // Pass the error along

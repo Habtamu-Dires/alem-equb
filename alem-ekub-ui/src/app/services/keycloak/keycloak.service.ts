@@ -15,7 +15,6 @@ export class KeycloakService {
 
   get keycloak(){
     if(!this._KeyCloak){
-      console.log("The keycloak url is ..................", environment.keycloakUrl);
       this._KeyCloak = new Keycloak({
         url: environment.keycloakUrl ,//|| 'http://localhost:9090',
         realm: environment.realm, // || 'alem-ekub',
@@ -34,7 +33,6 @@ export class KeycloakService {
 
   async init(obj:any){
     const value = obj.onLoad;
-    console.log('Authenticating the user .... ');
     const authenticated = await this.keycloak?.init({
          onLoad: value,
          checkLoginIframe: false,
@@ -42,10 +40,8 @@ export class KeycloakService {
     });
 
     if(authenticated){
-      console.log('user authenticated');
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
       const attributes = (((await this.keycloak.loadUserProfile()).attributes));
-      console.log(this._KeyCloak?.token);
       if(attributes){
         const arr:string[] = attributes['phoneNumber'] as unknown as string[];
         this._profile.phoneNumber = arr[0];
@@ -83,9 +79,7 @@ export class KeycloakService {
   // decode the users role
   get isAdminUser():boolean{
     const parsedToken = this.keycloak.tokenParsed;
-    console.log("roles ",parsedToken?.realm_access?.roles);
     const roles:string[] = parsedToken?.realm_access?.roles as string[];
-    console.log(roles.includes("ADMIN"));
 
     if(roles.includes('ADMIN')){
       return true;

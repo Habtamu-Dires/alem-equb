@@ -99,9 +99,6 @@ export class ViewEkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.memberDetails = res;
-        console.log("the member detail length", res.length);
-        console.log("The current version is " + this.currentVersion);
-        console.log("the ekub version " + this.ekub?.version);
       },
       error:(err)=>{
         console.log(err);
@@ -204,7 +201,6 @@ export class ViewEkubDetailComponent implements OnInit {
       next:(res: UserRoundPaymentResponse[])=>{
         this.userRoundPayments = res as UserRoundPaymentResponse[];
       
-        console.log("ts map:", this.userRoundPayments);
         
       if(this.userRoundPayments.length > 0){
           const firstRow = this.userRoundPayments[0].row;
@@ -272,8 +268,6 @@ export class ViewEkubDetailComponent implements OnInit {
     // data from dialog
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log("Selected Method " + result.paymentMethod);
-        console.log("Remakr ", result.remark);
         this.paymentRequest = {
            'amount': this.ekub?.winAmount as number,
            'roundId': round.id as string,

@@ -15,56 +15,57 @@ services:
       - alem-ekub
     restart: unless-stopped # always
 
-  keycloak:
-    container_name: keycloak-ekub
-    image: quay.io/keycloak/keycloak
-    ports:
-      - "9090:8080"
-    environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: habt
-      KC_BOOTSTRAP_ADMIN_PASSWORD: password
-      KC_DB: postgres
-      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak_db"
-      KC_DB_USERNAME: hab
-      KC_DB_PASSWORD: password
-      KEYCLOAK_THEME: my-custom-theme
-      # Hostname configuration:
-      KC_HOSTNAME: host.docker.internal            # Hostname only (no port)
-      KC_HOSTNAME_PORT: 9090            # External port (browser access)
-      KC_HTTP_PORT: 8080                # Internal port (matches Docker mapping)
-      KC_PROXY: edge                    # Required for reverse proxy behavior
-      KC_HOSTNAME_STRICT: "false"       # Allow internal/external URLs
-    volumes:
-      - ./keycloak-custom-theme/my-custom-theme:/opt/keycloak/themes/my-custom-theme
-    networks:
-      - alem-ekub
-    command:
-      - "start-dev"
-
-  backend:
-    container_name: ekub-api
-    image: habtamudires/alem-ekub-api
-    ports:
-      - "8088:8088"
-    environment:
-      #FILE_PATH: /file/photos
-      ALLOWED_ORIGINS: http://localhost:4200 # Browser
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/alem_ekub_db
-      SPRING_DATASOURCE_USERNAME: hab
-      SPRING_DATASOURCE_PASSWORD: password
-      OAUTH2_JWT_ISSUER_URL: https://alem-equb.duckdns.org/keycloak/realms/alem-ekub #http://host.docker.internal:9090/realms/alem-ekub
-      KEYCLOAK_AUTH_SERVER_URL: https://alem-equb.duckdns.org/keycloak #http://keycloak:8080
-      KEYCLOAK_CLIENT_ID: api-client #api-service
-      KEYCLOAK_CLIENT_SECRET: kwJ81Vi67cXc2v88mN6mlky6a3yrbi8b #mztotjdj2zSvizLBaJw1MWSztEKKRVh7
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"  # Maps to the host's IP
-    depends_on:
-      - postgres
-      - keycloak
+#  keycloak:
+#    container_name: keycloak-ekub
+#    image: quay.io/keycloak/keycloak
+#    ports:
+#      - "9090:8080"
+#    environment:
+#      KC_BOOTSTRAP_ADMIN_USERNAME: habt
+#      KC_BOOTSTRAP_ADMIN_PASSWORD: password
+#      KC_DB: postgres
+#      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak_db"
+#      KC_DB_USERNAME: hab
+#      KC_DB_PASSWORD: password
+#      KEYCLOAK_THEME: my-custom-theme
+#      # Hostname configuration:
+#      KC_HOSTNAME: host.docker.internal            # Hostname only (no port)
+#      KC_HOSTNAME_PORT: 9090            # External port (browser access)
+#      KC_HTTP_PORT: 8080                # Internal port (matches Docker mapping)
+#      KC_PROXY: edge                    # Required for reverse proxy behavior
+#      KC_HOSTNAME_STRICT: "false"       # Allow internal/external URLs
 #    volumes:
-#      - ./photo:/file/photos
-    networks:
-      - alem-ekub
+#      - ./keycloak-custom-theme/my-custom-theme:/opt/keycloak/themes/my-custom-theme
+#    networks:
+#      - alem-ekub
+#    command:
+#      - "start-dev"
+#
+#  backend:
+#    container_name: ekub-api
+#    image: habtamudires/alem-ekub-api
+#    ports:
+#      - "8088:8088"
+#    environment:
+#      #FILE_PATH: /file/photos
+#      ALLOWED_ORIGINS: http://localhost:4200 # Browser
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/alem_ekub_db
+#      SPRING_DATASOURCE_USERNAME: hab
+#      SPRING_DATASOURCE_PASSWORD: password
+#      OAUTH2_JWT_ISSUER_URI: https://alem-equb.duckdns.org/keycloak/realms/alem-ekub #http://host.docker.internal:9090/realms/alem-ekub
+#      OAUTH2_JWK_SET_URI: https://alem-equb.duckdns.org/keycloak/realms/alem-ekub/protocol/openid-connect/certs
+#      KEYCLOAK_AUTH_SERVER_URL: https://alem-equb.duckdns.org/keycloak #http://keycloak:8080
+#      KEYCLOAK_CLIENT_ID: api-client #api-service
+#      KEYCLOAK_CLIENT_SECRET: kwJ81Vi67cXc2v88mN6mlky6a3yrbi8b #mztotjdj2zSvizLBaJw1MWSztEKKRVh7
+##    extra_hosts:
+##      - "host.docker.internal:host-gateway"  # Maps to the host's IP
+#    depends_on:
+#      - postgres
+#      - keycloak
+##    volumes:
+##      - ./photo:/file/photos
+#    networks:
+#      - alem-ekub
 
   front-end:
     container_name: ekub-ui

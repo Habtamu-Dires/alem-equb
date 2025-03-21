@@ -8,7 +8,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   
   if(!keycloakService.isTokenValid){
     keycloakService.logout();
-    console.log("expired")
     return false;
   }
 

@@ -5,9 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/AlemEQubApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/AlemEQubApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/BeanConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/BeanConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubController.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/ekub/EkubController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/security/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/test/java/com/ekub/AlemEQubApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/test/java/com/ekub/AlemEQubApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/ekub/ekub.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-ekub/manage-ekub.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/payment/payment.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/ekub-detail/ekub-detail.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/home/home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/payment/payment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/payment/payment.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-url/api-url.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-url/api-url.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/guard/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/guard/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/interceptor/http.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/interceptor/http.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/keycloak/keycloak.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,22 +60,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.AlemEkubApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.backend/Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.alem-ekub-api [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.alem-ekub-api [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.alem-ekub-api [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.alem-equb-api [install].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;pipeline&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AlemEkubApplication.executor": "Debug",
+    "Docker.backend/Dockerfile.executor": "Run",
+    "JUnit.AlemEQubApplicationTests.executor": "Debug",
+    "JUnit.AlemEQubApplicationTests.whenKeycloakIsSlow_thenRequestFailsWithTimeout.executor": "Debug",
+    "Maven.alem-ekub-api [clean].executor": "Run",
+    "Maven.alem-ekub-api [install].executor": "Run",
+    "Maven.alem-ekub-api [package].executor": "Run",
+    "Maven.alem-equb-api [install].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "pipeline",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.ekub.common" />
@@ -68,6 +87,37 @@
     <configuration name="AlemEkubApplication" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.ekub.AlemEQubApplication" />
       <module name="alem-ekub-api" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AlemEQubApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alem-ekub-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ekub.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ekub" />
+      <option name="MAIN_CLASS_NAME" value="com.ekub.AlemEQubApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AlemEQubApplicationTests.whenKeycloakIsSlow_thenRequestFailsWithTimeout" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alem-ekub-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ekub.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ekub" />
+      <option name="MAIN_CLASS_NAME" value="com.ekub.AlemEQubApplicationTests" />
+      <option name="METHOD_NAME" value="whenKeycloakIsSlow_thenRequestFailsWithTimeout" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -89,6 +139,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.AlemEQubApplicationTests" />
+        <item itemvalue="JUnit.AlemEQubApplicationTests.whenKeycloakIsSlow_thenRequestFailsWithTimeout" />
         <item itemvalue="Docker.backend/Dockerfile" />
       </list>
     </recent_temporary>

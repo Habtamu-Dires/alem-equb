@@ -40,7 +40,6 @@ export class PaymentComponent {
   ngOnInit(): void {
     this.checkScreenSzie(window.innerWidth);
     this.loggedUser = this.keycloakService.profile;
-    console.log("phone number ", this.loggedUser?.phoneNumber);
     if(this.loggedUser?.id){
       this.fetchUserPendingPayments(this.loggedUser.id);
     }
@@ -93,7 +92,6 @@ export class PaymentComponent {
     // data from dialog
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log("The phone number ", result.phoneNumber);
         // build payment request
         const paymentRequest:PaymentRequest = {
           'userId': userId,

@@ -3,8 +3,8 @@ server:
   tomcat:
     max-connections: 10000
     accept-count: 10000
-#    threads:
-#      max: 10
+    threads:
+      max: 20
 spring:
   application:
     name: alem-ekub-api
@@ -16,11 +16,11 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:hab}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 10
-#      minimum-idle: 2
-#      connection-timeout: 30000
-#      leak-detection-threshold: 5000
+    hikari:
+      maximum-pool-size: 8 # down form 10, b/c pgBouncer connection pool
+      minimum-idle: 2
+      connection-timeout: 30000   # 30 second
+      leak-detection-threshold: 5000  # enable hikari leak detection
   jpa:
     hibernate:
       ddl-auto: none
@@ -34,7 +34,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-         issuer-uri: ${OAUTH2_JWT_ISSUER_URL:https://alem-equb.duckdns.org/keycloak/realms/alem-ekub}
+         issuer-uri: ${OAUTH2_JWT_ISSUER_URI:https://alem-equb.duckdns.org/keycloak/realms/alem-ekub}
+         jwk-set-uri: ${OAUTH2_JWK_SET_URI:https://alem-equb.duckdns.org/keycloak/realms/alem-ekub/protocol/openid-connect/certs}
 
 keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:https://alem-equb.duckdns.org/keycloak}

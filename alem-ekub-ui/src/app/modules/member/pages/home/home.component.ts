@@ -52,21 +52,7 @@ export class HomeComponent {
     this.getSelectedPage();
   }
 
-  //fetch users by id
-  // fetchUserById(userId:string){
-  //   this.usersService.getUserById({
-  //     'user-id': userId
-  //   }).subscribe({
-  //     next:(res:UserResponse) => {
-  //       this.user = res;
-  //     },
-  //     error:(err) => {
-  //       console.log(err);
-  //       this.toastrService.error('Failed to fetch user info', 'Ooops');
-  //     }
-  //   })
-  // }
-
+  
 
   //show drawer service
   getDrawerStatus(){

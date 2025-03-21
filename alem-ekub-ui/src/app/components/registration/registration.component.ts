@@ -149,7 +149,6 @@ export class RegistrationComponent implements OnInit{
     //file methods
     //onfile selected
     onFileSelected(event:any,type:string){
-      console.log("hello ");
       if(type ==='profilePic'){
         this.selectedProfilePic = event.target.files[0];
         if(this.selectedProfilePic != null){

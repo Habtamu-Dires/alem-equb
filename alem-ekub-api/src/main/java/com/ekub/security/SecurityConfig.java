@@ -20,7 +20,6 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(
-                        "/ekubs/test-sec",
                         "/registration/**",
                         "/files/get-file",
                         "/v2/api-docs",

@@ -13,7 +13,6 @@ export class ApiUrlService {
   constructor() { }
 
   async initialize(){
-    console.log('API_URL:', window.API_URL);
     if(window.API_URL && window.API_URL !== '__API_URL_PLACEHOLDER__'){
       environment.apiUrl = window.API_URL || 'http://localhost:8088/api/v1';
     } else {
@@ -22,7 +21,6 @@ export class ApiUrlService {
 
     if(window.KEYCLOAK_URL && window.KEYCLOAK_URL !== '__KEYCLOAK_URL_PLACEHOLDER__'){
       environment.keycloakUrl = window.KEYCLOAK_URL || 'http://host.docker.internal:9090';
-      console.log("hello ----", environment.keycloakUrl);
     } else {  
       environment.keycloakUrl = 'http://host.docker.internal:9090';
     }
@@ -45,7 +43,6 @@ export class ApiUrlService {
       environment.redirectUrl = 'http://localhost:4200';
     }
 
-    console.log('API rootUrl set to:', window.API_URL);
   }
 
 }

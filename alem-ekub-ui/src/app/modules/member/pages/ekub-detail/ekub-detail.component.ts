@@ -181,7 +181,6 @@ export class EkubDetailComponent implements OnInit {
     // dialog confirmation
     dialogRef.afterClosed().subscribe((result)=>{
       if(result){
-        console.log("leave the ekub");
         this.leaveEkub(ekubId);
       }
     })
