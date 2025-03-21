@@ -146,4 +146,18 @@ public class UserController {
         return ResponseEntity.ok(service.searchByName(name));
     }
 
+    // upload s3 file
+    @PostMapping(value = "/upload-s3-file", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadS3file(@RequestPart MultipartFile file){
+        service.uploadS3File(file);
+        return ResponseEntity.accepted().build();
+    }
+
+    // delete s3 file
+    @DeleteMapping("/s3-file")
+    public ResponseEntity<?> deleteS3File(String url){
+        service.deleteS3File(url);
+        return ResponseEntity.accepted().build();
+    }
+
 }

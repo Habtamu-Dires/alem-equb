@@ -6,6 +6,7 @@ import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubService;
 import com.ekub.ekub_users.EkubUser;
 import com.ekub.file.FileStorageService;
+import com.ekub.file.S3Service;
 import com.ekub.keycloak.KeycloakService;
 import com.ekub.keycloak.KeycloakUserRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +36,7 @@ public class UserService {
     private final UserMapper mapper;
     private final EkubService ekubService;
     private final FileStorageService fileStorageService;
+    private final S3Service s3Service;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
@@ -430,4 +432,19 @@ public class UserService {
                 .toList();
     }
 
+    // upload s3 file
+    public void uploadS3File(MultipartFile file) {
+        try {
+            String url = s3Service.uploadFile(file);
+            System.out.println("The url is " + url);
+        } catch (Exception e){
+            throw new RuntimeException("file failed to upload : " + e.getMessage());
+
+        }
+    }
+
+    // delete s3 file
+    public void deleteS3File(String url) {
+        s3Service.deleteFile(url);
+    }
 }
