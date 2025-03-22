@@ -54,6 +54,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~
-            docker-compose pull habtamudires/alem-ekub-ui:latest
+            docker pull habtamudires/alem-ekub-ui:latest
             docker-compose up -d frontend
-            docker-compose prune
