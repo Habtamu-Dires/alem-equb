@@ -12,7 +12,6 @@
         <table class="min-w-full border border-gray-300 bg-white">
             <thead class="bg-gray-200 sticky top-16">
               <tr>
-                <th class="table-head w-1/12">Photo</th>
                 <th class="table-head w-1/12">Username</th>
                 <th class="table-head w-1/12">FullName</th>
                 <th class="table-head w-1/12">Enabled</th>
@@ -24,10 +23,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of userList" class="border-b border-gray-300 hover:bg-gray-100">              
-                <td class="table-data">
-                  <img class="w-20 h-20 rounded-full" [src]="user.profilePicUrl" alt="profile picture"/>
-                </td>
+              <tr *ngFor="let user of userList" class="border-b border-gray-300 hover:bg-gray-100">                          
                 <td class="table-data">{{ user.username }}</td>
                 <td class="table-data">{{user.fullName}}</td>
                 <td class="table-data">

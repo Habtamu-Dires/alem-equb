@@ -19,7 +19,6 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .profession(user.getProfession())
-                .profilePicUrl(user.getProfilePicUrl())
                 .idCardImageUrl(user.getIdCardImageUrl())
                 .enabled(user.isEnabled())
                 .remark(user.getRemark())

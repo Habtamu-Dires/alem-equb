@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { KeycloakService } from '../../services/keycloak/keycloak.service';
 import { RegistrationService } from '../../services/services';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-registration',
@@ -32,11 +33,8 @@ export class RegistrationComponent implements OnInit{
     confirmPassword = new FormControl('');
     passwordControl = new FormControl('');
     ekubIdNameMap = new Map<string,string>();
-    selectedProfilePic:any;
-    selectedPictureString:string | undefined;
     selectedIdCardImage:any;
     selectedIdCardImageString:string | undefined;
-    showProfilePicErr:boolean = false;
     showIdCardImgErr:boolean = false;
   
     constructor(
@@ -57,7 +55,6 @@ export class RegistrationComponent implements OnInit{
       this.registrationService.register({
         body: {
           request: this.userRequest,
-          profilePic: this.selectedProfilePic,
           idCardImg: this.selectedIdCardImage
         }
       }).subscribe({
@@ -129,8 +126,6 @@ export class RegistrationComponent implements OnInit{
     onSave(){
       if(!this.userRequest.password ||  this.userRequest.password.length < 4){
         this.showPassMandatoryError = true;
-      } else if(!this.selectedProfilePic){
-        this.showProfilePicErr = true;
       } else if(!this.selectedIdCardImage) {
         this.showIdCardImgErr = true;
       }
@@ -147,31 +142,26 @@ export class RegistrationComponent implements OnInit{
   
     //file methods
     //onfile selected
-    onFileSelected(event:any,type:string){
-      if(type ==='profilePic'){
-        this.selectedProfilePic = event.target.files[0];
-        if(this.selectedProfilePic != null){
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedPictureString = reader.result as string;
-          }
-          reader.readAsDataURL(this.selectedProfilePic)
-          this.showProfilePicErr = false;
-        }
-      } else if(type==='idCardImg') {
-        this.selectedIdCardImage = event.target.files[0];
-        if(this.selectedIdCardImage != null){
+    onFileSelected(event:any){
+        const file = event.target.files[0];
+        if(file){
           const reader = new FileReader();
           reader.onload = () => {
             this.selectedIdCardImageString = reader.result as string;
+            const options = { maxSizeMB: 4, maxWidthOrHeight: 1024, useWebWorker: true };
+
+            imageCompression(file, options).then((compressedFile) => {
+              this.selectedIdCardImage = compressedFile; 
+            });
+            this.showIdCardImgErr = false;
+
           }
-          reader.readAsDataURL(this.selectedIdCardImage);
-          this.showIdCardImgErr = false;
+          reader.readAsDataURL(file);
         }
-      }
       
     }
-  
-  
+
+
+
 
 }

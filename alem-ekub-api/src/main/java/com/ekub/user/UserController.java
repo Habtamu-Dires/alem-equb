@@ -25,10 +25,9 @@ public class UserController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<IdResponse> createUser(
             @RequestPart @Valid UserRequest request,
-            @RequestPart MultipartFile profilePic,
             @RequestPart MultipartFile idCardImg
     ) {
-        service.createUser(request,profilePic,idCardImg);
+        service.createUser(request,idCardImg);
         return ResponseEntity.accepted().build();
     }
 
@@ -78,16 +77,6 @@ public class UserController {
             @Valid  @RequestBody PasswordUpdateRequest request
     ){
         service.updatePassword(userId, request);
-        return ResponseEntity.accepted().build();
-    }
-
-    // upload profile picture
-    @PostMapping(value = "/profile-picture", consumes = "multipart/form-data")
-    public ResponseEntity<Void> uploadProfilePicture(
-            @RequestParam("user-id") String userId,
-            @RequestPart MultipartFile file
-    ){
-        service.uploadProfilePicture(userId,file);
         return ResponseEntity.accepted().build();
     }
 

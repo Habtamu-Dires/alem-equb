@@ -5,7 +5,6 @@ import com.ekub.common.PageResponse;
 import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubService;
 import com.ekub.ekub_users.EkubUser;
-import com.ekub.file.FileStorageService;
 import com.ekub.file.S3Service;
 import com.ekub.keycloak.KeycloakService;
 import com.ekub.keycloak.KeycloakUserRequest;
@@ -43,7 +42,6 @@ public class UserService {
     @Transactional
     public void createUser(
             UserRequest request,
-            MultipartFile profilePic,
             MultipartFile idCardImg
     ) {
         String keyCloakUserId = null;
@@ -78,7 +76,6 @@ public class UserService {
             repository.flush();
 
             // save profile picture and id image.
-            uploadProfilePicture(savedUser.getExternalId(), profilePic);
             uploadIdCardImage(savedUser.getExternalId(), idCardImg);
 
         } catch (Exception e){
@@ -93,10 +90,6 @@ public class UserService {
             //Roll back database if file upload failed
             if(savedUser != null){
                 try{
-                    //delete profile pic
-                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        s3Service.deleteFile(savedUser.getProfilePicUrl());
-                    }
                     //delete id card image
                     if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
                         s3Service.deleteFile(savedUser.getIdCardImageUrl());
@@ -131,7 +124,6 @@ public class UserService {
 
     // registration
     public void register(UserRequest request,
-                               MultipartFile profilePic,
                                MultipartFile idCardImg)
     {
         String keyCloakUserId = null;
@@ -162,8 +154,7 @@ public class UserService {
             savedUser = repository.save(user);
             repository.flush();
 
-            // save profile picture and id image.
-            uploadProfilePicture(savedUser.getExternalId(), profilePic);
+            // save id image.
             uploadIdCardImage(savedUser.getExternalId(), idCardImg);
 
         } catch (Exception e){
@@ -178,10 +169,6 @@ public class UserService {
             //Roll back database if file upload failed
             if(savedUser != null){
                 try{
-                    //delete profile pic
-                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        s3Service.deleteFile(savedUser.getProfilePicUrl());
-                    }
                     //delete id card image
                     if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
                         s3Service.deleteFile(savedUser.getIdCardImageUrl());
@@ -356,27 +343,11 @@ public class UserService {
     }
 
 
-    // upload profile picture
-    public void uploadProfilePicture(String userId, MultipartFile file) {
-        User user = this.findUserByExId(userId);
-        if(user.getProfilePicUrl() != null && !user.getProfilePicUrl().isBlank()){
-            s3Service.deleteFile(user.getProfilePicUrl());
-        }
-        try {
-            String url = s3Service.uploadFile(file);
-            user.setProfilePicUrl(url);
-            repository.save(user);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     // upload id card
     public void uploadIdCardImage(String userId, MultipartFile file) {
         User user = this.findUserByExId(userId);
         if(user.getIdCardImageUrl() != null && !user.getIdCardImageUrl().isBlank()){
-//            fileStorageService.deleteFile(user.getIdCardImageUrl());
-            s3Service.deleteFile(user.getProfilePicUrl());
+            s3Service.deleteFile(user.getIdCardImageUrl());
         }
 //        String url = fileStorageService.saveFile(file, userId, "id-card");
         try {

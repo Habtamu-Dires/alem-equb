@@ -37,12 +37,9 @@
             <label class="form-label">Profession<span class="text-red-400">*</span></label>
             <input [(ngModel)] ="userRequest.profession"  class="form-input" type="text" placeholder="Profession"/>
         </div> 
-        <!--Profile Picture Displayer-->
-        <section class="w-full flex justify-evenly gap-2 md:gap-10">
-            <div class="flex justify-center w-20 h-20 md:w-28 md:h-28" *ngIf="selectedPictureString">
-                <img class="rounded-3xl" [src]="selectedPictureString" alt="profile picture" />
-            </div>
-            <div class="flex justify-center w-24 h-20 md:w-40 md:h-28" *ngIf="selectedIdCardImageString">
+        <!--image id Displayer-->
+        <section class="w-full flex justify-center items-center p-2">
+            <div class="flex justify-center w-48 h-32" *ngIf="selectedIdCardImageString">
                 <img (click)="openImageViewer()" class="rounded-3xl" 
                   [src]="selectedIdCardImageString" alt="id card image" 
                 />

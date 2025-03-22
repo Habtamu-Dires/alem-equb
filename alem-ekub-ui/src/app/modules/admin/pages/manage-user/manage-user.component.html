@@ -111,20 +111,6 @@
                 </div>
             </div>
         </div>
-        <!-- profile picture, file selector-->
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">
-                <p>Profile Picture</p>
-            </label>
-            <div class="w-full flex items-center col-span-12 md:col-span-10 ">
-                <input 
-                    class="w-full p-2 rounded-lg text-lg outline-none"
-                    type="file" 
-                    accept="image/*"
-                    (change)="onFileSelected($event,'profilePic')"
-                />
-            </div>
-        </div>
         <!--id card image file selector-->
         <div class="w-full grid grid-cols-12">
             <label class="form-label">
@@ -135,16 +121,13 @@
                     class="w-full p-2 rounded-lg text-lg outline-none"
                     type="file" 
                     accept="image/*"
-                    (change)="onFileSelected($event,'idCardImg')"
+                    (change)="onFileSelected($event)"
                 />
             </div>
         </div>
-        <!--Profile Picture Displayer-->
-        <section class="w-full flex justify-evenly gap-2 md:gap-10">
-            <div class="flex justify-center w-24 h-24 md:w-28 md:h-28" *ngIf="selectedPictureString">
-                <img class="rounded-3xl" [src]="selectedPictureString" alt="profile picture" />
-            </div>
-            <div class="flex justify-center w-32 h-24 md:w-40 md:h-28" *ngIf="selectedIdCardImageString">
+        <!--Id card image Displayer-->
+        <section class="w-full flex justify-center items-center p-2">
+            <div class="flex justify-center w-36 h-28" *ngIf="selectedIdCardImageString">
                 <img (click)="openImageViewer()" class="rounded-3xl" 
                   [src]="selectedIdCardImageString" alt="id card image" 
                 />

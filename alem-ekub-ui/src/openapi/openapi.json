@@ -109,10 +109,6 @@
                                     "request": {
                                         "$ref": "#/components/schemas/UserRequest"
                                     },
-                                    "profilePic": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
                                     "idCardImg": {
                                         "type": "string",
                                         "format": "binary"
@@ -120,7 +116,6 @@
                                 },
                                 "required": [
                                     "idCardImg",
-                                    "profilePic",
                                     "request"
                                 ]
                             }
@@ -372,47 +367,6 @@
                 }
             }
         },
-        "/users/profile-picture": {
-            "post": {
-                "tags": [
-                    "users"
-                ],
-                "operationId": "uploadProfilePicture",
-                "parameters": [
-                    {
-                        "name": "user-id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "required": [
-                                    "file"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/users/invite/{user-id}": {
             "post": {
                 "tags": [
@@ -531,10 +485,6 @@
                                     "request": {
                                         "$ref": "#/components/schemas/UserRequest"
                                     },
-                                    "profilePic": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
                                     "idCardImg": {
                                         "type": "string",
                                         "format": "binary"
@@ -542,7 +492,6 @@
                                 },
                                 "required": [
                                     "idCardImg",
-                                    "profilePic",
                                     "request"
                                 ]
                             }
@@ -1635,9 +1584,6 @@
                         "type": "string"
                     },
                     "profession": {
-                        "type": "string"
-                    },
-                    "profilePicUrl": {
                         "type": "string"
                     },
                     "idCardImageUrl": {

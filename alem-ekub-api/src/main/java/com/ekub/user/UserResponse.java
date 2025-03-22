@@ -14,7 +14,6 @@ public record UserResponse(
         String email,
         String phoneNumber,
         String profession,
-        String profilePicUrl,
         String idCardImageUrl,
         List<String> guarantors,
         boolean enabled,
