@@ -53,5 +53,7 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cd root
             docker-compose pull habtamudires/alem-ekub-ui:latest
             docker-compose up -d frontend
+            docker-compose prune
