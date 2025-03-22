@@ -72,19 +72,19 @@ services:
     networks:
       - alem-ekub
 
-  front-end:
-    container_name: ekub-ui
-    image: habtamudires/alem-ekub-ui
-    ports:
-      - "4200:80"
-    environment:
-      API_URL: http://localhost:8088/api/v1
-      KEYCLOAK_URL: http://host.docker.internal:9090
-      REALM: alem-ekub
-      CLIENT_ID: ekub-user-login
-      REDIRECT_URL: http://localhost:4200
-    networks:
-      - alem-ekub
+#  front-end:
+#    container_name: ekub-ui
+#    image: habtamudires/alem-ekub-ui
+#    ports:
+#      - "4200:80"
+#    environment:
+#      API_URL: http://localhost:8088/api/v1
+#      KEYCLOAK_URL: http://host.docker.internal:9090
+#      REALM: alem-ekub
+#      CLIENT_ID: ekub-user-login
+#      REDIRECT_URL: http://localhost:4200
+#    networks:
+#      - alem-ekub
 
 volumes:
   alem_ekub_volume:

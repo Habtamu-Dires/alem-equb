@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="" />
+    <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,24 +47,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AlemEkubApplication.executor": "Debug",
-    "Docker.backend/Dockerfile.executor": "Run",
-    "JUnit.AlemEQubApplicationTests.executor": "Debug",
-    "JUnit.AlemEQubApplicationTests.whenKeycloakIsSlow_thenRequestFailsWithTimeout.executor": "Debug",
-    "Maven.alem-ekub-api [clean].executor": "Run",
-    "Maven.alem-ekub-api [install].executor": "Run",
-    "Maven.alem-ekub-api [package].executor": "Run",
-    "Maven.alem-equb-api [install].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "pipeline",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AlemEkubApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Docker.backend/Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AlemEQubApplicationTests.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.AlemEQubApplicationTests.whenKeycloakIsSlow_thenRequestFailsWithTimeout.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.alem-ekub-api [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.alem-ekub-api [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.alem-ekub-api [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.alem-equb-api [install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pipeline&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hab/workspace/projects/alem-ekub/alem-ekub-api/pom.xml&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.ekub.common" />

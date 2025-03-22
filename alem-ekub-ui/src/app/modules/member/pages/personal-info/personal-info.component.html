@@ -1,4 +1,4 @@
-<main class="relative max-container w-full min-h-screen flex flex-col items-center gap-16">
+<main class="relative max-container w-full min-h-screen flex flex-col items-center gap-16 px-2">
     <app-header class="w-full"
         pageName="Personal Information"
         [onMobileView]="onMobileView"
@@ -38,11 +38,11 @@
             <input [(ngModel)] ="userRequest.profession"  class="form-input" type="text" placeholder="Profession"/>
         </div> 
         <!--Profile Picture Displayer-->
-        <section class="w-full flex justify-evenly gap-10">
-            <div class="flex gap-4 justify-center w-28 h-28" *ngIf="selectedPictureString">
+        <section class="w-full flex justify-evenly gap-2 md:gap-10">
+            <div class="flex justify-center w-20 h-20 md:w-28 md:h-28" *ngIf="selectedPictureString">
                 <img class="rounded-3xl" [src]="selectedPictureString" alt="profile picture" />
             </div>
-            <div class="flex gap-4 justify-center w-38 h-28" *ngIf="selectedIdCardImageString">
+            <div class="flex justify-center w-24 h-20 md:w-40 md:h-28" *ngIf="selectedIdCardImageString">
                 <img (click)="openImageViewer()" class="rounded-3xl" 
                   [src]="selectedIdCardImageString" alt="id card image" 
                 />

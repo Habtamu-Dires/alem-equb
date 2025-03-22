@@ -441,20 +441,4 @@ public class UserService {
                 .toList();
     }
 
-//    // upload s3 file
-//    public void uploadS3File(MultipartFile file) {
-//        try {
-//            String url = s3Service.uploadFile(file);
-//            System.out.println("The url is " + url);
-//        } catch (Exception e){
-//            throw new RuntimeException("file failed to upload : " + e.getMessage());
-//        }
-//    }
-//
-//    // delete s3 file
-//    public void deleteS3File(String url) {
-//        s3Service.deleteFile(url);
-//    }
-
-
 }
