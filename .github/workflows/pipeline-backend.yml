@@ -111,6 +111,7 @@ jobs:
             cd ~
             docker pull habtamudires/alem-ekub-api:latest
             docker-compose up -d backend
+            docker image prune -a -f
             
 
 

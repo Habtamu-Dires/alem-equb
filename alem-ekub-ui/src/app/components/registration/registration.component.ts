@@ -69,7 +69,6 @@ export class RegistrationComponent implements OnInit{
           
         },
         error:(err:HttpErrorResponse)=>{
-          this.toastrService.error('Something Went wrong', 'Ooops');
           if(err.error.validationErrors){
             this.errMsgs = err.error.validationErrors;
           } else{

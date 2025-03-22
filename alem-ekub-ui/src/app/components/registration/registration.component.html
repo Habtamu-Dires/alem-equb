@@ -62,9 +62,7 @@
                     class="p-2 rounded-lg text-lg outline-none cursor-pointer"
                     type="file" 
                     accept="image/*"
-                    capture="camera"
                     (change)="onFileSelected($event,'profilePic')"
-                    accept="image/*"
                 />
             </div>
         </div>
@@ -79,19 +77,17 @@
                     class="p-2 rounded-lg text-lg outline-none cursor-pointer"
                     type="file" 
                     accept="image/*"
-                    capture="camera"
                     (change)="onFileSelected($event,'idCardImg')"
-                    accept="image/*"
                 />
             </div>
         </div>
         <p *ngIf="showIdCardImgErr" class="text-sm text-red-500">Id Card Image is mandatory</p>
         <!--Profile Picture Displayer-->
         <section class="w-full flex justify-evenly gap-2 md:gap-10">
-            <div class="flex justify-center w-20 h-20 md:w-28 md:h-28" *ngIf="selectedPictureString">
+            <div class="flex justify-center w-24 h-24 md:w-28 md:h-28" *ngIf="selectedPictureString">
                 <img class="rounded-3xl" [src]="selectedPictureString" alt="profile picture" />
             </div>
-            <div class="flex justify-center w-24 h-20 md:w-40 md:h-28" *ngIf="selectedIdCardImageString">
+            <div class="flex justify-center w-32 h-24 md:w-40 md:h-28" *ngIf="selectedIdCardImageString">
                 <img  class="rounded-3xl" 
                   [src]="selectedIdCardImageString" alt="id card image" 
                 />

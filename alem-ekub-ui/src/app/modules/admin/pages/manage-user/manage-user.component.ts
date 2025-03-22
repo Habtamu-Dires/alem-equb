@@ -50,8 +50,7 @@ export class ManageUserComponent implements OnInit{
     private activatedRoute:ActivatedRoute,
     private router:Router,
     private toastrService:ToastrService,
-    private matDialog:MatDialog,
-    private registrationService:RegistrationService
+    private matDialog:MatDialog
   ){}
 
   ngOnInit(): void {
@@ -82,7 +81,15 @@ export class ManageUserComponent implements OnInit{
         
       },
       error:(err:HttpErrorResponse)=>{
-        this.toastrService.error(err.error.error, 'Ooops');
+        this.toastrService.error(err.error, 'Ooops');
+        const dialog = this.matDialog.open(ConfirmationDialogComponent,{
+          width: '400px',
+          data:{
+            message: err,
+            buttonName: err.error,
+            isWarning: true
+          }
+         });
         const errMsg = JSON.parse(err.error);
         if(errMsg.validationErrors){
           this.errMsgs = errMsg.validationErrors;

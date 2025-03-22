@@ -56,3 +56,4 @@ jobs:
             cd ~
             docker pull habtamudires/alem-ekub-ui:latest
             docker-compose up -d frontend
+            docker image prune -a -f
