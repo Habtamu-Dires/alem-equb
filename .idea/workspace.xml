@@ -6,29 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/RegistrationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/RegistrationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/components/registration/registration.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/manage-user/manage-user.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/member/pages/personal-info/personal-info.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-configuration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/api-configuration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/create-user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/create-user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/fn/users/upload-profile-picture.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/user-response.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/models/user-response.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/services/services/users.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/openapi/openapi.json" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/openapi/openapi.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

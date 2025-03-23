@@ -51,7 +51,6 @@ export class RegistrationComponent implements OnInit{
   
     // create user
     register(){
-      
       this.registrationService.register({
         body: {
           request: this.userRequest,
@@ -82,7 +81,7 @@ export class RegistrationComponent implements OnInit{
     passwordFormControl(){
       this.passwordControl.valueChanges
       .pipe(
-        debounceTime(1500)
+        debounceTime(3000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4) {
@@ -109,7 +108,7 @@ export class RegistrationComponent implements OnInit{
     confirmPasswordControl(){
       this.confirmPassword.valueChanges
       .pipe(
-        debounceTime(1500)
+        debounceTime(3000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4){
@@ -130,7 +129,6 @@ export class RegistrationComponent implements OnInit{
         this.showIdCardImgErr = true;
       }
       else if(!this.showPassConfError) {
-        // this.registration();
         this.register();
       }
     }
@@ -148,15 +146,20 @@ export class RegistrationComponent implements OnInit{
           const reader = new FileReader();
           reader.onload = () => {
             this.selectedIdCardImageString = reader.result as string;
-            const options = { maxSizeMB: 4, maxWidthOrHeight: 1024, useWebWorker: true };
+            const options = { 
+              maxSizeMB: 0.5, 
+              maxWidthOrHeight: 1024, 
+              useWebWorker: true, 
+              maxIteration: 3 
+            };
 
             imageCompression(file, options).then((compressedFile) => {
               this.selectedIdCardImage = compressedFile; 
             });
-            this.showIdCardImgErr = false;
-
           }
           reader.readAsDataURL(file);
+          this.showIdCardImgErr = false;
+
         }
       
     }

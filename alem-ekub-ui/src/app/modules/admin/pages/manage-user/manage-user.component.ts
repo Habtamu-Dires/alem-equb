@@ -372,12 +372,16 @@ export class ManageUserComponent implements OnInit{
         const reader = new FileReader();
         reader.onload = () => {
           this.selectedIdCardImageString = reader.result as string;
-          const options = { maxSizeMB: 4, maxWidthOrHeight: 1024, useWebWorker: true };
+          const options = { 
+                  maxSizeMB: 0.5, 
+                  maxWidthOrHeight: 1024, 
+                  useWebWorker: true, 
+                  maxIteration: 3 
+          };
 
           imageCompression(file, options).then((compressedFile) => {
             this.selectedIdCardImage = compressedFile; 
           });
-
         }
         reader.readAsDataURL(file);
       }

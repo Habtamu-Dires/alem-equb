@@ -37,7 +37,7 @@
             <label class="form-label">Profession<span class="text-red-400">*</span></label>
             <input [(ngModel)] ="userRequest.profession"  class="form-input" type="text" placeholder="Profession"/>
         </div> 
-        <!--image id Displayer-->
+        <!--image id displayer-->
         <section class="w-full flex justify-center items-center p-2">
             <div class="flex justify-center w-48 h-32" *ngIf="selectedIdCardImageString">
                 <img (click)="openImageViewer()" class="rounded-3xl" 

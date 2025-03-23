@@ -69,7 +69,7 @@
         <p *ngIf="showIdCardImgErr" class="text-sm text-red-500">Id Card Image is mandatory</p>
         <!--ID Card Image Displayer-->
         <section class="w-full flex justify-center">
-            <div class="flex justify-center w-48 h-32" *ngIf="selectedIdCardImageString">
+            <div class="flex justify-center w-40 h-28" *ngIf="selectedIdCardImageString">
                 <img  class="rounded-3xl" 
                   [src]="selectedIdCardImageString" alt="id card image" 
                 />
