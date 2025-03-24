@@ -284,7 +284,12 @@ public class UserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(String userId) {
+       List<String> reamRoles = keycloakService.getUserRealmRoles(userId);
+       if(reamRoles.contains("ADMIN")){
+           throw new RuntimeException("You can't delete ADMIN user");
+       }
         User user = findUserByExId(userId);
+
         try{
             keycloakService.deleteUser(userId);
         } catch (Exception e){
@@ -325,13 +330,6 @@ public class UserService {
         keycloakService.logoutUserFromAllDevices(userId);
     }
 
-
-    // find user by id
-    public User findUserById(int userId){
-        return repository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    }
-
     public User findUserByExId(String userId){
         return repository.findByExternalId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -349,7 +347,6 @@ public class UserService {
         if(user.getIdCardImageUrl() != null && !user.getIdCardImageUrl().isBlank()){
             s3Service.deleteFile(user.getIdCardImageUrl());
         }
-//        String url = fileStorageService.saveFile(file, userId, "id-card");
         try {
             String url = s3Service.uploadFile(file);
             user.setIdCardImageUrl(url);

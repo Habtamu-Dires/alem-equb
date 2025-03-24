@@ -115,6 +115,32 @@ public class KeycloakService {
 
     }
 
+    //get user by id
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<String> getUserRealmRoles(String userId){
+        String url = keycloakAuthUrl + "/admin/realms/" + realm + "/users/" + userId + "/role-mappings/realm";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(keycloakClient.getClientAccessToken());
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        ResponseEntity<List> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                request,
+                List.class
+        );
+        List<Map<String,Object>> roles = response.getBody();
+        if(roles == null){
+            return List.of();
+        }
+
+        return roles.stream()
+                .map(role -> (String) role.get("name"))
+                .toList();
+    }
+
 
     // get all users
     @PreAuthorize("hasRole('ROLE_ADMIN')")

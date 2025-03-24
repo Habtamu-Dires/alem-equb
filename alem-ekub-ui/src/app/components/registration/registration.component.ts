@@ -117,7 +117,9 @@ export class RegistrationComponent implements OnInit{
           } else{
             this.showPassConfError = false;
           }
-        } 
+        } else {
+          this.showPassConfError = true;
+        }
       })
     }
   

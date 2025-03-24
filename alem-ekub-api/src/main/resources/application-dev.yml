@@ -34,21 +34,21 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-         issuer-uri: ${OAUTH2_JWT_ISSUER_URI:https://alem-equb.duckdns.org/keycloak/realms/alem-ekub}
-         jwk-set-uri: ${OAUTH2_JWK_SET_URI:https://alem-equb.duckdns.org/keycloak/realms/alem-ekub/protocol/openid-connect/certs}
+         issuer-uri: ${OAUTH2_JWT_ISSUER_URI:http://host.docker.internal:9090/realms/alem-ekub}
+         jwk-set-uri: ${OAUTH2_JWK_SET_URI:http://host.docker.internal:9090/realms/alem-ekub/protocol/openid-connect/certs}
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:https://alem-equb.duckdns.org/keycloak}
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:9090}
   realm: ${KEYCLOAK_REALM:alem-ekub}
-  client-id: ${KEYCLOAK_CLIENT_ID:api-client}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:kwJ81Vi67cXc2v88mN6mlky6a3yrbi8b}
+  client-id: ${KEYCLOAK_CLIENT_ID:api-service}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:mztotjdj2zSvizLBaJw1MWSztEKKRVh7}
 
 s3:
-  space-access-key: ${S3_SPACES_ACCESS_KEY:DOdadM}
-  space-secret-key: ${S3_SPACES_SECRET_KEY:HZV4o}
-  space-endpoint:  ${S3_SPACES_ENDPOINT:https://alem-equb.com}
-  bucket-name: ${S3_BUCKET_NAME:images}
-  region: ${S3_REGION:ETH1}
+  space-access-key: ${S3_SPACES_ACCESS_KEY:DOSomething}
+  space-secret-key: ${S3_SPACES_SECRET_KEY:Zsomething}
+  space-endpoint:  ${S3_SPACES_ENDPOINT:https://image.com}
+  bucket-name: ${S3_BUCKET_NAME:photoss}
+  region: ${S3_REGION:Eh1}
 
 application:
   server:

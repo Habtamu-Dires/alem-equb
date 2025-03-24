@@ -114,7 +114,8 @@ export class UserComponent implements OnInit{
           },
           error:(err)=>{
             console.log(err);
-            this.toastrService.error('Something went wrong', 'oops')
+            const msg = JSON.parse(err.error);
+            this.toastrService.error(msg.error, 'oops')
           }
         })
       }

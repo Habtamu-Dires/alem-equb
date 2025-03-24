@@ -344,6 +344,8 @@ export class ManageUserComponent implements OnInit{
         } else{
           this.showPassConfError = false;
         }
+      } else {
+        this.showPassConfError = true;
       }
     })
   }
@@ -365,7 +367,6 @@ export class ManageUserComponent implements OnInit{
   }
 
   //file methods
-  //onfile selected
   onFileSelected(event:any){
       const file = event.target.files[0];
       if(file){
