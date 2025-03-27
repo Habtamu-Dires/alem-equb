@@ -1,9 +1,6 @@
 package com.ekub.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public record UserRequest(
         @NotNull(message = "PhoneNumber is mandatory")
         @NotBlank(message = "PhoneNumber is mandatory")
         @NotEmpty(message = "PhoneNumber is mandatory")
+        @Pattern(regexp = "^(09|07)\\d{8}$", message = "Invalid phone number format")
         String phoneNumber,
         @NotEmpty(message = "Profession is mandatory")
         String profession,
