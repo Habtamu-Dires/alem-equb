@@ -50,11 +50,11 @@ export class ViewEkubDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loggedUser = this.keycloakService.profile;
     if (this.ekub?.id && this.ekub.version !== undefined) {
-        // this.fetchEkubStatus(this.ekub.id,this.ekub.version);
-        // this.fetchMembersDetail(this.ekub.id,this.ekub.version);
+        this.fetchEkubStatus(this.ekub.id,this.ekub.version);
+        this.fetchMembersDetail(this.ekub.id,this.ekub.version);
         if(this.ekub.version){
           this.fetchRoundsOfEkub(this.ekub.id, this.ekub.version);
-          // this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
+          this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
         }
         //fill the versions
         this.currentVersion = this.ekub.version;
