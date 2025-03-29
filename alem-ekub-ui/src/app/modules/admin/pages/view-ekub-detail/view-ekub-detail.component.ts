@@ -323,6 +323,10 @@ export class ViewEkubDetailComponent implements OnInit {
 
   // transform date time
   transformDateTime(dateString: any) {
+    if (!dateString) {
+      return '';
+    }
+    // Convert the date string to a Date object
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , yy, hh:mm a')
     return formattedDate;

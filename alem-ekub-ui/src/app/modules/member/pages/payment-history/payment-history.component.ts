@@ -36,6 +36,9 @@ export class PaymentHistoryComponent {
   }
 
   transformDateTime(dateString:any){
+    if(!dateString){
+      return '';      
+    }
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , MM, yyyy, hh:mm a')
     return formattedDate;

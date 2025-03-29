@@ -125,13 +125,19 @@ export class PaymentComponent {
   }
 
   transformDateTime(dateString:any){
-      const date = new Date(dateString);
-      const formattedDate = this.datePipe.transform(date, 'EEE, dd , MM, hh:mm a')
-      return formattedDate;
+    if(!dateString){
+      return '';
+    }
+    const date = new Date(dateString);
+    const formattedDate = this.datePipe.transform(date, 'EEE, dd , MM, hh:mm a')
+    return formattedDate;
   }
   
   //transfrom  duaration
   transfromDuration(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const duration = formatDistanceToNow(date, {addSuffix: true})
     return duration;

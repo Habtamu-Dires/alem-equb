@@ -85,13 +85,13 @@ public class EkubController {
         return ResponseEntity.ok(service.searchEkubByName(ekubName));
     }
 
-    //find invited ekubs yet to join
+    // find invited ekubs yet to join
     @GetMapping("/invited-ekubs")
     public ResponseEntity<List<EkubResponse>> getInvitedEkubsYetToJoin(){
         return ResponseEntity.ok(service.getInvitedEkubsYetToJoin());
     }
 
-    //get ekub status
+    // get ekub status
     @GetMapping("/ekub-status/{ekub-id}/{version}")
     public ResponseEntity<EkubStatusResponse> getEkubStatus(
             @PathVariable("ekub-id") String ekubId,

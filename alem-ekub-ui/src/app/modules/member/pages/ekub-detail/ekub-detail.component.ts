@@ -206,6 +206,9 @@ export class EkubDetailComponent implements OnInit {
 
   // transform date time
   transformDateTime(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , yy, hh:mm a')
     return formattedDate;
