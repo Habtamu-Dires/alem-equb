@@ -62,9 +62,12 @@ application:
 logging:
   level:
     org:
-      springframework:
-        security: DEBUG
+      springframework.security.oauth2.jwt: DEBUG
+      springframework.security: DEBUG
       keycloak: DEBUG
+      apache.http: DEBUG
+      apache.http.wire: ERROR
+
 
 
 

@@ -70,6 +70,24 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 
+		<!--apache http client-->
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.4.3</version>
+		</dependency>
+
+		<!--caffeine for caching the jwks -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+<!--			<version>3.2.0</version>-->
+		</dependency>
+
 		<!--amazon s3 -->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
