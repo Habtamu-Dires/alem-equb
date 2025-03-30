@@ -146,6 +146,7 @@ export class ViewEkubDetailComponent implements OnInit {
 
   // remove guarantor
   removeGuarantor(round:RoundResponse,guarantorId:any){
+    console.log(guarantorId + " the guarantor id");
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
@@ -154,8 +155,10 @@ export class ViewEkubDetailComponent implements OnInit {
         isWarning: true
       }
     });
+
     dialogRef.afterClosed().subscribe(result =>{
       if(result && guarantorId){
+        console.log(guarantorId);
         this.userGuaranteeService.cancelGuarantee({
           'round-id': round.id as string,
           'guarantor-id': guarantorId,

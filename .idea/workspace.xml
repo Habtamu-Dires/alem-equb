@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9954e2e-5e77-4a51-890b-701ffae5b580" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/BeanConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/config/BeanConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/payment/PaymentSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user_guarantee/UserGuaranteeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user_guarantee/UserGuaranteeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user_guarantee/UserGuaranteeResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-api/src/main/java/com/ekub/user_guarantee/UserGuaranteeResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/alem-ekub-ui/src/app/modules/admin/pages/view-ekub-detail/view-ekub-detail.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
