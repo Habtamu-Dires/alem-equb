@@ -18,12 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-//@RestController
-//@RequestMapping("/files")
-//@Tag(name = "files")
+@RestController
+@RequestMapping("/files")
+@Tag(name = "files")
 public class FileController {
 
-    //@GetMapping("/get-file")
+    @GetMapping("/get-file")
     public ResponseEntity<Resource> getFile(
         @RequestParam("file-path") String filePath
     ) throws MalformedURLException {

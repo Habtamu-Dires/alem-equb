@@ -11,33 +11,34 @@
         </div>
      </section>
     <section class="flex flex-col justify-center items-center overflow-auto">
-        <!--last round winner-->
+        <!-- Last Round Winner -->
         <article *ngIf="lastRound > 0 
-                    && rounds[lastRound -1]
-                    && rounds[lastRound -1].winner
-                    && ekub?.version === currentVersion"  
-                class="w-full flex flex-col gap-2 justify-center items-center text-lg font-semibold">
-            <section *ngIf="rounds.length > 0"
-                 class="w-full flex justify-evenly p-4">
-                <div>
-                    የዙር <span>{{lastRound}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                    <span>{{rounds[lastRound-1].winner?.username}}</span>
+            && rounds[lastRound -1]
+            && rounds[lastRound -1].winner
+            && ekub?.version === currentVersion"  
+        class="w-full px-4 py-6 text-lg font-semibold bg-gray-50 rounded-lg shadow-sm">
+        <div class="container mx-auto flex flex-col gap-6">
+            <section *ngIf="rounds.length > 0" class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+                <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center text-gray-800">
+                    <span class="text-indigo-600">የዙር</span> 
+                    <span class="bg-indigo-100 px-2 py-1 rounded">{{lastRound}}</span>
+                    <span class="text-indigo-600">ዕጣ የወጣላቸው አባላ መለያ ስም | Username:</span>
+                    <span class="font-bold text-indigo-800">{{rounds[lastRound-1].winner?.username}}</span>
                 </div>
-                <div class="flex gap-2">
-                    Guarantors: 
-                    <p *ngFor="let userGuarantee of rounds[lastRound-1].userGuarantees"
-                        class="flex gap-1">
-                        <span>{{userGuarantee.guarantor}} </span>
+                <div class="flex flex-col sm:flex-row gap-2 text-gray-700">
+                    <span *ngIf="hasGuarantor(rounds[lastRound -1])">Guarantors:</span>
+                    <p *ngFor="let userGuarantee of rounds[lastRound-1].userGuarantees" class="flex gap-1">
+                        <span class="font-semibold text-indigo-700">{{userGuarantee.guarantor}}</span>
                     </p>
                 </div>
             </section>
-            <section class="w-full flex justify-evenly p-4">
+            <section class="flex flex-col sm:flex-row justify-center sm:justify-evenly gap-6">
                 <div *ngIf="rounds[lastRound-1] 
                     && !hasGuarantor(rounds[lastRound -1])
                     && !rounds[lastRound-1].paid">
                     <button (click)="guarantWinner(rounds[lastRound-1])" 
-                        class="text-blue-400 hover:text-blue-600">
-                        guarantee 
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200">
+                        Guarantee
                     </button>
                 </div>
                 <div *ngIf="rounds[lastRound-1] 
@@ -45,50 +46,53 @@
                         && hasGuarantor(rounds[lastRound -1])
                         && !rounds[lastRound-1].paid">
                     <button (click)="payRoundWinner(rounds[lastRound-1])" 
-                         class="px-5 py-2 text-white rounded-lg bg-grn text-center hover:bg-green-600">
+                            class="px-5 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors duration-200">
                         Pay
                     </button>
                 </div>
             </section>
+        </div>
         </article>
 
-         <!--general information section-->
-        <section class="w-full flex flex-col justify-center items-center">
-            <div  class="text-xl font-semibold">
-                <p>General Information</p>
+        <!-- General Information Section -->
+        <section class="w-full py-8 bg-white">
+            <div class="container mx-auto flex flex-col items-center gap-6">
+                <div class="text-2xl font-bold text-gray-800">
+                    <p>General Information</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl px-4">
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <span class="text-sm sm:text-base">የአባላት ብዛት: </span>
+                        @if (currentVersion === ekub?.version) {
+                            <span class="font-bold text-indigo-700">{{ekubStatus?.totalMembers}}</span> 
+                        } @else {
+                            <span class="font-bold text-indigo-700">{{ekubStatus?.winnersCount}}</span>
+                        }
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">ዕጣ የወጣላቸው የአባላት ብዛት: <span class="font-bold text-indigo-700">{{ekubStatus?.winnersCount}}</span></p>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <span class="text-sm sm:text-base">ዕጣ ያልወጣላቸው የአባላት ብዛት: </span> 
+                        @if (currentVersion === ekub?.version) {
+                            <span class="font-bold text-indigo-700">{{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</span> 
+                        } @else {
+                            <span class="font-bold text-indigo-700">0</span>
+                        }
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">የተጀመረበት ቀን: <span class="font-bold text-indigo-700">{{transformDateTime(ekubStatus?.startDate)}}</span></p>
+                    </div>
+                </div>
             </div>
-            <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <span>የአባላት ብዛት: </span>
-                    @if (currentVersion === ekub?.version) {
-                        <span>{{ekubStatus?.totalMembers}}</span> 
-                    } @else {
-                        <span>{{ekubStatus?.winnersCount}}</span>
-                    }
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubStatus?.winnersCount}}</p>
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <span>ዕጣ ያልወጣላቸው የአባላት ብዛት: </span> 
-                    @if (currentVersion === ekub?.version) {
-                        <span> {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</span> 
-                    } @else {
-                        <span>0</span>
-                    }
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የተጀመረበት ቀን: {{transformDateTime(ekubStatus?.startDate)}}</p>
-                </div>
-            </section>
         </section>
         <!--each rounds winner-->
         <section *ngIf="rounds.length !== 0" 
                 class="w-full p-4 flex flex-col justify-center items-center">
-            <div class="p-2 text-xl font-semibold">
-                <p class="underline">Round Winners List</p>
+            <div class="text-2xl font-bold text-gray-800">
+                <p>Round Winners List</p>
             </div>
-            <section class="w-full flex justify-center overflow-auto">
+            <section class="p-4 w-full flex justify-center overflow-auto">
                 <table class="w-full border border-gray-300 bg-white">
                     <thead class="bg-gray-200">
                         <tr>
@@ -151,8 +155,8 @@
         <!--User Round Payments section-->
         <section *ngIf="userRoundPayments.length !== 0" 
             class="w-full flex flex-col items-center justify-center">
-            <div class="p-2 text-xl font-semibold">
-                <p class="underline">User Round Payments</p>
+            <div class="text-2xl font-bold text-gray-800">
+                <p>User Round Payments</p>
             </div>
             <section class="w-full p-4 flex flex-col items-center justify-center overflow-auto">
                 <table class="w-full border border-gray-300 bg-white">
@@ -178,8 +182,8 @@
         <!--Member List-->
         <section *ngIf="memberDetails.length > 0 && currentVersion == ekub?.version" 
             class="w-full flex flex-col justify-center items-center">
-            <div class="p-2 text-xl font-semibold">
-                <p class="underline">Members List</p>
+            <div class="text-2xl font-bold text-gray-800">
+                <p>Members List</p>
             </div>
             <section class="w-full p-4 flex justify-center max-h-96 overflow-auto">
                 <table class="w-full border border-gray-300 bg-white">
@@ -248,8 +252,8 @@
         </section>
         <!--Description-->
         <section class="w-full flex flex-col justify-center items-center">
-            <div class="p-4 text-xl font-semibold">
-                <p class="underline">Description</p>
+            <div class="text-2xl font-bold text-gray-800">
+                <p>Description</p>
             </div>
             <section class="w-full p-5">
                 <div class="border-2 rounded-md p-4 max-h-96 overflow-y-auto">

@@ -27,7 +27,7 @@ public class UserController {
             @RequestPart @Valid UserRequest request,
             @RequestPart MultipartFile idCardImg
     ) {
-        service.createUser(request,idCardImg);
+        service.createUser(request,idCardImg, true);
         return ResponseEntity.accepted().build();
     }
 

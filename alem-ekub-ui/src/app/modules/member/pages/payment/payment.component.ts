@@ -52,6 +52,7 @@ export class PaymentComponent {
     }).subscribe({
       next:(res:UserPendingPaymentResponse[]) =>{
         this.pendingPayments = res as UserPendingPaymentResponse[];
+        console.log(this.pendingPayments);
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err);

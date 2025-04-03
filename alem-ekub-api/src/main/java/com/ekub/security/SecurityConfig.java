@@ -41,8 +41,6 @@ public class SecurityConfig {
                         new KeycloakJwtAuthenticationConverter()
                 )));
 
-
-
         return http.build();
     }
 }

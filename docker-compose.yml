@@ -10,7 +10,7 @@ services:
     volumes:
       - alem_ekub_volume:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5431:5432"
     networks:
       - alem-ekub
     restart: unless-stopped # always
@@ -19,7 +19,7 @@ services:
     container_name: keycloak-ekub
     image: quay.io/keycloak/keycloak
     ports:
-      - "9090:8080"
+      - "9091:8080"
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: habt
       KC_BOOTSTRAP_ADMIN_PASSWORD: password

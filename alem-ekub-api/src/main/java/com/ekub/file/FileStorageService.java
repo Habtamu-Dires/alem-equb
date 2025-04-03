@@ -2,6 +2,7 @@ package com.ekub.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ import java.nio.file.Paths;
 import static java.io.File.separator;
 import static java.lang.System.currentTimeMillis;
 
-//@Service
+@Service
 @Slf4j
 public class FileStorageService {
 
@@ -47,7 +48,7 @@ public class FileStorageService {
             log.info("Failed to create directory: {}", e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-        final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
+        final String fileExtension = getFileExtension(sourceFile);
         String targetFiltPath = uploadDir + separator + id +"-"+ currentTimeMillis() +"." + fileExtension;
 
         Path filePath = Paths.get(targetFiltPath);
@@ -67,15 +68,37 @@ public class FileStorageService {
         return serverUrl  + "/files/get-file?file-path="+targetFilepath;
     }
     // get file extentin
-    private String getFileExtension(String fileName) {
+    private String getFileExtension(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
         if(fileName == null){
             return  "";
         }
         int lastDotIndex = fileName.lastIndexOf(".");
         if(lastDotIndex == -1){
-            return "";
+            // Fallback: Infer extension from Content-Type
+            String contentType = file.getContentType();
+            if (contentType != null && !contentType.isEmpty()) {
+                return  getExtensionFromContentType(contentType);
+            } else {
+                return "file.unknown"; // Last resort
+            }
         }
         return fileName.substring(lastDotIndex + 1).toUpperCase();
+    }
+
+    // get file extension from content type
+    public static String getExtensionFromContentType(String contentType) {
+        return switch (contentType) {
+            case MediaType.IMAGE_JPEG_VALUE -> ".jpg";
+            case MediaType.IMAGE_PNG_VALUE -> ".png";
+            case MediaType.IMAGE_GIF_VALUE -> ".jpeg";
+            case MediaType.APPLICATION_PDF_VALUE -> ".webp";
+            case MediaType.TEXT_PLAIN_VALUE -> ".txt";
+
+            // Add other content types as needed
+            case null, default -> ".unknown"; // Default if content type is not recognized
+
+        };
     }
 
     //delete file

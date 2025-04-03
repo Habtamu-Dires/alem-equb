@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       colors:{
         "coral-red": "#FF6452",
-        "grn":'#1c594e'
+        "grn":'#2a7d6e' /* #1c594e */
       }
     },
   },

@@ -24,7 +24,7 @@ public class RegistrationController {
             @RequestPart MultipartFile idCardImg
 
     ) {
-        userService.register(request,idCardImg);
+        userService.createUser(request,idCardImg, false);
         return ResponseEntity.accepted().build();
     }
 

@@ -17,7 +17,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 8 # down form 10, b/c pgBouncer connection pool
+      maximum-pool-size: 8 # down form 10, b/c pgBouncer [digital ocean] connection pool
       minimum-idle: 2
       connection-timeout: 30000   # 30 second
       leak-detection-threshold: 5000  # enable hikari leak detection
@@ -41,7 +41,7 @@ keycloak:
   auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:9090}
   realm: ${KEYCLOAK_REALM:alem-ekub}
   client-id: ${KEYCLOAK_CLIENT_ID:api-service}
-  client-secret: ${KEYCLOAK_CLIENT_SECRET:mztotjdj2zSvizLBaJw1MWSztEKKRVh7}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:51UhKLYjhsqqleFSw0gc1iRka0NiOQMC}
 
 s3:
   space-access-key: ${S3_SPACES_ACCESS_KEY:DOSomething}
@@ -59,14 +59,14 @@ application:
     path: ${FILE_PATH:./photo}
 
 
-logging:
-  level:
-    org:
-      springframework.security.oauth2.jwt: DEBUG
-      springframework.security: DEBUG
-      keycloak: DEBUG
-      apache.http: DEBUG
-      apache.http.wire: ERROR
+#logging:
+#  level:
+#    org:
+#      springframework.security.oauth2.jwt: DEBUG
+#      springframework.security: DEBUG
+#      keycloak: DEBUG
+#      apache.http: DEBUG
+#      apache.http.wire: ERROR
 
 
 

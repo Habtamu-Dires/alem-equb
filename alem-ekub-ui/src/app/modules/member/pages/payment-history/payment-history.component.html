@@ -9,28 +9,44 @@
     <section *ngIf="paymentResponses.length > 0"
         class="w-full flex flex-col justify-center items-center"
             [ngClass]="{'mt-16': onMobileView}">
-        <table class="w-full border border-gray-300 bg-white">
-            <thead class="bg-gray-200 sticky top-[66px]">
-                <tr>
-                    <th class="table-head">የብር መጠን</th>
-                    <th class="table-head">Type</th>
-                    <th class="table-head">የዕቁብ ስም</th>
-                    <th class="table-head">የዕቁብ V</th>
-                    <th class="table-head">ዙር</th>
-                    <th class="table-head">የተፈፀመበት ቀን እና ሰዓት</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let payment of paymentResponses">
-                    <td class="table-data">{{payment.amount}}</td>
-                    <td class="table-data">{{payment.type}}</td>
-                    <td class="table-data">{{payment.ekubName}}</td>
-                    <td class="table-data">{{payment.roundVersion}}</td>
-                    <td class="table-data">{{payment.roundNumber}}</td>
-                    <td class="table-data">{{transformDateTime(payment.createdDate)}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <!--Display table for large screen-->
+        <div *ngIf="!onMobileView" class="w-full">
+            <table class="w-full border border-gray-300 bg-white">
+                <thead class="bg-gray-200 sticky top-[66px]">
+                    <tr>
+                        <th class="table-head">የብር መጠን</th>
+                        <th class="table-head">Type</th>
+                        <th class="table-head">የዕቁብ ስም</th>
+                        <th class="table-head">የዕቁብ V</th>
+                        <th class="table-head">ዙር</th>
+                        <th class="table-head">የተፈፀመበት ቀን እና ሰዓት</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let payment of paymentResponses">
+                        <td class="table-data">{{payment.amount}}</td>
+                        <td class="table-data">{{payment.type}}</td>
+                        <td class="table-data">{{payment.ekubName}}</td>
+                        <td class="table-data">{{payment.roundVersion}}</td>
+                        <td class="table-data">{{payment.roundNumber}}</td>
+                        <td class="table-data">{{transformDateTime(payment.createdDate)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Display Cards for Mobile -->
+        <div class="w-full flex flex-col space-y-4" *ngIf="onMobileView">
+            <div *ngFor="let payment of paymentResponses" 
+                class="bg-white shadow-md rounded-lg p-4 w-full">
+                <div class="text-lg font-semibold text-gray-700">{{payment.amount}}<span> ብር</span></div>
+                <div class="text-gray-500 text-sm">Type: {{payment.type}}</div>
+                <div class="text-gray-500 text-sm">የዕቁብ ስም: {{payment.ekubName}}</div>
+                <div class="text-gray-500 text-sm">የዕቁብ V: {{payment.roundVersion}}</div>
+                <div class="text-gray-500 text-sm">ዙር: {{payment.roundNumber}}</div>
+                <div class="text-gray-500 text-sm">የተፈፀመበት ቀን እና ሰዓት: {{transformDateTime(payment.createdDate)}}</div>
+                
+            </div>
+        </div>
     </section>
 </main>
 

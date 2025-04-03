@@ -38,12 +38,11 @@
     <p *ngIf="showMethodErr" class="text-sm text-red-400">select payment method</p>
   </section>
   
-  <div class="flex justify-evenly w-full">
-    <button 
-      class="px-4 py-2 rounded-lg text-white bg-grn hover:bg-green-700"
-      (click)="submit()">
-      Pay
-    </button>
-    <button (click)="cancel()">Cancel</button>
+  <div class="w-full">
+    <!-- <button (click)="cancel()">Cancel</button> -->
+    <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-2 w-full hover:bg-green-700"
+        (click)="submit()">
+        Pay
+      </button>
   </div>
 </main>

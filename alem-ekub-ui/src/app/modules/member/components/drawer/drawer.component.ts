@@ -28,7 +28,11 @@ export class DrawerComponent implements OnInit{
 
   selectItem(item:string){
     this.uxService.updateHeadersSelectedItem(item);
+    if(item === 'Home'){
+      this.uxService.updateShowDrawerStatus(false);
+    }
     this.router.navigate(['member', item.toLocaleLowerCase()]);
+
   }
 
   logout() {

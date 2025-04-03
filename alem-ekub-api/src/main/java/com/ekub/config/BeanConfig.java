@@ -34,7 +34,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class BeanConfig {
 
-    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") String jwkSetUri;
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    String jwkSetUri;
     private final AllowedOriginsConfig allowedOriginsConfig;
 
     // cors filter
