@@ -5,11 +5,18 @@
         (onSearch)="onSearch($event)"
         (filter)="onFilterByEkub($event)"
         (afterDateTime)="onDateTimeFilter($event)"
+        printSectionId="print-section"
       >
       </app-header>
    </div>
+   <!--no payment found message-->
+   <ng-container *ngIf="paymentList.length === 0" class="flex justify-center py-10">
+    No Payment found.
+  </ng-container>
     <section>
-        <table class="min-w-full border border-gray-300 bg-white overflow-auto">
+        <!--on large screen-->
+        <div class="hidden md:block" id="print-section">
+          <table class="min-w-full border border-gray-300 bg-white overflow-auto">
             <thead class="bg-gray-200 sticky top-16">
               <tr>
                 <th class="table-head w-1/12">Payer</th>
@@ -39,7 +46,23 @@
                     <td class="table-data">{{payment.paymentMethod}}</td>
               </tr>
             </tbody>
-        </table> 
+          </table> 
+        </div>
+        <!--on mobile view-->
+        <div class="block md:hidden space-y-4">
+          <div *ngFor="let payment of paymentList" class="bg-white rounded-lg shadow p-4 border border-gray-200">
+            <div class="mb-2"><strong>Payer:</strong> {{payment.username}}</div>
+            <div class="mb-2"><strong>Type:</strong> {{payment.type}}</div>
+            <div class="mb-2"><strong>Payee:</strong> {{payment.toUsername}}</div>
+            <div class="mb-2"><strong>Amount:</strong> {{payment.amount}}</div>
+            <div class="mb-2"><strong>Equb:</strong> {{payment.ekubName}}</div>
+            <div class="mb-2"><strong>Version:</strong> {{payment.roundVersion}}</div>
+            <div class="mb-2"><strong>Round:</strong> {{payment.roundNumber}}</div>
+            <div class="mb-2"><strong>Date & Time:</strong> {{formattedDateTime(payment.createdDate)}}</div>
+            <div class="mb-2"><strong>Remark:</strong> {{payment.remark}}</div>
+            <div class="mb-2"><strong>Method:</strong> {{payment.paymentMethod}}</div>
+          </div>
+        </div>
         <app-pagination *ngIf="!isEmptyPage" class="w-full m-5 z-10 sticky bottom-0 bg-white"
           [page]="page"
           [size]="size"

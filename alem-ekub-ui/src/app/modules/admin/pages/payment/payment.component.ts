@@ -19,6 +19,7 @@ export class PaymentComponent implements OnInit{
   paymentList:PaymentResponse[] = [];
   ekubFilter:string = '';
   dateTimeFilter:string = '';
+  printSectionId:string = '';
   // pagination
   page:number = 0;
   size:number = 5;

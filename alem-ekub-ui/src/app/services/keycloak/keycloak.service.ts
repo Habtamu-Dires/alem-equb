@@ -31,12 +31,12 @@ export class KeycloakService {
   constructor(private router:Router) { }
 
 
-  async init(obj:any){
-    const value = obj.onLoad;
+  // async init(obj:any){
+    async init(){
+    // const value = obj.onLoad;
     const authenticated = await this.keycloak?.init({
-         onLoad: value,
+         onLoad: 'check-sso',
          checkLoginIframe: false,
-        //  enableCookie: true
     });
 
     if(authenticated){
@@ -68,6 +68,11 @@ export class KeycloakService {
   // is token valid
   get isTokenValid(){
     return !this.keycloak.isTokenExpired();
+  }
+
+  // is authenticated
+  get isAuthenticated(){
+    return this.keycloak.authenticated;
   }
 
   //account management

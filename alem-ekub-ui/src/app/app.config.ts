@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, inject, Injector, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, Injector, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import {provideToastr} from 'ngx-toastr';
 import { routes } from './app.routes';
@@ -26,11 +26,11 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const injector = inject(Injector);
       const kcService = injector.get(KeycloakService);
-      const isRegistrationPage = window.location.pathname === '/registration';
-
-      return kcService.init({
-        onLoad: isRegistrationPage ? 'check-sso' : 'login-required',
-      });
+      // const isRegistrationPage = window.location.pathname === '/registration';
+      return kcService.init();
+      // return kcService.init({
+      //   onLoad: isRegistrationPage ? 'check-sso' : 'login-required',
+      // });
     }),
     provideAnimations(),
     provideAnimationsAsync(),

@@ -81,7 +81,7 @@ export class RegistrationComponent implements OnInit{
     passwordFormControl(){
       this.passwordControl.valueChanges
       .pipe(
-        debounceTime(3000)
+        debounceTime(1000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4) {
@@ -108,7 +108,7 @@ export class RegistrationComponent implements OnInit{
     confirmPasswordControl(){
       this.confirmPassword.valueChanges
       .pipe(
-        debounceTime(3000)
+        debounceTime(1000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4){
@@ -143,27 +143,26 @@ export class RegistrationComponent implements OnInit{
     //file methods
     //onfile selected
     onFileSelected(event:any){
-        const file = event.target.files[0];
-        if(file){
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedIdCardImageString = reader.result as string;
-            const options = { 
-              maxSizeMB: 0.5, 
-              maxWidthOrHeight: 1024, 
-              useWebWorker: true, 
-              maxIteration: 3 
-            };
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.selectedIdCardImageString = reader.result as string;
+          const options = { 
+            maxSizeMB: 0.5, 
+            maxWidthOrHeight: 1024, 
+            useWebWorker: true, 
+            maxIteration: 3 
+          };
 
-            imageCompression(file, options).then((compressedFile) => {
-              this.selectedIdCardImage = compressedFile; 
-            });
-          }
-          reader.readAsDataURL(file);
-          this.showIdCardImgErr = false;
-
+          imageCompression(file, options).then((compressedFile) => {
+            this.selectedIdCardImage = compressedFile; 
+          });
         }
-      
+        reader.readAsDataURL(file);
+        this.showIdCardImgErr = false;
+
+      }      
     }
 
 

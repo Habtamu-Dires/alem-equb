@@ -1,6 +1,6 @@
 <main class="w-full h-screen flex relative">
     <!--side bar-->
-    <section *ngIf="!isSideBarHidden" class="w-1/3  md:w-1/6 shadow-lg font-mono h-screen">
+    <section *ngIf="!onShawDrawer" class="w-1/3  md:w-1/6 shadow-lg font-mono h-screen">
         <div class="flex flex-col h-full justify-between shadow-xl">
             <div class="flex flex-col gap-2">
                 <div class="flex justify-between p-4">
@@ -55,17 +55,9 @@
     </section>
     <!--main-->
     <section class="overflow-auto" 
-        [ngClass]="{'w-full': isSideBarHidden, 'w-2/3 md:w-5/6': !isSideBarHidden}">
-        <!-- side bar toggler -->
-        <div>
-            <svg *ngIf="isSideBarHidden"
-                class="absolute top-0 cursor-pointer mx-4 my-5"
-                (click)="toggleSideBar()"
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.5 2H.5m13 5H.5m13 5H.5"/>
-            </svg>
-        </div>
+        [ngClass]="{'w-full': onShawDrawer, 'w-2/3 md:w-5/6': !onShawDrawer}">
         <!--pages-->
-        <div class="px-12">
+        <div class="p-2 md:px-12">
             <router-outlet></router-outlet>
         </div>
     </section>

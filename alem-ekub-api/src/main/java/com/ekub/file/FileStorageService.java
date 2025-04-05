@@ -26,14 +26,6 @@ public class FileStorageService {
     String serverUrl;
 
     public String saveFile(
-            @NonNull MultipartFile sourceFile,
-            @NonNull String id,
-            @NonNull String type
-    ){
-        return uploadFile(sourceFile,type,id);
-    }
-
-    public String uploadFile(
             @NonNull  MultipartFile sourceFile,
             @NonNull  String type,
             @NonNull  String id

@@ -24,6 +24,7 @@
     "date-fns": "^4.1.0",
     "keycloak-js": "^26.0.7",
     "ng-openapi-gen": "^0.52.0",
+    "ngx-print": "^2.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -10,7 +10,7 @@ import { DrawerComponent } from "../../components/drawer/drawer.component";
 import { Router } from '@angular/router';
 import { EkubsComponent } from "../ekubs/ekubs.component";
 import { PaymentHistoryComponent } from '../payment-history/payment-history.component';
-import { UxService } from '../../../../services/ux-service/ux.service';
+import { UxService } from '../../services/member-ux/ux.service';
 import { PaymentComponent } from '../payment/payment.component';
 import { NewEkubsComponent } from '../new-ekubs/new-ekubs.component';
 

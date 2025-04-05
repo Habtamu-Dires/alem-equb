@@ -4,6 +4,7 @@ import { UserProfile } from '../../../services/keycloak/user-profile';
 import { CommonModule } from '@angular/common';
 import { SideBarItemComponent } from "../components/side-bar-item/side-bar-item.component";
 import { Router, RouterOutlet } from '@angular/router';
+import { AdminUxService } from '../services/admin-ux/admin-ux.service';
 
 @Component({
   selector: 'app-home',
@@ -14,18 +15,23 @@ import { Router, RouterOutlet } from '@angular/router';
 export class HomeComponent implements OnInit{
 
   profile:UserProfile | undefined;
-  isSideBarHidden:boolean = false;
+  onShawDrawer:boolean = false;
   activeComponent:string = 'Ekubs';
-  onMobileView:boolean = false;
+  // onMobileView:boolean = false;
 
-  constructor(private keycloakService:KeycloakService,
-    private router:Router
+  constructor(
+    private keycloakService:KeycloakService,
+    private router:Router,
+    private adminUxService:AdminUxService
   ){}
-
 
   ngOnInit(): void {
     this.setActiveComponent('Ekubs');
     this.profile = this.keycloakService.profile;
+    // get show drawer 
+    this.adminUxService.showDrawer$.subscribe((onShawDrawer:boolean)=>{
+      this.onShawDrawer = onShawDrawer;
+    });
   }
 
   // logout
@@ -35,7 +41,8 @@ export class HomeComponent implements OnInit{
 
   // toggle side bar
   toggleSideBar() {
-    this.isSideBarHidden = !this.isSideBarHidden;
+    this.onShawDrawer = !this.onShawDrawer;
+    this.updateShowDrawer(this.onShawDrawer);
   }
 
   // set active component
@@ -44,20 +51,9 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['admin', component.toLocaleLowerCase()])
   }
 
-  // Listen for window resize events
-    @HostListener('window:resize',['$event'])
-    onResize(event:any){
-      this.checkScreenSzie(event.target.innerWidth);
-    }
-  
-    // check screen size and set hideSideBar value
-    private checkScreenSzie(width:number){
-      if (width < 1008) { // Small screen threshold (can be adjusted)
-          this.onMobileView = true;
-      } else {
-        this.onMobileView = false;
-        this.isSideBarHidden = true;
-      }
-    }
+  // update show drawer
+  updateShowDrawer(show:boolean){
+    this.adminUxService.updateShowDrawerStatus(show);
+  }
 
 }

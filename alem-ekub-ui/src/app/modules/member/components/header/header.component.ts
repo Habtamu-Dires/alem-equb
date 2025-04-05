@@ -4,7 +4,7 @@ import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DrawerItemComponent } from "../drawer-item/drawer-item.component";
-import { UxService } from '../../../../services/ux-service/ux.service';
+import { UxService } from '../../services/member-ux/ux.service';
 
 @Component({
   selector: 'app-header',

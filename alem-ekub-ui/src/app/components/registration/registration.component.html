@@ -1,92 +1,96 @@
-<main class="max-container w-full min-h-screen flex flex-col justify-center items-center gap-2 overflow-auto p-2">
-    <article class="flex justify-center">
-        <p class="text-2xl font-mono mt-4">Alem Equb Registration</p>
-    </article>
-    <section class="w-full md:w-2/3 lg:w-2/3 space-y-3">
-        <div *ngIf="errMsgs" class="flex-col items-center">
-            <p *ngFor="let msg of errMsgs" class="text-red-500">
-                {{msg}}
-            </p>
+<main class="w-full min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <section class="w-full max-w-2xl bg-gray-800 rounded-xl shadow-md p-6 space-y-6">
+      
+      <!-- Title -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold font-mono text-white">Alem Equb Registration</h1>
+      </div>
+  
+      <!-- Error Messages -->
+      <div *ngIf="errMsgs" class="space-y-1">
+        <p *ngFor="let msg of errMsgs" class="text-red-400 text-sm text-center">{{msg}}</p>
+      </div>
+  
+      <!-- Form Fields -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">Username<span class="text-red-400">*</span></label>
+          <input [(ngModel)]="userRequest.username" type="text" placeholder="name" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">Username<span class="text-red-400">*</span></label>
-            <input [(ngModel)] ="userRequest.username"  class="form-input" type="text" placeholder="name"/>
+  
+        <div>
+          <label class="block text-sm font-medium">First Name<span class="text-red-400">*</span></label>
+          <input [(ngModel)]="userRequest.firstName" type="text" placeholder="First Name" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">First Name<span class="text-red-400">*</span></label>
-            <input [(ngModel)] ="userRequest.firstName"  class="form-input" type="text" step="0.01" placeholder="First Name"/>
+  
+        <div>
+          <label class="block text-sm font-medium">Last Name<span class="text-red-400">*</span></label>
+          <input [(ngModel)]="userRequest.lastName" type="text" placeholder="Last Name" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">Last Name<span class="text-red-400">*</span></label>
-            <input [(ngModel)] ="userRequest.lastName"  class="form-input" type="text" step="0.01" placeholder="Last Name"/>
+  
+        <div>
+          <label class="block text-sm font-medium">Phone Number<span class="text-red-400">*</span></label>
+          <input [(ngModel)]="userRequest.phoneNumber" type="text" placeholder="09.. or 07.." class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">Phone Number<span class="text-red-400">*</span></label>
-            <input [(ngModel)] ="userRequest.phoneNumber"  class="form-input" type="text" placeholder="09.. or 07.."/>
+  
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input [(ngModel)]="userRequest.email" type="text" placeholder="email" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">Email</label>
-            <input [(ngModel)] ="userRequest.email"  class="form-input" type="text" placeholder="email"/>
+  
+        <div>
+          <label class="block text-sm font-medium">Profession<span class="text-red-400">*</span></label>
+          <input [(ngModel)]="userRequest.profession" type="text" placeholder="Profession" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
         </div>
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">Profession<span class="text-red-400">*</span></label>
-            <input [(ngModel)] ="userRequest.profession"  class="form-input" type="text" placeholder="Profession"/>
+  
+        <!-- Passwords -->
+        <ng-container *ngIf="!userRequest.id">
+          <div>
+            <label class="block text-sm font-medium">Password<span class="text-red-400">*</span></label>
+            <input [formControl]="passwordControl" type="password" placeholder="password" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
+          </div>
+  
+          <!-- Password Errors -->
+          <div *ngIf="showPassConfError || showPassMandatoryError || showPassLenghtError" class="space-y-1">
+            <p *ngIf="showPassConfError" class="text-sm text-red-400">password didn't match</p>
+            <p *ngIf="showPassMandatoryError" class="text-sm text-red-400">password is Mandatory</p>
+            <p *ngIf="showPassLenghtError" class="text-sm text-red-400">Minimum password length is 4</p>
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium">Confirm Password<span class="text-red-400">*</span></label>
+            <input [formControl]="confirmPassword" type="password" placeholder="confirm password" class="w-full bg-gray-700 text-white placeholder-gray-400 rounded-md p-2"/>
+          </div>
+        </ng-container>
+  
+        <!-- Id Card Upload -->
+        <div>
+          <label class="block text-sm font-medium">Id Card Image</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" class="w-full bg-gray-700 text-white rounded-md p-2 cursor-pointer"/>
         </div>
-        <div *ngIf="!userRequest.id" class="w-full grid grid-cols-12">
-            <label class="form-label">Password<span class="text-red-400">*</span></label>
-            <input [formControl]="passwordControl" class="form-input" type="password" placeholder="password"/>
+  
+        <p *ngIf="showIdCardImgErr" class="text-sm text-red-400">Id Card Image is mandatory</p>
+  
+        <!-- Image Preview -->
+        <div *ngIf="selectedIdCardImageString" class="flex justify-center">
+          <img [src]="selectedIdCardImageString" alt="id card image" class="rounded-xl w-40 h-28 object-cover border border-gray-600"/>
         </div>
-        <div *ngIf="!userRequest.id && (showPassConfError || showPassMandatoryError || showPassLenghtError)" 
-            class="w-full grid grid-cols-12">
-            <p *ngIf="showPassConfError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
-                password didn't match
-            </p>
-            <p *ngIf="showPassMandatoryError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
-                password is Mandatory
-            </p>
-            <p *ngIf="showPassLenghtError" class="text-sm text-red-500 w-full col-start-3 col-end-12">
-                Minimum password lenght is 4
-            </p>
-        </div> 
-        <div *ngIf="!userRequest.id" class="w-full grid grid-cols-12">
-            <label class="form-label">Confirm Password<span class="text-red-400">*</span></label>
-            <input [formControl]="confirmPassword" class="form-input" type="password" placeholder="confirm password"/>
-        </div>
-        <!--id card image file selector-->
-        <div class="w-full grid grid-cols-12">
-            <label class="form-label">
-                <p>Id Card Image</p>
-            </label>
-            <div class="flex items-center col-span-12 md:col-span-10 ">
-                <input 
-                    class="p-2 rounded-lg text-lg outline-none cursor-pointer"
-                    type="file" 
-                    accept="image/*"
-                    (change)="onFileSelected($event)"
-                />
-            </div>
-        </div>
-        <p *ngIf="showIdCardImgErr" class="text-sm text-red-500">Id Card Image is mandatory</p>
-        <!--ID Card Image Displayer-->
-        <section class="w-full flex justify-center">
-            <div class="flex justify-center w-40 h-28" *ngIf="selectedIdCardImageString">
-                <img  class="rounded-3xl" 
-                  [src]="selectedIdCardImageString" alt="id card image" 
-                />
-            </div>
-        </section>
-
-        <div class="w-full flex justify-evenly py-4 ">
-            <button class="form-button bg-grn hover:bg-green-900" (click)="onSave()">
-                <p class="text-xl">save</p>
-            </button>
-        </div>
-
-        <div class="w-full flex  justify-center py-4 text-blue-700 underline cursor-pointer"
-            (click)="onCancel()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#1d4ed8" d="M17.59 18L19 16.59L14.42 12L19 7.41L17.59 6l-6 6z"/><path fill="#1d4ed8" d="m11 18l1.41-1.41L7.83 12l4.58-4.59L11 6l-6 6z"/></svg>
-            <p class="text-lg">Back to Login</p>
-        </div>
+      </div>
+  
+      <!-- Save Button -->
+      <div class="flex justify-center">
+        <button (click)="onSave()" 
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md text-lg font-semibold">
+          Save
+        </button>
+      </div>
+  
+      <!-- Back to Login -->
+      <div (click)="onCancel()"
+        class="flex items-center justify-center gap-2 cursor-pointer text-blue-400 hover:text-blue-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="fill-current" viewBox="0 0 24 24"><path d="M17.59 18L19 16.59L14.42 12L19 7.41L17.59 6l-6 6z"/><path d="m11 18l1.41-1.41L7.83 12l4.58-4.59L11 6l-6 6z"/></svg>
+        <p class="text-base font-medium">Back to Login</p>
+      </div>
     </section>
 </main>
-
+  
