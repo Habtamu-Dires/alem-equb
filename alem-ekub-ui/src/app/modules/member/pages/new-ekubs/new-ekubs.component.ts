@@ -8,7 +8,7 @@ import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { HeaderComponent } from '../../components/header/header.component';
 import { Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
-import { UxService } from '../../../../services/ux-service/ux.service';
+import { UxService } from '../../services/member-ux/ux.service';
 
 
 @Component({

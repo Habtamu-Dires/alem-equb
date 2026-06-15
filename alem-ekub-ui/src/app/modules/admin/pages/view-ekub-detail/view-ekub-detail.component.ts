@@ -50,11 +50,11 @@ export class ViewEkubDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loggedUser = this.keycloakService.profile;
     if (this.ekub?.id && this.ekub.version !== undefined) {
-        // this.fetchEkubStatus(this.ekub.id,this.ekub.version);
-        // this.fetchMembersDetail(this.ekub.id,this.ekub.version);
+        this.fetchEkubStatus(this.ekub.id,this.ekub.version);
+        this.fetchMembersDetail(this.ekub.id,this.ekub.version);
         if(this.ekub.version){
           this.fetchRoundsOfEkub(this.ekub.id, this.ekub.version);
-          // this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
+          this.fetchUserRoundPayments(this.ekub.id, this.ekub.version);
         }
         //fill the versions
         this.currentVersion = this.ekub.version;
@@ -99,9 +99,6 @@ export class ViewEkubDetailComponent implements OnInit {
     }).subscribe({
       next:(res:MemberDetailResponse[])=>{
         this.memberDetails = res;
-        console.log("the member detail length", res.length);
-        console.log("The current version is " + this.currentVersion);
-        console.log("the ekub version " + this.ekub?.version);
       },
       error:(err)=>{
         console.log(err);
@@ -149,6 +146,7 @@ export class ViewEkubDetailComponent implements OnInit {
 
   // remove guarantor
   removeGuarantor(round:RoundResponse,guarantorId:any){
+    console.log(guarantorId + " the guarantor id");
     const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
       width: '400px',
       data:{
@@ -157,8 +155,10 @@ export class ViewEkubDetailComponent implements OnInit {
         isWarning: true
       }
     });
+
     dialogRef.afterClosed().subscribe(result =>{
       if(result && guarantorId){
+        console.log(guarantorId);
         this.userGuaranteeService.cancelGuarantee({
           'round-id': round.id as string,
           'guarantor-id': guarantorId,
@@ -204,7 +204,6 @@ export class ViewEkubDetailComponent implements OnInit {
       next:(res: UserRoundPaymentResponse[])=>{
         this.userRoundPayments = res as UserRoundPaymentResponse[];
       
-        console.log("ts map:", this.userRoundPayments);
         
       if(this.userRoundPayments.length > 0){
           const firstRow = this.userRoundPayments[0].row;
@@ -272,8 +271,6 @@ export class ViewEkubDetailComponent implements OnInit {
     // data from dialog
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log("Selected Method " + result.paymentMethod);
-        console.log("Remakr ", result.remark);
         this.paymentRequest = {
            'amount': this.ekub?.winAmount as number,
            'roundId': round.id as string,
@@ -329,6 +326,10 @@ export class ViewEkubDetailComponent implements OnInit {
 
   // transform date time
   transformDateTime(dateString: any) {
+    if (!dateString) {
+      return '';
+    }
+    // Convert the date string to a Date object
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , yy, hh:mm a')
     return formattedDate;

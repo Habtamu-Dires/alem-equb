@@ -7,7 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './services/interceptor/http.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { ApiUrlService } from './services/api-url/api-url.service';
 
 
 export const appConfig: ApplicationConfig = {
@@ -19,12 +19,18 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAppInitializer(() => {
       const injector = inject(Injector);
-      const kcService = injector.get(KeycloakService);
-      const isRegistrationPage = window.location.pathname === '/registration';
+      const apiConfigService = injector.get(ApiUrlService);
 
-      return kcService.init({
-        onLoad: isRegistrationPage ? 'check-sso' : 'login-required',
-      });
+      return apiConfigService.initialize();
+    }),
+    provideAppInitializer(() => {
+      const injector = inject(Injector);
+      const kcService = injector.get(KeycloakService);
+      // const isRegistrationPage = window.location.pathname === '/registration';
+      return kcService.init();
+      // return kcService.init({
+      //   onLoad: isRegistrationPage ? 'check-sso' : 'login-required',
+      // });
     }),
     provideAnimations(),
     provideAnimationsAsync(),

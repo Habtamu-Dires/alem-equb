@@ -14,7 +14,6 @@ import { UserRequest } from '../../models/user-request';
 export interface Register$Params {
       body?: {
 'request': UserRequest;
-'profilePic': Blob;
 'idCardImg': Blob;
 }
 }

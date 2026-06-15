@@ -6,63 +6,74 @@
     ></app-header>
     <!--body-->
     <section class="flex flex-col justify-center items-center mt-[68px]">
-        <!--last round winner-->
-        <section  class="w-full flex p-4 text-lg font-semibold"
-                [ngClass]="{'justify-evenly':lastRound?.winnerId, 'justify-end': !lastRound?.winnerId}">
-            <div *ngIf="lastRound?.winnerId" class="flex flex-col gap-3">
-                <div>
-                    የዙር <span>{{lastRound?.roundNumber}}</span> ዕጣ የወጣላቸው አባላ መለያ ስም | Username :
-                    <span>{{lastRound?.winnerUsername}}</span>
+        <!-- Last Round Winner -->
+        <section class="w-full px-4 py-6 text-lg font-semibold bg-gray-50 rounded-lg">
+            <div class="container mx-auto flex flex-col sm:flex-row gap-6"
+                [ngClass]="{'justify-between items-center': lastRound?.winnerId, 'justify-end': !lastRound?.winnerId}">
+                <div *ngIf="lastRound?.winnerId" class="flex flex-col gap-4 text-gray-800">
+                    <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                        <p class="flex items-center justify-center gap-2">
+                            <span class="text-indigo-600">የዙር</span> 
+                            <span class="bg-indigo-100 px-2 py-1 rounded">{{lastRound?.roundNumber}}</span>
+                        </p>    
+                        <span class="text-indigo-600">ዕጣ የወጣላቸው አባላ መለያ ስም | Username:</span>
+                        <span class="font-bold text-indigo-800">{{lastRound?.winnerUsername}}</span>
+                    </div>
+                    <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
+                        <button (click)="guarantWinner(lastRound?.id ?? '', lastRound?.winnerId ?? '')" 
+                                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200">
+                            Guarantee
+                        </button>
+                    </div>
                 </div>
-                <div *ngIf="isAllowedToBeGuarantor && !lastRound?.paid">
-                    <button (click)="guarantWinner(
-                                    lastRound?.id ?? '',
-                                    lastRound?.winnerId ?? '')" 
-                        class="text-blue-400 hover:text-blue-600">
-                            guarantee 
-                    </button>
+                <div *ngIf="!ekub?.isActive && ekubType === 'joined'" class="text-right">
+                    <p (click)="onLeavingEkub(ekub?.id)" 
+                    class="inline-block px-4 py-2 bg-red-100 text-red-600 rounded-md cursor-pointer hover:bg-red-200 hover:text-red-700 transition-colors duration-200">
+                        Leave
+                    </p>
                 </div>
-            </div>
-            <div *ngIf="!ekub?.isActive && ekubType === 'joined'">
-                <p class="cursor-pointer text-red-300 hover:text-red-500" 
-                    (click)="onLeavingEkub(ekub?.id)">
-                    leave
-                </p>
             </div>
         </section>
-        <!--general information section-->
-        <section class="w-full flex flex-col justify-center items-center">
-            <div  class="text-xl font-semibold">
-                <p>General Information</p>
+
+        <!-- General Information Section -->
+        <section class="w-full py-8 bg-white">
+            <div class="container mx-auto flex flex-col items-center gap-6">
+                <div class="text-2xl font-bold text-gray-800">
+                    <p>General Information</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl px-4">
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">የአባላት ብዛት: <span class="font-bold text-indigo-700">{{ekubStatus?.totalMembers}}</span></p>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">ዕጣ የወጣላቸው የአባላት ብዛት: <span class="font-bold text-indigo-700">{{ekubStatus?.winnersCount}}</span></p>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">ዕጣ ያልወጣላቸው የአባላት ብዛት: <span class="font-bold text-indigo-700">{{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</span></p>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-xl shadow-md text-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <p class="text-sm sm:text-base">የተጀመረበት ቀን: <span class="font-bold text-indigo-700">{{transformDateTime(ekubStatus?.startDate)}}</span></p>
+                    </div>
+                </div>
             </div>
-            <section class="flex flex-wrap justify-center items-center md:gap-10 gap-2">
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የአባላት ብዛት: {{ekubStatus?.totalMembers}}</p>
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ የወጣላቸው የአባላት ብዛት: {{ekubStatus?.winnersCount}}</p>
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>ዕጣ ያልወጣላቸው የአባላት ብዛት: {{(ekubStatus?.totalMembers ?? 0) - (ekubStatus?.winnersCount ?? 0)}}</p>
-                </div>
-                <div class="p-5 shadow-lg font-semibold rounded-lg">
-                    <p>የተጀመረበት ቀን: {{transformDateTime(ekubStatus?.startDate)}}</p>
-                </div>
-            </section>
         </section>
-        <!--Description-->
-        <section class="w-full flex flex-col justify-center items-center">
-            <div class="p-4 text-xl font-semibold">
-                <p class="underline">Description</p>
-            </div>
-            <section class="w-full p-5">
-                <div class="border-2 rounded-md p-4 max-h-96 overflow-y-auto">
-                    {{ekub?.description}}
+
+        <!-- Description -->
+        <section class="w-full py-8 bg-gray-50">
+            <div class="container mx-auto flex flex-col items-center gap-6 px-4 overflow-scroll">
+                <div class="text-2xl font-bold text-gray-800">
+                    <p>Description</p>
                 </div>
-            </section>
+                <div class="w-full max-w-3xl">
+                    <div class="border-2 border-gray-200 rounded-lg p-6 bg-white shadow-sm max-h-96 overflow-y-auto text-gray-700">
+                        {{ekub?.description}}
+                    </div>
+                </div>
+            </div>
         </section>
         <!--member list section with won status -->
-        <section *ngIf="membersDetailList.length > 0" 
+        <!--Desktop view -->
+        <section *ngIf="membersDetailList.length > 0 && !onMobileView" 
             class="w-full flex flex-col justify-center items-center"
             [ngClass]="{'md:w-1/3' : ekubType === 'new'}">
             <div class="p-2 text-xl font-semibold">
@@ -72,7 +83,7 @@
                 <table class="w-full border border-gray-300 bg-white">
                     <thead class="bg-gray-200">
                         <tr>
-                            <th></th>
+                            <th class="table-head"></th>
                             <th *ngIf="ekubType === 'joined'" class="table-head">
                                 Username
                             </th>
@@ -116,6 +127,36 @@
                     </tbody>
                 </table>
             </section>
+        </section>
+        <!--member list section with won status -->
+        <!--mobile view-->
+        <section *ngIf="membersDetailList.length > 0 && onMobileView"
+            class="w-full p-4 flex flex-col space-y-4 md:hidden">
+            @for (member of membersDetailList; track $index) {
+                <div class="border border-gray-300 p-4 rounded-lg shadow-md bg-white">
+                    <p class="text-sm text-gray-500">#{{$index + 1}}</p>
+                    <p class="text-lg font-semibold">{{member.fullName}}</p>
+    
+                    <div *ngIf="ekubType === 'joined'" class="text-sm text-gray-700 mt-1">
+                        <p><span class="font-semibold">Username:</span> {{member.username}}</p>
+                        <p><span class="font-semibold">Won in Round:</span> {{member.roundNumber}}</p>
+                        <p><span class="font-semibold">Guarantor:</span> 
+                            @if (member.guarantor) {
+                                <span>{{member.guarantor}}</span>
+                            } @else if(isAllowedToBeGuarantor 
+                                        && member.winRoundId
+                                        && !member.isPaid){
+                                <button (click)="guarantWinner(
+                                            member.winRoundId,                                            
+                                            member.userId ?? '')" 
+                                    class="text-blue-400 hover:text-blue-600">
+                                        guarantee 
+                                </button>
+                            }
+                        </p>
+                    </div>
+                </div>
+            }
         </section>
     </section>
 </main>

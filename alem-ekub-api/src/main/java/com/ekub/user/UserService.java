@@ -6,6 +6,7 @@ import com.ekub.ekub.Ekub;
 import com.ekub.ekub.EkubService;
 import com.ekub.ekub_users.EkubUser;
 import com.ekub.file.FileStorageService;
+import com.ekub.file.S3Service;
 import com.ekub.keycloak.KeycloakService;
 import com.ekub.keycloak.KeycloakUserRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,14 +37,15 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final EkubService ekubService;
+//    private final S3Service s3Service;
     private final FileStorageService fileStorageService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void createUser(
             UserRequest request,
-            MultipartFile profilePic,
-            MultipartFile idCardImg
+            MultipartFile idCardImg,
+            boolean isPasswordTemporary
     ) {
         String keyCloakUserId = null;
         User savedUser = null;
@@ -56,7 +60,7 @@ public class UserService {
                     .enabled(request.enabled())
                     .build();
             //save to keycloak
-            keyCloakUserId = keycloakService.createUser(keycloakUserRequest);
+            keyCloakUserId = keycloakService.createUser(keycloakUserRequest, isPasswordTemporary);
 
             User user = User.builder()
                     .externalId(keyCloakUserId)
@@ -75,7 +79,6 @@ public class UserService {
             repository.flush();
 
             // save profile picture and id image.
-            uploadProfilePicture(savedUser.getExternalId(), profilePic);
             uploadIdCardImage(savedUser.getExternalId(), idCardImg);
 
         } catch (Exception e){
@@ -90,12 +93,9 @@ public class UserService {
             //Roll back database if file upload failed
             if(savedUser != null){
                 try{
-                    //delete profile pic
-                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
-                    }
                     //delete id card image
                     if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
+                        //s3Service.deleteFile(savedUser.getIdCardImageUrl());
                         fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
                     }
                     //delete user
@@ -125,75 +125,6 @@ public class UserService {
         return ekubUserList;
     }
 
-
-    // registration
-    public void register(UserRequest request,
-                               MultipartFile profilePic,
-                               MultipartFile idCardImg)
-    {
-        String keyCloakUserId = null;
-        User savedUser = null;
-        try{
-            KeycloakUserRequest keycloakUserRequest = KeycloakUserRequest.builder()
-                    .username(request.username())
-                    .password(request.password())
-                    .firstName(request.firstName())
-                    .lastName(request.lastName())
-                    .phoneNumber(request.phoneNumber())
-                    .email(request.email())
-                    .build();
-            //save to keycloak
-            keyCloakUserId = keycloakService.registration(keycloakUserRequest);
-
-            User user = User.builder()
-                    .externalId(keyCloakUserId)
-                    .username(request.username())
-                    .firstName(request.firstName())
-                    .lastName(request.lastName())
-                    .email(request.email())
-                    .phoneNumber(request.phoneNumber())
-                    .profession(request.profession())
-                    .build();
-
-            // save to database
-            savedUser = repository.save(user);
-            repository.flush();
-
-            // save profile picture and id image.
-            uploadProfilePicture(savedUser.getExternalId(), profilePic);
-            uploadIdCardImage(savedUser.getExternalId(), idCardImg);
-
-        } catch (Exception e){
-            // RollBack in keycloak if database operation failed
-            if(keyCloakUserId != null){
-                try{
-                    keycloakService.deleteUser(keyCloakUserId);
-                } catch (Exception ex){
-                    throw new RuntimeException("Failed to rollback Keycloak user creation after database failure", ex);
-                }
-            }
-            //Roll back database if file upload failed
-            if(savedUser != null){
-                try{
-                    //delete profile pic
-                    if(savedUser.getProfilePicUrl() != null && !savedUser.getProfilePicUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getProfilePicUrl());
-                    }
-                    //delete id card image
-                    if(savedUser.getIdCardImageUrl() != null && !savedUser.getIdCardImageUrl().isBlank()){
-                        fileStorageService.deleteFile(savedUser.getIdCardImageUrl());
-                    }
-                    //delete user
-                    repository.deleteById(savedUser.getId());
-                } catch (Exception ex){
-                    throw new RuntimeException("Failed to rollback database after file failed", ex);
-                }
-            }
-
-            throw new RuntimeException("Something went wrong: "
-                    + e.getMessage());
-        }
-    }
 
 
     // get list of users
@@ -294,7 +225,12 @@ public class UserService {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(String userId) {
+       List<String> reamRoles = keycloakService.getUserRealmRoles(userId);
+       if(reamRoles.contains("ADMIN")){
+           throw new RuntimeException("You can't delete ADMIN user");
+       }
         User user = findUserByExId(userId);
+
         try{
             keycloakService.deleteUser(userId);
         } catch (Exception e){
@@ -311,7 +247,7 @@ public class UserService {
                     .email(user.getEmail())
                     .enabled(user.isEnabled())
                     .build();
-            keycloakService.createUser(keycloakUserRequest); // create again
+            keycloakService.createUser(keycloakUserRequest,false); // create again
             throw  new RuntimeException("Database deletion failed " + e.getMessage());
         }
     }
@@ -335,13 +271,6 @@ public class UserService {
         keycloakService.logoutUserFromAllDevices(userId);
     }
 
-
-    // find user by id
-    public User findUserById(int userId){
-        return repository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    }
-
     public User findUserByExId(String userId){
         return repository.findByExternalId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -353,28 +282,21 @@ public class UserService {
     }
 
 
-    // upload profile picture
-    public void uploadProfilePicture(String userId, MultipartFile file) {
-        User user = this.findUserByExId(userId);
-        if(user.getProfilePicUrl() != null && !user.getProfilePicUrl().isBlank()){
-            fileStorageService.deleteFile(user.getProfilePicUrl());
-        }
-        String url = fileStorageService.saveFile(file, userId, "profile");
-
-        user.setProfilePicUrl(url);
-        repository.save(user);
-    }
-
     // upload id card
     public void uploadIdCardImage(String userId, MultipartFile file) {
         User user = this.findUserByExId(userId);
         if(user.getIdCardImageUrl() != null && !user.getIdCardImageUrl().isBlank()){
+//            s3Service.deleteFile(user.getIdCardImageUrl());
             fileStorageService.deleteFile(user.getIdCardImageUrl());
         }
-        String url = fileStorageService.saveFile(file, userId, "id-card");
-
-        user.setIdCardImageUrl(url);
-        repository.save(user);
+//        try {
+//            String url = s3Service.uploadFile(file);
+            String url = fileStorageService.saveFile(file,"id-card",userId);
+            user.setIdCardImageUrl(url);
+            repository.save(user);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 

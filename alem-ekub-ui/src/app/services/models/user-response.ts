@@ -15,7 +15,6 @@ export interface UserResponse {
   lastname?: string;
   phoneNumber?: string;
   profession?: string;
-  profilePicUrl?: string;
   remark?: string;
   username?: string;
 }

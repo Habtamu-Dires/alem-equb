@@ -70,6 +70,10 @@ public class EkubService {
         ekub.setExclusive(request.isExclusive());
         ekub.setArchived(request.isArchived());
 
+        if(request.nextDrawDateTime() != null && ekub.getStartDateTime() == null){
+            ekub.setStartDateTime(request.nextDrawDateTime());
+        }
+
         Ekub savedEkub = repository.save(ekub);
         // if ekub is updated to be active
         if( request.isActive()
@@ -197,4 +201,10 @@ public class EkubService {
         return repository.findEkubStatus(UUID.fromString(ekubId),version);
     }
 
+    // get ekubs
+    public List<EkubResponse> getEkubs() {
+          return repository.findAll().stream()
+                .map(mapper::toEkubResponse)
+                .toList();
+    }
 }

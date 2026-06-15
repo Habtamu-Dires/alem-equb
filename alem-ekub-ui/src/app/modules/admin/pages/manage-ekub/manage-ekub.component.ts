@@ -45,7 +45,6 @@ export class ManageEkubComponent implements OnInit{
   
   // create equb
   createEkub(){
-    console.log("The request " + this.ekubRequest);
     this.ekubService.createEkub({
       body: this.ekubRequest
     }).subscribe({

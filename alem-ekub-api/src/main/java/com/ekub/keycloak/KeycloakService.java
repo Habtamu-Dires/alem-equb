@@ -38,7 +38,7 @@ public class KeycloakService {
 
     // create users
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String createUser(KeycloakUserRequest userRequest) {
+    public String createUser(KeycloakUserRequest userRequest, boolean isPasswordTemporary) {
         String url = keycloakAuthUrl + "/admin/realms/" + realm + "/users";
 
         HttpHeaders headers = new HttpHeaders();
@@ -60,7 +60,7 @@ public class KeycloakService {
         payload.put("credentials", List.of(Map.of(
                 "type", "password",
                 "value", userRequest.password(),
-                "temporary", true
+                "temporary", isPasswordTemporary
         )));
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
@@ -76,43 +76,30 @@ public class KeycloakService {
 
     }
 
-    // user registration
-    public String registration(KeycloakUserRequest userRequest) {
-        String url = keycloakAuthUrl + "/admin/realms/" + realm + "/users";
+    //get user by id
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<String> getUserRealmRoles(String userId){
+        String url = keycloakAuthUrl + "/admin/realms/" + realm + "/users/" + userId + "/role-mappings/realm";
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(keycloakClient.getClientAccessToken());
 
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("username", userRequest.username());
-        payload.put("firstName", userRequest.firstName());
-        payload.put("lastName", userRequest.lastName());
-        payload.put("email", userRequest.email());
-        payload.put("enabled",false);
+        HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        // Store phoneNumber as an attribute inside attributes map
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("phoneNumber", List.of(userRequest.phoneNumber()));
-        payload.put("attributes", attributes);
-
-        payload.put("credentials", List.of(Map.of(
-                "type", "password",
-                "value", userRequest.password(),
-                "temporary", false
-        )));
-
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
-
-        ResponseEntity<Void> response = restTemplate.postForEntity(url, request, Void.class);
-
-        if(response.getStatusCode() == HttpStatus.CREATED){
-            String locationHeader = response.getHeaders().getLocation().toString();
-            return locationHeader.substring(locationHeader.lastIndexOf("/") + 1);
-        } else {
-            throw new RuntimeException("Failed to create user in Keycloak");
+        ResponseEntity<List> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                request,
+                List.class
+        );
+        List<Map<String,Object>> roles = response.getBody();
+        if(roles == null){
+            return List.of();
         }
 
+        return roles.stream()
+                .map(role -> (String) role.get("name"))
+                .toList();
     }
 
 

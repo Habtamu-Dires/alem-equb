@@ -9,4 +9,3 @@ export { UserGuaranteesService } from './services/user-guarantees.service';
 export { RegistrationService } from './services/registration.service';
 export { PaymentsService } from './services/payments.service';
 export { RoundsService } from './services/rounds.service';
-export { FilesService } from './services/files.service';

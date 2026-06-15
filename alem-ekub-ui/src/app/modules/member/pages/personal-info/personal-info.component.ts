@@ -31,7 +31,6 @@ export class PersonalInfoComponent implements OnInit {
   loggedUser: UserProfile | undefined;
   errMsgs:Array<string> = [];
   selectedProfilePic:any;
-  selectedPictureString:string | undefined;
   selectedIdCardImage:any;
   selectedIdCardImageString:string | undefined;
   onMobileView:boolean = true;
@@ -69,10 +68,6 @@ export class PersonalInfoComponent implements OnInit {
           ekubIds: res.ekubIdList,
           enabled: res.enabled,
           remark:res.remark
-        }
-        //profile pic
-        if(res.profilePicUrl != undefined && res.profilePicUrl.length > 0){ 
-          this.selectedPictureString = res.profilePicUrl;
         }
         //id card image
         if(res.idCardImageUrl != undefined && res.idCardImageUrl.length > 0){ 

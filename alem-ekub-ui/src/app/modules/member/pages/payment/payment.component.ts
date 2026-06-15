@@ -40,7 +40,6 @@ export class PaymentComponent {
   ngOnInit(): void {
     this.checkScreenSzie(window.innerWidth);
     this.loggedUser = this.keycloakService.profile;
-    console.log("phone number ", this.loggedUser?.phoneNumber);
     if(this.loggedUser?.id){
       this.fetchUserPendingPayments(this.loggedUser.id);
     }
@@ -53,6 +52,7 @@ export class PaymentComponent {
     }).subscribe({
       next:(res:UserPendingPaymentResponse[]) =>{
         this.pendingPayments = res as UserPendingPaymentResponse[];
+        console.log(this.pendingPayments);
       },
       error:(err:HttpErrorResponse)=>{
         console.log(err);
@@ -93,7 +93,6 @@ export class PaymentComponent {
     // data from dialog
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log("The phone number ", result.phoneNumber);
         // build payment request
         const paymentRequest:PaymentRequest = {
           'userId': userId,
@@ -127,13 +126,19 @@ export class PaymentComponent {
   }
 
   transformDateTime(dateString:any){
-      const date = new Date(dateString);
-      const formattedDate = this.datePipe.transform(date, 'EEE, dd , MM, hh:mm a')
-      return formattedDate;
+    if(!dateString){
+      return '';
+    }
+    const date = new Date(dateString);
+    const formattedDate = this.datePipe.transform(date, 'EEE, dd , MM, hh:mm a')
+    return formattedDate;
   }
   
   //transfrom  duaration
   transfromDuration(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const duration = formatDistanceToNow(date, {addSuffix: true})
     return duration;

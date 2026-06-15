@@ -21,9 +21,9 @@ public class PaymentSpecification {
             //ekubId
             if(ekubId != null && !ekubId.isEmpty()){
                 UUID ekub_id = UUID.fromString(ekubId);
-                Join<Payment, Round> roundJoin = root.join("round");
-                Join<Round, Ekub> roundEkubJoin = roundJoin.join("ekub");
-                Predicate ekubPredicate = criteriaBuilder.equal(roundEkubJoin.get("id"), ekub_id);
+                Join<Payment, Round> round = root.join("round");
+                Join<Round, Ekub> ekub = round.join("ekub");
+                Predicate ekubPredicate = criteriaBuilder.equal(ekub.get("externalId"), ekub_id);
                 predicates.add(ekubPredicate);
             }
             // dateTime

@@ -19,6 +19,7 @@ export class PaymentComponent implements OnInit{
   paymentList:PaymentResponse[] = [];
   ekubFilter:string = '';
   dateTimeFilter:string = '';
+  printSectionId:string = '';
   // pagination
   page:number = 0;
   size:number = 5;
@@ -48,7 +49,6 @@ export class PaymentComponent implements OnInit{
       'size': this.size
     }).subscribe({
       next:(res:PageResponsePaymentResponse) => {
-        console.log("hello");
         this.paymentList = res.content as PaymentResponse[];
         // pagination
         this.isEmptyPage = res.empty as boolean;

@@ -4,16 +4,19 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, throttleTime } from 'rxjs';
 import { EkubResponse } from '../../../../services/models';
 import { EkubsService } from '../../../../services/services';
+import { AdminUxService } from '../../services/admin-ux/admin-ux.service';
+import { NgxPrintModule } from 'ngx-print';
 
 @Component({
   selector: 'app-header',
-  imports: [ReactiveFormsModule,CommonModule,FormsModule],
+  imports: [ReactiveFormsModule,CommonModule,FormsModule,NgxPrintModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit{
 
   @Input() componentName: string = '';
+  @Input() printSectionId: string = '';
   @Output() onCreateNewCliked = new EventEmitter<{}>();
   @Output() onSearch = new EventEmitter<string>();
   @Output() filter = new EventEmitter<string>();
@@ -22,17 +25,34 @@ export class HeaderComponent implements OnInit{
   showEkubs:boolean = false;
   ekubs:EkubResponse[] = [];
   dateTime:string | undefined;
+  onShowDrawer:boolean = false;
 
   searchControl= new FormControl();
   ekubSearchControl = new FormControl();
 
   constructor(
-    private ekubsService:EkubsService
+    private ekubsService:EkubsService,
+    private adminUxService:AdminUxService
   ){}
 
   ngOnInit(): void {
     this.searchFormControl();
     this.ekubSearchFormControl();
+    // on show drawer status
+    this.adminUxService.showDrawer$.subscribe((onShowDrawer:boolean)=>{
+      this.onShowDrawer = onShowDrawer;
+    });
+  }
+
+  // update showDrawer status
+  updateShowDrawerStatus(){
+    this.adminUxService.updateShowDrawerStatus(this.onShowDrawer);
+  }
+
+  // toogle showdrawer
+  toggleShowDrawer(){
+    this.onShowDrawer = !this.onShowDrawer;
+    this.updateShowDrawerStatus();
   }
 
   onCreateNew() {
@@ -111,6 +131,11 @@ export class HeaderComponent implements OnInit{
   // on date change
   onDateTimeChange(){
     this.afterDateTime.emit(this.dateTime);
+  }
+
+  // print page
+  printPage(){
+    window.print();
   }
 
 }

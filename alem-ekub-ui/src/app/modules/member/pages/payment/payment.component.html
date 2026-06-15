@@ -1,5 +1,5 @@
 <main class="max-container w-full h-full flex flex-col justify-center items-center">
-    <app-header *ngIf='onMobileView' class="w-full sticky top-0 z-10"  
+    <app-header *ngIf='onMobileView' class="w-full sticky top-0 z-10 p-2"  
         [onSubPage]="true"
         pageName="Payment"
         [onMobileView]="onMobileView">
@@ -8,39 +8,61 @@
     <!--Main section-->
     <section *ngIf="pendingPayments.length > 0"
         class="w-full flex flex-col justify-center items-center"
-        [ngClass]="{'mt-16': onMobileView}">
-        <table class="w-full border border-gray-300 bg-white">
-            <thead class="bg-gray-200 sticky top-[66px]">
-                <tr>
-                    <th class="table-head">የዕቁብ ስም</th>
-                    <th class="table-head">Version</th>
-                    <th class="table-head">ዙር</th>
-                    <th class="table-head">የብር መጠን</th>
-                    <th class="table-head">የቅጣት መጠን</th>
-                    <th class="table-head">የቀረው ቀን እና ሰዓት</th>
-                    <th class="table-head">የሚያበቃበት ቀን እና ሰዓት</th>
-                    <th class="table-head"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pendingPayment of pendingPayments">
-                    <td class="table-data">{{pendingPayment.equbName}}</td>
-                    <td class="table-data">{{pendingPayment.version}}</td>
-                    <td class="table-data">{{pendingPayment.roundNumber}}</td>
-                    <td class="table-data">{{pendingPayment.amount | number}}</td>
-                    <td class="table-data">{{pendingPayment.penalty | number }}</td>
-                    <td class="table-data">{{transfromDuration(pendingPayment.endDateTime)}}</td>
-                    <td class="table-data">{{transformDateTime(pendingPayment.endDateTime)}}</td>
-                    <td class="table-data">
-                        <button class="bg-grn text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                            (click)="onPayment(pendingPayment)">
-                            Pay
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+        [ngClass]="{'mt-16 overflow-x-auto': onMobileView}">
+    
+        <!-- Display Table for Large Screens -->
+        <div class="w-full" *ngIf="!onMobileView">
+            <table class="min-w-full border border-gray-300 bg-white">
+                <thead class="bg-gray-200 sticky top-[66px]">
+                    <tr>
+                        <th class="table-head">የዕቁብ ስም</th>
+                        <th class="table-head">Version</th>
+                        <th class="table-head">ዙር</th>
+                        <th class="table-head">የብር መጠን</th>
+                        <th class="table-head">የቅጣት መጠን</th>
+                        <th class="table-head">የቀረው ቀን እና ሰዓት</th>
+                        <th class="table-head">የሚያበቃበት ቀን እና ሰዓት</th>
+                        <th class="table-head"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pendingPayment of pendingPayments">
+                        <td class="table-data">{{pendingPayment.equbName}}</td>
+                        <td class="table-data">{{pendingPayment.version}}</td>
+                        <td class="table-data">{{pendingPayment.roundNumber}}</td>
+                        <td class="table-data">{{pendingPayment.amount | number}}</td>
+                        <td class="table-data">{{pendingPayment.penalty | number }}</td>
+                        <td class="table-data">{{transfromDuration(pendingPayment.endDateTime)}}</td>
+                        <td class="table-data">{{transformDateTime(pendingPayment.endDateTime)}}</td>
+                        <td class="table-data">
+                            <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                                (click)="onPayment(pendingPayment)">
+                                Pay
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Display Cards for Mobile -->
+        <div class="w-full flex flex-col space-y-4" *ngIf="onMobileView">
+            <div *ngFor="let pendingPayment of pendingPayments" 
+                class="bg-white shadow-md rounded-lg p-4 w-full">
+                <div class="text-lg font-semibold text-gray-700">{{pendingPayment.equbName}}</div>
+                <div class="text-gray-500 text-sm">Version: {{pendingPayment.version}}</div>
+                <div class="text-gray-500 text-sm">ዙር: {{pendingPayment.roundNumber}}</div>
+                <div class="text-gray-500 text-sm">Amount: {{pendingPayment.amount | number}}</div>
+                <div class="text-gray-500 text-sm">Penalty: {{pendingPayment.penalty | number }}</div>
+                <div class="text-gray-500 text-sm">Remaining Time: {{transfromDuration(pendingPayment.endDateTime)}}</div>
+                <div class="text-gray-500 text-sm">Due Date: {{transformDateTime(pendingPayment.endDateTime)}}</div>
+                <button class="bg-green-500 text-white px-4 py-2 rounded-lg mt-2 w-full hover:bg-green-700"
+                    (click)="onPayment(pendingPayment)">
+                    Pay
+                </button>
+            </div>
+        </div>
+    </section>    
 </main>
 
 

@@ -50,7 +50,6 @@ export class UserComponent implements OnInit{
     }).subscribe({
       next:(res:PageResponseUserResponse)=>{
         this.userList = res.content as UserResponse[];
-        // hello
         
         // pagination
         this.isEmptyPage = res.empty as boolean;
@@ -115,7 +114,8 @@ export class UserComponent implements OnInit{
           },
           error:(err)=>{
             console.log(err);
-            this.toastrService.error('Something went wrong', 'oops')
+            const msg = JSON.parse(err.error);
+            this.toastrService.error(msg.error, 'oops')
           }
         })
       }

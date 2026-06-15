@@ -43,7 +43,6 @@ public class User  {
     @Column(unique = true)
     private String email;
     private String profession;
-    private String profilePicUrl;
     private String idCardImageUrl;
     private boolean enabled;
     private String remark;

@@ -3,7 +3,7 @@ import { KeycloakService } from '../../../../services/keycloak/keycloak.service'
 import { UserProfile } from '../../../../services/keycloak/user-profile';
 import { DrawerItemComponent } from "../drawer-item/drawer-item.component";
 import { Router } from '@angular/router';
-import { UxService } from '../../../../services/ux-service/ux.service';
+import { UxService } from '../../services/member-ux/ux.service';
 
 @Component({
   selector: 'app-drawer',
@@ -28,7 +28,11 @@ export class DrawerComponent implements OnInit{
 
   selectItem(item:string){
     this.uxService.updateHeadersSelectedItem(item);
+    if(item === 'Home'){
+      this.uxService.updateShowDrawerStatus(false);
+    }
     this.router.navigate(['member', item.toLocaleLowerCase()]);
+
   }
 
   logout() {

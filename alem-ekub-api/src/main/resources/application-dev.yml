@@ -3,8 +3,8 @@ server:
   tomcat:
     max-connections: 10000
     accept-count: 10000
-#    threads:
-#      max: 10
+    threads:
+      max: 20
 spring:
   application:
     name: alem-ekub-api
@@ -12,33 +12,43 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/alem_ekub_db
-    username: hab
-    password: password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/alem_ekub_db}
+    username: ${SPRING_DATASOURCE_USERNAME:hab}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 5
-#      minimum-idle: 2
+    hikari:
+      maximum-pool-size: 8 # down form 10, b/c pgBouncer [digital ocean] connection pool
+      minimum-idle: 2
+      connection-timeout: 30000   # 30 second
+      leak-detection-threshold: 5000  # enable hikari leak detection
   jpa:
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://localhost:9090/realms/alem-ekub"
+         issuer-uri: ${OAUTH2_JWT_ISSUER_URI:http://host.docker.internal:9090/realms/alem-ekub}
+         jwk-set-uri: ${OAUTH2_JWK_SET_URI:http://host.docker.internal:9090/realms/alem-ekub/protocol/openid-connect/certs}
 
 keycloak:
-  auth-server-url: http://localhost:9090
-  realm: alem-ekub
-  client-id: backend-service
-  client-secret: Ot54gUJCZcGKo3wm4z2xBu6OvMFoX63G
+  auth-server-url: ${KEYCLOAK_AUTH_SERVER_URL:http://localhost:9090}
+  realm: ${KEYCLOAK_REALM:alem-ekub}
+  client-id: ${KEYCLOAK_CLIENT_ID:api-service}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:51UhKLYjhsqqleFSw0gc1iRka0NiOQMC}
+
+s3:
+  space-access-key: ${S3_SPACES_ACCESS_KEY:DOSomething}
+  space-secret-key: ${S3_SPACES_SECRET_KEY:Zsomething}
+  space-endpoint:  ${S3_SPACES_ENDPOINT:https://image.com}
+  bucket-name: ${S3_BUCKET_NAME:photoss}
+  region: ${S3_REGION:Eh1}
 
 application:
   server:
@@ -47,4 +57,19 @@ application:
     origins: ${ALLOWED_ORIGINS:http://localhost:4200}
   file:
     path: ${FILE_PATH:./photo}
+
+
+#logging:
+#  level:
+#    org:
+#      springframework.security.oauth2.jwt: DEBUG
+#      springframework.security: DEBUG
+#      keycloak: DEBUG
+#      apache.http: DEBUG
+#      apache.http.wire: ERROR
+
+
+
+
+
 

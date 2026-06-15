@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ImageViewerComponent } from "../../components/image-viewer/image-viewer.component";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmationDialogComponent } from '../../../../components/confirmation-dialog/confirmation-dialog.component';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-manage-user',
@@ -38,8 +39,6 @@ export class ManageUserComponent implements OnInit{
   showEkubs:boolean = true;
   ekubList:EkubResponse[] = [];
   ekubIdNameMap = new Map<string,string>();
-  selectedProfilePic:any;
-  selectedPictureString:string | undefined;
   selectedIdCardImage:any;
   selectedIdCardImageString:string | undefined;
 
@@ -50,8 +49,7 @@ export class ManageUserComponent implements OnInit{
     private activatedRoute:ActivatedRoute,
     private router:Router,
     private toastrService:ToastrService,
-    private matDialog:MatDialog,
-    private registrationService:RegistrationService
+    private matDialog:MatDialog
   ){}
 
   ngOnInit(): void {
@@ -71,7 +69,6 @@ export class ManageUserComponent implements OnInit{
     this.usersService.createUser({
       body: {
         request: this.userRequest,
-        profilePic: this.selectedProfilePic,
         idCardImg: this.selectedIdCardImage
       }
     }).subscribe({
@@ -82,7 +79,15 @@ export class ManageUserComponent implements OnInit{
         
       },
       error:(err:HttpErrorResponse)=>{
-        this.toastrService.error(err.error.error, 'Ooops');
+        this.toastrService.error(err.error, 'Ooops');
+        const dialog = this.matDialog.open(ConfirmationDialogComponent,{
+          width: '400px',
+          data:{
+            message: err,
+            buttonName: err.error,
+            isWarning: true
+          }
+         });
         const errMsg = JSON.parse(err.error);
         if(errMsg.validationErrors){
           this.errMsgs = errMsg.validationErrors;
@@ -102,10 +107,6 @@ export class ManageUserComponent implements OnInit{
       body:this.userRequest
     }).subscribe({
       next:(res:IdResponse)=>{
-        //upload  profile picture
-        if(this.selectedProfilePic) {
-          this.uploadProfilePic(res.id as string);
-        } 
         // upload id card image
         if(this.selectedIdCardImage) {
           this.uploadIdCardImg(res.id as string);
@@ -124,23 +125,6 @@ export class ManageUserComponent implements OnInit{
     })
   }
 
-  // upload profile picture
-  uploadProfilePic(id:string){
-    this.usersService.uploadProfilePicture({
-      'user-id' : id,
-      body : {
-        file: this.selectedProfilePic
-      }
-    }).subscribe({
-      next:() => {
-        
-      },
-      error:(err) => {
-        console.log(err);
-        this.toastrService.error("Couldn't upload profile picture", 'Ooops');            
-      }
-    })
-  }
 
   // upload id card image
   uploadIdCardImg(id:string){
@@ -177,10 +161,6 @@ export class ManageUserComponent implements OnInit{
           ekubIds: res.ekubIdList,
           enabled: res.enabled,
           remark:res.remark
-        }
-        //profile pic
-        if(res.profilePicUrl != undefined && res.profilePicUrl.length > 0){ 
-          this.selectedPictureString = res.profilePicUrl;
         }
         //id card image
         if(res.idCardImageUrl != undefined && res.idCardImageUrl.length > 0){ 
@@ -364,6 +344,8 @@ export class ManageUserComponent implements OnInit{
         } else{
           this.showPassConfError = false;
         }
+      } else {
+        this.showPassConfError = true;
       }
     })
   }
@@ -385,27 +367,25 @@ export class ManageUserComponent implements OnInit{
   }
 
   //file methods
-  //onfile selected
-  onFileSelected(event:any,type:string){
-    if(type ==='profilePic'){
-      this.selectedProfilePic = event.target.files[0];
-      if(this.selectedProfilePic != null){
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.selectedPictureString = reader.result as string;
-        }
-        reader.readAsDataURL(this.selectedProfilePic)
-      }
-    } else if(type==='idCardImg') {
-      this.selectedIdCardImage = event.target.files[0];
-      if(this.selectedIdCardImage != null){
+  onFileSelected(event:any){
+      const file = event.target.files[0];
+      if(file){
         const reader = new FileReader();
         reader.onload = () => {
           this.selectedIdCardImageString = reader.result as string;
+          const options = { 
+                  maxSizeMB: 0.5, 
+                  maxWidthOrHeight: 1024, 
+                  useWebWorker: true, 
+                  maxIteration: 3 
+          };
+
+          imageCompression(file, options).then((compressedFile) => {
+            this.selectedIdCardImage = compressedFile; 
+          });
         }
-        reader.readAsDataURL(this.selectedIdCardImage)
+        reader.readAsDataURL(file);
       }
-    }
     
   }
 

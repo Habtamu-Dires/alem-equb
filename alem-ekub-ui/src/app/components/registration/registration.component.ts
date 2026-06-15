@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { KeycloakService } from '../../services/keycloak/keycloak.service';
 import { RegistrationService } from '../../services/services';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-registration',
@@ -32,11 +33,8 @@ export class RegistrationComponent implements OnInit{
     confirmPassword = new FormControl('');
     passwordControl = new FormControl('');
     ekubIdNameMap = new Map<string,string>();
-    selectedProfilePic:any;
-    selectedPictureString:string | undefined;
     selectedIdCardImage:any;
     selectedIdCardImageString:string | undefined;
-    showProfilePicErr:boolean = false;
     showIdCardImgErr:boolean = false;
   
     constructor(
@@ -53,11 +51,9 @@ export class RegistrationComponent implements OnInit{
   
     // create user
     register(){
-      
       this.registrationService.register({
         body: {
           request: this.userRequest,
-          profilePic: this.selectedProfilePic,
           idCardImg: this.selectedIdCardImage
         }
       }).subscribe({
@@ -69,7 +65,6 @@ export class RegistrationComponent implements OnInit{
           
         },
         error:(err:HttpErrorResponse)=>{
-          this.toastrService.error('Something Went wrong', 'Ooops');
           if(err.error.validationErrors){
             this.errMsgs = err.error.validationErrors;
           } else{
@@ -86,7 +81,7 @@ export class RegistrationComponent implements OnInit{
     passwordFormControl(){
       this.passwordControl.valueChanges
       .pipe(
-        debounceTime(1500)
+        debounceTime(1000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4) {
@@ -113,7 +108,7 @@ export class RegistrationComponent implements OnInit{
     confirmPasswordControl(){
       this.confirmPassword.valueChanges
       .pipe(
-        debounceTime(1500)
+        debounceTime(1000)
       ).subscribe((value:any)=>{
         const password = value as string;
         if(password.length >= 4){
@@ -122,7 +117,9 @@ export class RegistrationComponent implements OnInit{
           } else{
             this.showPassConfError = false;
           }
-        } 
+        } else {
+          this.showPassConfError = true;
+        }
       })
     }
   
@@ -130,13 +127,10 @@ export class RegistrationComponent implements OnInit{
     onSave(){
       if(!this.userRequest.password ||  this.userRequest.password.length < 4){
         this.showPassMandatoryError = true;
-      } else if(!this.selectedProfilePic){
-        this.showProfilePicErr = true;
       } else if(!this.selectedIdCardImage) {
         this.showIdCardImgErr = true;
       }
       else if(!this.showPassConfError) {
-        // this.registration();
         this.register();
       }
     }
@@ -148,32 +142,30 @@ export class RegistrationComponent implements OnInit{
   
     //file methods
     //onfile selected
-    onFileSelected(event:any,type:string){
-      console.log("hello ");
-      if(type ==='profilePic'){
-        this.selectedProfilePic = event.target.files[0];
-        if(this.selectedProfilePic != null){
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedPictureString = reader.result as string;
-          }
-          reader.readAsDataURL(this.selectedProfilePic)
-          this.showProfilePicErr = false;
+    onFileSelected(event:any){
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.selectedIdCardImageString = reader.result as string;
+          const options = { 
+            maxSizeMB: 0.5, 
+            maxWidthOrHeight: 1024, 
+            useWebWorker: true, 
+            maxIteration: 3 
+          };
+
+          imageCompression(file, options).then((compressedFile) => {
+            this.selectedIdCardImage = compressedFile; 
+          });
         }
-      } else if(type==='idCardImg') {
-        this.selectedIdCardImage = event.target.files[0];
-        if(this.selectedIdCardImage != null){
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedIdCardImageString = reader.result as string;
-          }
-          reader.readAsDataURL(this.selectedIdCardImage);
-          this.showIdCardImgErr = false;
-        }
-      }
-      
+        reader.readAsDataURL(file);
+        this.showIdCardImgErr = false;
+
+      }      
     }
-  
-  
+
+
+
 
 }

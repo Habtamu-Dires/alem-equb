@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-slate-200/50;
+    @apply bg-gray-100;
 }
 
 
@@ -12,23 +12,30 @@ body {
   .max-container {
       max-width: 1440px;
       margin: 0 auto;
-    }
-    
-  .table-head{
-    @apply p-4 text-left font-mono text-gray-700;
   }
     
-  .table-data{
-    @apply p-4 text-gray-600;
+  .table-head {
+    @apply p-4 text-left font-semibold bg-grn text-white;
+  }
+    
+  .table-data {
+    @apply p-4 text-black border-b ;
   }
 
-  .form-input{
-      @apply w-full p-2 rounded-lg text-lg outline-none col-span-11 md:col-span-10;
+  .form-input {
+      @apply w-full p-2 rounded-lg text-lg outline-none col-span-11 md:col-span-10 border border-gray-300;
   }
-  .form-label{
+
+  .form-label {
       @apply col-span-12 md:col-span-2 flex items-center;
   }
-  .form-button{
-      @apply p-2 rounded-lg flex justify-center w-1/6 text-white;
+
+  .form-button {
+      @apply p-2 rounded-lg flex justify-center md:w-1/6 w-1/3 text-white bg-blue-500 hover:bg-blue-700;
   }
+
+  .input-style {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  
 }

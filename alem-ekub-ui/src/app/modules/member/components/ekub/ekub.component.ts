@@ -42,12 +42,18 @@ export class EkubComponent {
 
   //transfrom date
   transformDate(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , yy')
     return formattedDate;
   }
 
   transformDateTime(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const formattedDate = this.datePipe.transform(date, 'EEE, dd , yy, hh:mm a')
     return formattedDate;
@@ -55,6 +61,9 @@ export class EkubComponent {
 
   //transfrom time
   transfromTime(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const fromattedTime = this.datePipe.transform(date, 'hh:mm a');
     return fromattedTime;
@@ -62,6 +71,9 @@ export class EkubComponent {
 
   //transfrom  duaration
   transfromDuration(dateString:any){
+    if(!dateString){
+      return '';
+    }
     const date = new Date(dateString);
     const duration = formatDistanceToNow(date, {addSuffix: true})
     return duration;

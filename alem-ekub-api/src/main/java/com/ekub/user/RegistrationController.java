@@ -21,11 +21,10 @@ public class RegistrationController {
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<IdResponse> register(
             @RequestPart @Valid UserRequest request,
-            @RequestPart MultipartFile profilePic,
             @RequestPart MultipartFile idCardImg
 
     ) {
-        userService.register(request,profilePic,idCardImg);
+        userService.createUser(request,idCardImg, false);
         return ResponseEntity.accepted().build();
     }
 
